@@ -1,0 +1,60 @@
+
+
+\begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=4 cm, scale = 1, transform shape]
+
+\tikzstyle{accept} = [draw=blue!75,fill=blue!20]
+\tikzstyle{violate} = [draw=red!75,fill=red!40, dashed]
+\tikzstyle{unstable} = [draw=red!75,fill=red!15]
+
+\node[initial,state, accepting, accept] (A) {$q_{auto}$};
+\node[state, unstable] (B) [right of=A, xshift=8em] {$q_{unstable}$};
+\node[state, violate]         (C) [below of=B, yshift=1em, xshift=-3.5cm]  {$q_v$};
+
+\path[->] 
+		(A) edge [loop above]       node [above, xshift=-1em]  
+		{
+			\scriptsize$\let\scriptstyle\textstyle\substack{
+				\sum~\textbackslash~
+				\Big(~
+					(~P~|~C~|~N~|~S~)~\&~(~C~<~99~)
+				~\Big)}$
+		} (A)
+		
+		(A) edge [bend left]		node [below, yshift=-1em]  
+		{
+			\scriptsize$\let\scriptstyle\textstyle\substack{
+				(~P~|~C~|~N~|~S~)~\&~(~C~<~99~)~,~\\~
+				t~:=~0~
+			}$
+		} (B)
+	
+		(B) edge [loop above]		node [above]  
+		{
+			\scriptsize$\let\scriptstyle\textstyle\substack{t~<~3~\&~\\~
+				~\sum~\textbackslash~\Big((~P~|~C~|~N~|~S~)~\&~(~C~<~99~)~\Big)
+			}$
+		} (B)
+	
+		(B) edge [bend left]		node [right]  
+		{
+			\scriptsize$\let\scriptstyle\textstyle\substack{
+				(~P~|~C~|~N~|~S~)~\&~(~C~<~99~)
+			}$
+		} (C)
+	
+		(B) edge [bend left]		node [below, xshift=-3em]  
+		{
+			\scriptsize$\let\scriptstyle\textstyle\substack{
+				\bigg(~\sum~\textbackslash~
+					\Big(~(~P~|~C~|~N~|~S~)~\&~(~C~<~99~)~\Big)
+				~\bigg)~\&~\\~
+				t~>=~3}$
+		} (A)
+	
+		(C) edge [loop below] node [below]
+		{
+			\scriptsize$\sum$
+		}(C)
+		;
+
+\end{tikzpicture}

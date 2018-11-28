@@ -11,6 +11,7 @@
 %\input{glyphtounicode}
 %\pdfgentounicode=1
 
+\include{preamble}
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -21,7 +22,7 @@
 \usepackage[export]{adjustbox}
 \usepackage{url} % format email, hypertext, and path addresses
 %\usepackage[figure,linesnumbered,commentsnumbered,shortend,noline]{algorithm2e}
-\usepackage{subfigure}
+%\usepackage{subfigure}
 \usepackage{xspace}
 
 \usepackage{fancyvrb}
@@ -92,9 +93,9 @@
 \newcommand{\dontprintsemicolon}{\DontPrintSemicolon}
 
 
-\newtheorem{definition}{Definition}
+%\newtheorem{definition}{Definition}
 %\newtheorem{proof}{Proof}
-\newtheorem{theorem}{Theorem}
+%\newtheorem{theorem}{Theorem}
 
 \newenvironment{abbreviations}{%
     \if@twocolumn
@@ -146,10 +147,10 @@
 %%%%%%%%%%%% Body of the Thesis %%%%%%%%%%%
 \mainmatter
 
-%\include{Introduction/Introduction}
-\chapter{Test Chapter}
+\input{Content/acronyms}
 
-Hello World
+%\include{Introduction/Introduction}
+\chapter{Timing Analysis of Synchronous Neural Networks}
 
 %\include{LiteratureReview/LiteratureReview}
 
@@ -167,10 +168,13 @@ Hello World
 
 %\include{Results/Results}
 
-\chapter{Run-time Verification}
+\chapter{Run-time Enforcement of Synchronous Neural Networks}
 
-\include{Chapter3/methodology}
+\chapter{Run-time Verification of Synchronous Neural Networks}
 
+\include{Content/Chapter3/methodology}
+
+\include{Content/Chapter3/results}
 
 \begin{comment}
 \include{temp}
@@ -180,7 +184,7 @@ Hello World
 
 
 
-\include{Conclusions/Conclusions}
+%\include{Content/conclusions}
 
 \appendix
 \chapter{Appendix}

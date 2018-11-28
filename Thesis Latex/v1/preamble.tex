@@ -1,0 +1,82 @@
+
+
+\usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
+%\usepackage[colorlinks=false,bookmarks=false]{hyperref}
+\usepackage{booktabs}
+
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{multirow}
+%\usepackage{cite}
+\usepackage[normalem]{ulem} %for striking out text
+%
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts} %
+\usepackage{calligra} %
+\usepackage{mathtools}
+
+\usepackage{amsthm} % for neater definitions
+
+\usepackage{dblfloatfix} %allows floats to be at bottom of page
+
+%tikz and associated stuff
+\usepackage{tikz}
+\usepackage{verbatim}
+\usetikzlibrary{shapes,backgrounds}
+\usetikzlibrary{arrows,fit,automata,positioning,decorations,calc}
+\usetikzlibrary{spy}
+\usetikzlibrary{matrix,chains,decorations.pathreplacing}
+%\usetikzlibrary{arrows.meta}
+
+\usepackage{caption}
+%\usepackage{subcaption}
+
+\usepackage{comment}
+\usepackage{listings}
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+\usetikzlibrary{patterns}
+
+\usepackage[percent]{overpic}
+
+\usepackage[english]{babel}
+\usepackage{blindtext}
+
+\usepackage{acronym}
+
+%\usepackage[subtle]{savetrees}
+
+%\usepackage{flushend} % even out the last page, but use only at the end when there is a bibliography
+
+\newcommand\defeq{\stackrel{\mathclap{\scriptsize\mbox{def}}}{=}}
+\newcommand{\code}[1]{{\small{\texttt{#1}}}}
+
+% fatter TT font
+\renewcommand*\ttdefault{txtt}
+% another TT, suggested by Alex
+% \usepackage{inconsolata}
+% \usepackage[T1]{fontenc} % needed as well?
+
+\usepackage{listings}
+\usepackage{float}
+\input{preamble-listingsconf.tex}
+
+\newcommand{\todo}[1]{{\color{orange}(TODO: #1)}}
+\newcommand{\hammond}[1]{{\color{blue} Hammond: #1}}
+\newcommand{\matthew}[1]{{\color{red} Matthew: #1}}
+\newcommand{\changed}[1]{{\color{red}#1}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section] % definition numbers are dependent on theorem numbers
+\theoremstyle{example}
+\newtheorem{example}[definition]{Example} % same for example numbers
+\theoremstyle{theorem}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+%\newtheorem{defn}{definition}[section]
+%\newtheorem{exmp}{example}[section]
+%\newtheorem{rem}{remark}
+
