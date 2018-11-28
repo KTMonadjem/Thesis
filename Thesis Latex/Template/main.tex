@@ -1,0 +1,201 @@
+\documentclass[twoside,a4paper,12pt]{uathesis}
+\usepackage[percent]{overpic}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+%make fonts searchable
+%\usepackage{cmap}
+%\input{glyphtounicode}
+%\pdfgentounicode=1
+
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+%\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{url} % format email, hypertext, and path addresses
+%\usepackage[figure,linesnumbered,commentsnumbered,shortend,noline]{algorithm2e}
+\usepackage{subfigure}
+\usepackage{xspace}
+
+\usepackage{fancyvrb}
+%\usepackage{bera} %for bold in verbatim 
+%\usepackage{amsmath}
+\usepackage{bm}
+
+\usepackage[format=plain,labelfont=up]{caption}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{colortbl}
+%\usepackage[export]{adjustbox} %used to adjust trim image
+\usepackage{afterpage}
+\usepackage{booktabs} %for tables to use functions such as \toprule
+\usepackage{comment}
+
+\usepackage{enumitem} %used to change enum and list spaces and settings
+
+\usepackage{listings}
+\lstset{
+%     language=C,
+    captionpos=b,
+    breaklines=true,
+%     frame=single,
+    basicstyle=\footnotesize,
+    numbers=left,
+    numberstyle=\bf\scriptsize,
+    stepnumber=1,
+    numbersep=5pt,
+    escapeinside={(*@}{@*)}
+%     emph={solution},emphstyle={\color{red}},
+%     emph={[2]phOut,oxygenOut,waterOut},emphstyle={[2]\color{blue}},
+%     emph={[3]sensors,operatorStop},emphstyle={[3]\color{Green}}
+}
+\lstdefinelanguage{Esterel}{
+    morekeywords={abort, and, await, call, case, combine, constant do, each,
+                  else, elsif, emit, end, every, exec, exit, false, function,
+                  halt, handle, if, immediate, in, input, inputoutput, loop,
+                  mod, module, not, nothing, or,output, pause, positive, pre,
+                  present, procedure, relation, repeat, return, run, sensor,
+                  signal, suspend, sustain, task, then, tick, timeout, times,
+                  trap, true, type, upto, var, watching, weak, when, with
+                 },
+    sensitive=true,
+    morecomment=[l]{\%},
+    morestring=[b]",
+}
+
+\usepackage{hyperref}
+\hypersetup{
+    pdfauthor={Matthew Ming-Yen Kuo},
+    hidelinks
+}
+\usepackage{bookmark}
+
+\newbox\subfigbox
+\makeatletter
+\newenvironment{subfloat}
+{\def\caption##1{\gdef\subcapsave{\relax##1}}
+  \let\subcapsave\@empty
+  \setbox\subfigbox\hbox
+  \bgroup}
+{\egroup
+  \subfigure[\subcapsave]{\box\subfigbox}}
+\makeatother
+
+%\newcommand{\comment}[1]{{}}
+\newcommand{\dontprintsemicolon}{\DontPrintSemicolon}
+
+
+\newtheorem{definition}{Definition}
+%\newtheorem{proof}{Proof}
+\newtheorem{theorem}{Theorem}
+
+\newenvironment{abbreviations}{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{List of \abbreviationsname}%
+      \@mkboth{\abbreviationsname}%
+              {\abbreviationsname}%
+  }
+  {\newpage\@mkboth{}{}}
+\newcommand\abbreviationsname{Abbreviations}
+
+\begin{document}
+
+\title{Precision Timed Industrial Automation}
+\author{Matthew Ming-Yen Kuo}
+\department{Electrical \& Computer Engineering}
+\submitdate{September 2015}
+\supervisor[Dr. Partha S. Roop]{Dr. Nitish Patel}
+
+%create the title page
+\maketitle
+
+%%%%%%%%%%%%% First section %%%%%%%%%%%%%%%
+\frontmatter
+\bookmark[page=3]{Abstract}
+\include{Abstract}
+
+\bookmark[page=5]{Acknowledgements}
+\include{Acknowledgements}
+
+%create table of contents
+\bookmark[page=7]{Contents} % Sets a PDF bookmark for the contents page
+\tableofcontents
+
+\bookmark[page=11]{List of Figures}
+\listoffigures
+
+\bookmark[page=15]{List of Tables}
+\listoftables
+
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{List of Abbreviations}
+%\input{abbreviations}
+
+%%%%%%%%%%%% Body of the Thesis %%%%%%%%%%%
+\mainmatter
+
+%\include{Introduction/Introduction}
+\chapter{Test Chapter}
+
+Hello World
+
+%\include{LiteratureReview/LiteratureReview}
+
+%\include{Background/Backgound}
+
+%\include{Semantics/Semantics}
+%
+%\include{PRET/PRET}
+%
+
+%
+%\{Compilation/Compilation}
+%
+%\include{TimingAnalysis/TimingAnalysis}
+
+%\include{Results/Results}
+
+\begin{comment}
+\include{temp}
+\end{comment}
+
+
+
+
+
+\include{Conclusions/Conclusions}
+
+\appendix
+\chapter{Appendix}
+
+
+%\include{Publications}
+
+
+%%%%%%%%%%%% Last part of thesis indices, bibliography  %%%%%%%%%%%%
+\backmatter
+
+%create the bibliography
+% \bibliographystyle{siam}
+\renewcommand{\bibname}{References}
+% \clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\bibname}
+\bibliographystyle{IEEEtranS}
+\bibliography{references}
+
+
+\end{document}
+
