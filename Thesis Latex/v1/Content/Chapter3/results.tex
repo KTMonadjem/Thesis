@@ -1,17 +1,43 @@
 \section{Results}
 
-\begin{table}[]
+This research provides a solution for two aspects of \acf{AV} systems: predicting accurately with perturbations to the system's inputs and safely dealing with misclassifications by the system.
+The issue of input perturbations was addressed using a \acf{MNN} of different convolutional \acfp{SNN}, each \ac{SNN} working in tandem to predict more accurately.
+Misclassification by the system's controller was addressed by implementing sensor fusion between cameras and \ac{LiDAR}.
+This was done using a run-time enforcer that enforced a safety automaton.
+
+To test the \ac{MNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2010 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
+Table~\ref{tbl:sign-res} shows that without perturbations, the accuracy of the \ac{MNN} was increased from 87.07\% to 93.7\% when using an enforced policy.
+Table~\ref{tbl:sign-respert} shows that the accuracy of the \ac{MNN} hugely decreases when perturbations are present, from 87.07\% to 41.6\%.
+However, with sensor fusion and a relative safety policy, the accuracy is increased to 90.48\%.
+ 
+\begin{table}[h]
 	\centering
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{|l|l|l|l|l|l|}
 			\hline
 			Test case  & Person & Vehicle & Nothing of relevance & Street sign & Total \\ \hline
-			Number of misclassifications & 3.45 & 9.29 & 6.65 & 38.56 & 57.96 \\ \hline 
-			Caught misclassifications & 3.06 & 8.83 & 6.51 & 37.45 & 55.85 \\ \hline
-			False negatives & 3.87 & 2.16 & 0.28 & 7.53 & 13.84 \\ \hline
-			Missed misclassifications & 4.26 & 2.62 & 0.42 & 8.64 & 15.94 \\ \hline
+			Number of misclassifications & 1.23 & 3.82 & 3.27 & 4.61 & 12.93 \\ \hline 
+			Caught misclassifications & 1.00 & 3.64 & 3.20 & 3.75 & 11.59 \\ \hline
+			False negatives & 0.79 & 0.90 & 0.37 & 2.90 & 4.96 \\ \hline
+			Missed misclassifications & 1.02 & 1.09 & 0.44 & 3.75 & 6.30 \\ \hline
+		\end{tabular}%
+	}
+	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using the original images}
+	\label{tbl:sign-res}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|l|l|l|l|l|l|}
+			\hline
+			Test case  & Person & Vehicle & Nothing of relevance & Street sign & Total \\ \hline
+			Number of misclassifications & 3.59 & 9.20 & 6.58 & 39.03 & 58.40 \\ \hline 
+			Caught misclassifications & 2.73 & 8.00 & 6.37 & 35.87 & 52.98 \\ \hline
+			False negatives & 1.11 & 0.58 & 0.12 & 2.29 & 4.10 \\ \hline
+			Missed misclassifications & 1.97 & 1.78 & 0.32 & 5.45 & 9.52 \\ \hline
 		\end{tabular}%
 	}
 	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images}
-	\label{tbl:sign-res}
+	\label{tbl:sign-respert}
 \end{table}

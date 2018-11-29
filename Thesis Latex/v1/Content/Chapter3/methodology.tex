@@ -6,23 +6,26 @@ A solitary camera was sufficient to prove the efficacy of this solution, however
 The system used can be seen in Figure~\ref{fig:ssnn}. 
 
 The \ac{LiDAR} for this system was accurate 93\% of the time~\cite{lidarFusion}, to closely simulate a real \ac{LiDAR} system.
-The simulated camera outputs consisted of test images from both the \ac{VOC}~\cite{pascal-voc-2012} and \ac{GTSRB}~\cite{Stallkamp2012-gtsrb} datasets, in a combination of people, vehicles and various traffic signs.
+The simulated camera outputs consisted of test images from both the \ac{VOC} 2012~\cite{pascal-voc-2012} and \ac{GTSRB}~\cite{Stallkamp2012-gtsrb} datasets, in a combination of people, vehicles and various traffic signs.
 The \ac{LiDAR} and camera outputs were handled by different parts of the controller.
 The camera outputs were fed into a \ac{MNN} (see Figure~\ref{fig:mnn}) where they were classified by shape, colour and object type.
 
-Utilising synchronous semantics, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
-Each ensemble synchronously combined the outputs of three different convolutional \acfp{SNN}~\cite{sann}, providing increased prediction accuracy for shape, colour and object type. 
+Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
+Each \acf{SNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
+Synchronous programming guarantees code that is deterministic, causal and bounded.
+Additionally, the calculation of \acf{WCET} and \acf{WCRT} is enabled by using Esterel with C.
+Each ensemble synchronously combined the outputs of three different convolutional \acp{SNN}~\cite{sann}, providing increased prediction accuracy for shape, colour and object type. 
 These ensembles ran in synchronous concurrency, each taking four logical ticks to run. 
 The outputs of each ensemble were then combined into batch of outputs forming the \textit{predicted output}. 
 
 The system controller was encapsulated by a run-time enforcer~\cite{recps} that used sensor fusion to check for misclassifications made by the \ac{MNN}.
-A safety automata (timed automata)~\ref{?} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
+A safety automata (timed automata)~\ref{recps} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
 The automata started in a safe state, where control of the vehicle was autonomously handled by the system controller.
 If a misclassification was detected, the enforced policy entered an unstable state, still under autonomous control. 
 Once enough time passed without further misclassifications, the vehicle entered the safe state again.
 However, if another misclassification was detected while unstable, the enforced policy entered a violation state and forced control of the \ac{AV} to the driver.
 The vehicle would not enter autonomous mode again until the system was restarted.
-A diagram of the enforced policy's safety (timed) automaton is shown in Figure~\ref{fig:signrte}.
+A diagram of the enforced policy's safety automaton is shown in Figure~\ref{fig:signrte}.
 This type of run-time enforcement, where neither the inputs nor outputs of the sensors or controller are enforced, has been termed as \textit{run-time verification}.
 \textit{Run-time verification} refers to the verification of system parameters during run-time, while ensuring that the system is aware of any failed guards in the enforced policy.
 
