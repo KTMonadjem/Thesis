@@ -11,12 +11,14 @@ The \ac{LiDAR} and camera outputs were handled by different parts of the control
 The camera outputs were fed into a \ac{MNN} (see Figure~\ref{fig:mnn}) where they were classified by shape, colour and object type.
 
 Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
-Each \acf{SNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
+A \ac{MNN} is structure containing at least one \acf{SNN}~\cite{sann} synchronously combined with any number of other functional blocks~\cite{sann}.
+Each of the three \ac{MNN} ensembles were used to classify shape, colour and object type of each object being output by the camera.
+Each ensemble synchronously combined the outputs of three different convolutional \acp{SNN}, providing increased prediction accuracy for shape, colour and object type. 
+Each \ac{SNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
 Synchronous programming guarantees code that is deterministic, causal and bounded.
 Additionally, the calculation of \acf{WCET} and \acf{WCRT} is enabled by using Esterel with C.
-Each ensemble synchronously combined the outputs of three different convolutional \acp{SNN}~\cite{sann}, providing increased prediction accuracy for shape, colour and object type. 
-These ensembles ran in synchronous concurrency, each taking four logical ticks to run. 
-The outputs of each ensemble were then combined into batch of outputs forming the \textit{predicted output}. 
+These ensembles ran in synchronous concurrency with each other, forming a single, larger \ac{MNN}. 
+The outputs of each ensemble were then combined into a batch of outputs forming the \textit{predicted output}. 
 
 The system controller was encapsulated by a run-time enforcer~\cite{recps} that used sensor fusion to check for misclassifications made by the \ac{MNN}.
 A safety automata (timed automata)~\ref{recps} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
