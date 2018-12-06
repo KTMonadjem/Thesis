@@ -1,0 +1,42 @@
+\section{Verification of Deep Artificial Neural Networks}
+Deep \acfp{ANN}~\cite{schmidhuber2015deep}, \acp{ANN} with large, complex inputs and a large, complex layer structure and multiple layers, are hard to verify due to their complex nature~\cite{Gehr2018AI2SA}. 
+
+Need more here...
+
+%\subsection{Verifying Artificial Neural Networks for Input Perturbations}
+
+\subsection{Runtime Enforcement of Deep Artificial Neural Networks}
+Runtime Enforcement, as a solution to the verification of \acp{ANN} and introduced in the previous chapter, only works when the inputs to the \ac{ANN} are known. 
+Complex \ac{ANN} inputs (such as images) are unknown, the purpose of the \acp{ANN} is to classify said inputs.
+Thus, behaviour of \acp{ANN} with complex inputs (most commonly classification \acp{ANN}) can not be enforced. 
+
+
+\subsection{Input Perturbation for Deep Artificial Neural Networks}
+These \acp{ANN} can train to high accuracy on the training set, but simple perturbations to the \ac{ANN}'s input can lead to drastically reduced accuracy.
+A group showed that very slight modifications to an input image to a \acf{CNN}, such as discolouring a few pixels from the original image, could cause misclassification of the image~\cite{Gehr2018AI2SA}.
+
+\subsection{Sensor Fusion and Runtime Verification for Deep Artificial Neural Networks}
+Sensor fusion is a highly researched topic for increasing the accuracy of object detection \acp{CNN}~\cite{SensorFusion2017}. 
+Sensor fusion is the combination of two or more different sensor types to increase the overall sensor detection accuracy of the system.
+Where \acfp{AV} are concerned safety is of utmost importance, making this the biggest area of research for sensor fusion using \acp{CNN}.
+
+The proposed approach to safe deep \acp{ANN} combines runtime enforcement and sensor fusion to safely increase the detection accuracy of \acp{CNN} in \acp{AV}.
+The sensors in question are a 360$\circ$ \ac{LiDAR} sensor and three front-facing cameras.
+The sensor outputs are combined synchronously using a synchronous runtime enforcer, however the runtime enforcer does not enforce the outputs of the detection system.
+Rather, the runtime enforcer verifies the integrity of the detected outputs, and in the case of a possible misclassification the system is put into a safe mode where control of the vehicle is returned to the driver.
+This type of runtime enforcement has been termed as ``runtime verification''.
+Using \acfp{SSNN} as the \acp{CNN} in the \ac{AV} system, the system is kept synchronous, time predictable and easily formalised.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
