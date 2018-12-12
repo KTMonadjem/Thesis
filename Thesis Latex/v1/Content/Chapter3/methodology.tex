@@ -1,9 +1,9 @@
-\section{Simulating an Traffic Sign Recognition AV System}
+\section{Simulating a Traffic Sign Recognition AV System}
 The system designed for this case study was made to reflect a \acf{AV} and its object detection mechanisms. 
-The system used multiple techniques to tackle the inherent issues of the \ac{AV} system, i.e. weakness to perturbed inputs and misclassification detection.
-The system's sensors included an overhead, 360$^\circ$ \acf{LiDAR} apparatus, and a single, frontal facing camera.
-A solitary camera was sufficient to prove the efficacy of this solution, however it is to be noted that \ac{AV} systems generally use multiple cameras, facing different directions, so that the controller can make properly informed decisions.
-The system used can be seen in Figure~\ref{fig:ssnn}. 
+The system used multiple techniques to tackle the inherent issues of the \ac{AV} system, i.e. weakness to perturbed inputs and misclassification of detected objects.
+The system's sensors included an overhead, 360$^\circ$ \acf{LiDAR} apparatus, and a single set of front-facing cameras.
+Using only front-facing cameras was sufficient to prove the efficacy of this solution, however it is to be noted that \ac{AV} systems generally use cameras facing multiple, different directions, so that the controller can make properly informed decisions.
+The architecture of the system used can be seen in Figure~\ref{fig:ssnn}. 
 
 \subsection{Architecture of a Traffic Sign Recognition AV System}
 Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
