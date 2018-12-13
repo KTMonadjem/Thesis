@@ -1,2 +1,56 @@
 \section{Summary}
-Summary of everything previously mentioned in this chapter
+In the previous chapter of this thesis, runtime enforcement was introduced to dynamically increase the safety of \acfp{ANN}.
+However, runtime enforcement is not always applicable to \ac{ANN} systems; most notably where \acp{ANN} with complex inputs (such as \acfp{CNN}) are concerned.
+Thus, runtime enforcement is not a suitable solution to systems where \acp{CNN} are used, such as \acfp{AV}.
+
+Inspiration for the safety of \acp{AV} was taken from the recent \ac{AV} accidents by Uber and Tesla vehicles.
+These accidents resulted in the loss of life due to misclassifications made by the system controller, which consists of some layout of \acp{CNN} and other intelligent systems.
+Additionally, perturbations to a \ac{CNN}'s input can greatly decrease the prediction accuracy of a \ac{CNN}.
+This, in turn, increases the chance of a misclassification by the system's controller and decreases the safety of the system.
+
+In this chapter, two techniques are implemented to increase the safety of \acfp{CNN} in \acf{AV} systems.
+There are two ways that a system that misclassifies data can be made safe: reduce the chance of misclassifications and act in a safe manner should a misclassification occur.
+An \ac{AV} simulation was created to simulate an \ac{AV} system as closely as was possible.
+
+To address the first, a complex \acf{MNN} was implemented as the system's controller.
+This \ac{MNN} consisted of three different \ac{MNN} ensembles, each ensemble classifying a different aspect of the detected object.
+Each \ac{MNN} ensemble consisted of three different synchronous \acp{CNN}, with the outputs of each \ac{CNN} combined to increase the prediction accuracy of the system.
+The three ensembles' outputs were then combined synchronously during runtime to further increase the prediction accuracy of the system controller.
+This \ac{MNN} also served to increase the prediction accuracy of the system when perturbations were affecting the inputs to the \ac{MNN}.
+
+The simulated system also used sensor fusion, managed by a safety policy and enforced by a runtime enforcer.
+The system combined \acf{LiDAR} input with the \ac{MNN}, thereby increasing the chance of detecting a misclassification.
+Additionally, a timed automaton was used as the safety policy; this allowed the system to check for consecutive misclassifications and enforce the control of the vehicle where necessary.
+
+The runtime enforcement used in this system hs been termed ``runtime verification'', as the outputs of the \ac{MNN} itself were not enforced.
+Rather, the control of the vehicle (autonomous or driver operated) was enforced.
+If a situation was deemed unsafe by the safety policy, the runtime enforcer would force control of the vehicle to the driver.
+
+This system was tested and trained using a large combination of images from the \ac{VOC} and \ac{GTSRB} datasets, with images of cars and people taken from the \ac{VOC} dataset and images of various traffic signs taken from the \ac{GTSRB} dataset.
+The system showed that input perturbations can reduce the accuracy of the system by as much as 45\%.
+The efficacy of the implemented techniques are shown: both with and without the enforcer, the accuracy of the system controller greatly improves, with the enforced policy catching 36 out of every 39 misclassifications.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

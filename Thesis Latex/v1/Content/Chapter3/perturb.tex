@@ -23,7 +23,7 @@ The solution proposed is to use runtime enforcement as a means to safely combine
 \subsection{Input Perturbation for Deep Artificial Neural Networks}
 This chapter also tackles another problematic aspect of using \acp{CNN}: input perturbations.
 A group showed that very slight modifications to the input image of a \acf{CNN}, such as the discolouration of a few pixels, could cause the image to be misclassified~\cite{Gehr2018AI2SA}.
-A \ac{CNN} can train to high accuracy on the training set, but simple perturbations to the \ac{CNN}'s input can lead to drastically reduced accuracy once the \ac{CNN} has been deployed.
+A \ac{CNN} can train to high accuracy, e.g. 99.99\%, on the training set, but simple perturbations to the \ac{CNN}'s input can lead to drastically reduced accuracy once the \ac{CNN} has been deployed.
 This thesis shows two methods of increasing the prediction accuracy of an \ac{CNN} affected by input perturbations: the first is the above-mentioned sensor fusion with runtime enforcement and the other is using a \acf{MNN} ensemble of different \acp{CNN}, each classifying a different aspect of the input image and congregating to make a decision as a whole.
 
 

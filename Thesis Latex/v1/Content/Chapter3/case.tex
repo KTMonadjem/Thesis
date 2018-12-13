@@ -1,10 +1,26 @@
 \section{A Object Detection Case Study for Perturbed Inputs}
-\acfp{AV} are quickly growing, companies such as Uber and Tesla the biggest contributors to this field.
+Research in \acfp{AV} systems is rapidly expanding, with companies such as Uber and Tesla the biggest contributors to this field.
+With the growing use of \acp{AV} comes an increase in accidents related to these vehicles.
+The majority of these accidents have one thing in common: a misclassification occurred right before the accident.
+Input perturbations greatly decrease accuracy, thereby increasing the chance of a misclassification and, by proxy, the chance of an accident.
 
 
 \subsection{Object Misclassification in Autonomous Vehicle Systems}
-Describe what sort of object are misclassified, some examples of issues with misclassifications (Uber, etc) and why these occur.
+The inspiration for this case study was taken from the more recent Uber and Tesla \ac{AV} accident, such as~\cite{coldewey_2018}.
+In these accidents, a misclassification, or series thereof, precedented the crash.
+In the case of the Uber accident~\cite{coldewey_2018} a pedestrian crossing the road (at night) was misclassified a minimum of three times before the accident occurred.
+
+Theoretically, this accident could have been prevented in two ways: the first being that no misclassifications occurred and the second being that the system recognised the misclassifications sooner and acted accordingly.
+The misclassifications could have occurred because it was night-time and the input(s) of the pedestrian were perturbed, or the misclassification could have occurred in that 0.001\% of misclassifications. 
+Either way, a system can be implemented to increase prediction accuracy regardless of the state of the inputs, perturbed or not.
+Secondly, by implementing a runtime enforcer and a safe, timed automaton as the safety policy misclassifications can be detected quickly and effectively.
+
 
 \subsection{Simulation of an Autonomous Vehicle Object Detection System}
-We simulated an AV object detection system.
-How close is it to the original and why we simulated what we did.
+Replicating an \ac{AV} system, such as Uber's or Tesla's, would be impossible; it is expensive to purchase the technology such as \ac{LiDAR} and the machine vision cameras, and the time taken to implement the system as a single researcher is also infeasible.
+As such, a simulation of the \ac{AV} was made to try and capture the intricacies of such a system where safety is concerned, while showing the efficacy of the proposed techniques.
+
+%The simulated system needed a simulation of real \ac{LiDAR}, a simulated camera and an actual controller. 
+%The \ac{LiDAR} and camera inputs would need to be simulated so that they are represented accurately, but in a simplistic manner.
+%The controller would need to process the \ac{LiDAR} input and the camera inputs, meaning that it needed to include at least one \ac{ANN}.
+

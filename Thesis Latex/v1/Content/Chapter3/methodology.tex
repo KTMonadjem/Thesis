@@ -7,10 +7,10 @@ The architecture of the system used can be seen in Figure~\ref{fig:ssnn}.
 
 \subsection{Architecture of a Traffic Sign Recognition AV System}
 Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
-A \ac{MNN} is structure containing at least one \acf{SNN}~\cite{sann} synchronously combined with any number of other functional blocks~\cite{sann}.
+A \ac{MNN} is structure containing at least one \acf{SSNN}~\cite{sann} synchronously combined with any number of other functional blocks~\cite{sann}.
 Each of the three \ac{MNN} ensembles were used to classify shape, colour and object type of each object being output by the camera.
-Each ensemble synchronously combined the outputs of three different convolutional \acp{SNN}, providing increased prediction accuracy for shape, colour and object type. 
-Each \ac{SNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
+Each ensemble synchronously combined the outputs of three different convolutional \acp{SSNN}, providing increased prediction accuracy for shape, colour and object type. 
+Each \ac{SSNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
 Synchronous programming guarantees code that is deterministic, causal and bounded.
 Additionally, the calculation of \acf{WCET} and \acf{WCRT} is enabled by using Esterel with C.
 These ensembles ran in synchronous concurrency with each other, forming a single, larger \ac{MNN}. 
@@ -24,7 +24,7 @@ The outputs of each ensemble were then combined into a batch of outputs forming 
 
 \subsection{Sensor Fusion for a Traffic Sign Recognition AV System}
 Two sensors were used for the purpose of sensor fusion; \ac{LiDAR} and cameras.
-The \ac{LiDAR} for this system was accurate 93\% of the time~\cite{lidarFusion}, to closely simulate a real \ac{LiDAR} system.
+The \ac{LiDAR} controller for this system was accurate 93\% of the time~\cite{lidarFusion}, to closely simulate a system using real \ac{LiDAR}.
 The simulated camera outputs consisted of test images from both the \ac{VOC} 2012~\cite{pascal-voc-2012} and \ac{GTSRB}~\cite{Stallkamp2012-gtsrb} datasets, in a combination of people, vehicles and various traffic signs.
 The \ac{LiDAR} and camera outputs were handled by different parts of the controller.
 The camera outputs were fed into a \ac{MNN} (see Figure~\ref{fig:mnn}) where they were classified by shape, colour and object type.
@@ -46,7 +46,7 @@ A diagram of the enforced policy's safety automaton is shown in Figure~\ref{fig:
 		\item $V$: Misclassification of a vehicle.
 		\item $N$: Classification of an object when there is nothing.
 		\item $S$: Misclassification of a traffic sign.
-		\item $C$: Confidence rating of the \ac{SNN} classification.
+		\item $C$: Confidence rating of the \ac{SSNN} classification.
 		\item $t$: Timer for the unstable state.
 	\end{itemize}
 	

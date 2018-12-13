@@ -5,7 +5,7 @@ The issue of input perturbations was addressed using a \acf{MNN} of different co
 Misclassification by the system's controller was addressed by implementing sensor fusion between cameras and \ac{LiDAR}.
 This was done using a run-time enforcer that enforced a safety automaton.
 
-To test the \ac{MNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2010 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
+To test the \ac{MNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2012 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
 Table~\ref{tbl:sign-res} shows that without perturbations, the accuracy of the \ac{MNN} was increased from 87.07\% to 93.7\% when using an enforced policy.
 Table~\ref{tbl:sign-respert} shows that the accuracy of the \ac{MNN} hugely decreases when perturbations are present, from 87.07\% to 41.6\%.
 However, with sensor fusion and a relative safety policy, the accuracy is increased to 90.48\%.
