@@ -1,3 +1,20 @@
 \section{Discussion}
-Discussion of the results of the case study and benchmarks.
-Discuss methodology and results.
+This chapter presents techniques to increase the safety of \ac{AV} systems. 
+The first technique involves creating \ac{MNN} ensembles, consisting of multiple \acp{CNN}, which work together to increase the prediction accuracy.
+The second technique uses runtime enforcement to verify the integrity of the \ac{MNN}'s classifications, attempting to detect misclassifications dynamically and put the vehicle in safe state if one is detected.
+These two techniques work in tandem to greatly increase the safety of the \ac{AV} system where object misclassification is concerned.
+
+Creating a \ac{MNN}  with three synchronous \acp{CNN}, forming a \ac{MNN} ensemble, did have a large effect on the classification accuracy of the system.
+The classification accuracy was higher than that of an ordinary \ac{CNN} regardless of the number of epochs trained, but it was noted that the increase in accuracy was smaller the better trained the ordinary \ac{CNN} was.
+This means that using \ac{MNN} ensembles is more effective for poorly or incompletely trained \acp{CNN}, but it still increases the prediction accuracy even when extensively trained \acp{CNN} are used.
+However, implementing three \acp{CNN} is very resource intensive; each has to be trained separately to a suitable standard and on different data, each has to be implemented separately and each has to run separately.
+This takes much more time, memory and processing power than implementing a single \ac{CNN} to classify the input images.
+The \ac{MNN} used more than three times the resources that a single \ac{CNN} would use, but it can be argued that this trade-off is worth the increase in classification accuracy where human lives are concerned.
+
+The second technique showed the largest increase in the systems safety, with less resources required to implement it.
+The runtime enforcer increased the prediction accuracy by 45\% for an extensively trained \ac{MNN}, which is a large improvement compared to the improvement from the \acp{MNN} ensembles alone. 
+The biggest downside to the runtime enforcer is that is uses three different \acp{MNN} to run.
+Each \ac{MNN} is an ensemble of \acp{CNN}, as introduced previously.
+This means that using the runtime enforcer increases the resource usage of the system by 300\%.
+However, the trade-off for the safety of the system, unlike the previous technique, is well worth the extra resource cost.
+
