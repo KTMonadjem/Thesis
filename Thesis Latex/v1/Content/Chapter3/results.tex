@@ -22,25 +22,106 @@ However, with sensor fusion and a relative safety policy, the accuracy is increa
 			Missed misclassifications & 1.02 & 1.09 & 0.44 & 3.75 & 6.30 \\ \hline
 		\end{tabular}%
 	}
-	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using the original images}
+	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using the original images trained for 10000 epochs}
 	\label{tbl:sign-res}
 \end{table}
 
 \begin{table}[h]
 	\centering
 	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|l|l|l|l|l|l|}
+		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
 			\hline
-			Test case  & Person & Vehicle & Nothing of relevance & Street sign & Total \\ \hline
-			Number of misclassifications & 3.59 & 9.20 & 6.58 & 39.03 & 58.40 \\ \hline 
-			Caught misclassifications & 2.73 & 8.00 & 6.37 & 35.87 & 52.98 \\ \hline
-			False negatives & 1.11 & 0.58 & 0.12 & 2.29 & 4.10 \\ \hline
-			Missed misclassifications & 1.97 & 1.78 & 0.32 & 5.45 & 9.52 \\ \hline
+			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
+			Person & 17.01 & 17.01 & 0.00 & 0.00 \\ \hline
+			Vehicle & 15.85 & 15.85 & 0.00 & 0.00 \\ \hline
+			Sign & 54.46 & 54.46 & 4.84 & 4.84 \\ \hline
+			Nothing & 7.83 & 7.83 & 0.00 & 0.00 \\ \hline
+			All & 95.16 & 95.16 & 4.84 & 4.84 \\ \hline
 		\end{tabular}%
 	}
-	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images}
-	\label{tbl:sign-respert}
+	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images trained for 1 epochs}
+	\label{tbl:sign-respert1}
 \end{table}
+
+\begin{table}[h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
+			\hline
+			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
+			Person & 17.01 & 17.01 & 0.00 & 0.00 \\ \hline
+			Vehicle & 15.85 & 15.85 & 0.00 & 0.00 \\ \hline
+			Sign & 54.53 & 54.53 & 4.77 & 4.77 \\ \hline
+			Nothing & 7.83 & 7.83 & 0.00 & 0.00 \\ \hline
+			All & 95.23 & 95.23 & 4.77 & 4.77 \\ \hline
+		\end{tabular}%
+	}
+	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images trained for 10 epochs}
+	\label{tbl:sign-respert10}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
+			\hline
+			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
+			Person & 7.69 & 3.01 & 0.32 & 5.01 \\ \hline
+			Vehicle & 13.70 & 12.21 & 0.12 & 1.60 \\ \hline
+			Sign & 56.01 & 37.24 & 1.37 & 20.14 \\ \hline
+			Nothing & 7.83 & 7.83 & 0.00 & 0.00 \\ \hline
+			All & 85.24 & 60.30 & 1.81 & 26.74 \\ \hline
+		\end{tabular}%
+	}
+	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images trained for 100 epochs}
+	\label{tbl:sign-respert100}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
+			\hline
+			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
+			Person & 3.66 & 1.39 & 0.93 & 3.20 \\ \hline
+			Vehicle & 9.06 & 7.00 & 0.60 & 2.67 \\ \hline
+			Sign & 33.05 & 27.14 & 2.18 & 8.09 \\ \hline
+			Nothing & 6.65 & 6.12 & 0.07 & 0.60 \\ \hline
+			All & 52.42 & 41.65 & 3.78 & 14.55 \\ \hline
+		\end{tabular}%
+	}
+	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images trained for 1000 epochs}
+	\label{tbl:sign-respert1000}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
+			\hline
+			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
+			Person & 4.01 & 0.72 & 0.42 & 3.71 \\ \hline
+			Vehicle & 11.33 & 9.15 & 0.35 & 2.53 \\ \hline
+			Sign & 44.17 & 37.61 & 1.27 & 7.83 \\ \hline
+			Nothing & 7.32 & 7.00 & 0.07 & 0.39 \\ \hline
+			All & 66.84 & 54.48 & 2.11 & 14.46 \\ \hline
+		\end{tabular}%
+	}
+	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images trained for 10000 epochs}
+	\label{tbl:sign-respert10000}
+\end{table}
+
+\begin{figure}[t]
+	\centering
+	\scalebox{1}{\input{Content/fig/sign-graph.tex}}
+	\caption{Line graph showing the performance of the system trained over an increasing amount of epochs using unperturbed inputs \label{fig:sign-graph}}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+	\scalebox{1}{\input{Content/fig/sign-graphpert.tex}}
+	\caption{Line graph showing the number of misclassifications made by the system with perturbed inputs \label{fig:sign-graphpert}}
+\end{figure}
 
 \todo{Add results for multiple epochs}
 \todo{Add table showing how \ac{MNN} affects the prediction accuracy}

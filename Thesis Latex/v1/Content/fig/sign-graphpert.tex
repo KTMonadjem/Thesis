@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+\begin{semilogxaxis}[
+xlabel={Number of epochs trained},
+ylabel={Time to first incident (/100)},
+x=1.3cm,
+y=1.0mm, 
+legend style={at={(0.1,0.55)},anchor=west}]
+
+\addplot[color=blue,mark=*] coordinates {
+	(1, 95.16)
+	(10, 95.23)
+	(100, 85.24)
+	(1000, 52.42)
+	(10000, 66.84)
+};
+
+\addplot[color=red,mark=*] coordinates {
+	(1, 4.84)
+	(10, 4.77)
+	(100, 26.74)
+	(1000, 14.55)
+	(10000, 14.46)
+};
+
+\legend{Policies not enforced (perturbed), Policies enforced(perturbed)}
+\end{semilogxaxis}%
+\end{tikzpicture}%
