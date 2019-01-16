@@ -2,11 +2,11 @@
 \begin{semilogxaxis}[
 xlabel={Number of epochs trained},
 ylabel={System classification accuracy (\%)},
-x=1.3cm,
+x=1.1cm,
 y=1.0mm, 
 legend style={at={(0.02,0.55)},anchor=west}]
 
-\addplot[color=blue,mark=*] coordinates {
+\addplot[color=brown,mark=x] coordinates {
 	(1, 100 - 95.159996)
 	(10, 100 - 95.159996)
 	(20, 100 - 95.300003)
@@ -36,9 +36,18 @@ legend style={at={(0.02,0.55)},anchor=west}]
 	(8000, 100 - 18.889999)
 	(9000, 100 - 10.920000)
 	(10000, 100 - 12.380000)
+	(20000, 100 - 14.880000)
+	(30000, 100 - 10.920000)
+	(40000, 100 - 15.460000)
+	(50000, 100 - 10.850000)
+	(60000, 100 - 10.920000)
+	(70000, 100 - 15.620001)
+	(80000, 100 - 18.520000)
+	(90000, 100 - 14.410000)
+	(100000, 100 - 11.980000)
 };
 
-\addplot[color=red,mark=*] coordinates {
+\addplot[color=black,mark=x] coordinates {
 	(1, 100 - 4.840000)
 	(10, 100 - 4.840000)
 	(20, 100 - 4.630000)
@@ -68,8 +77,17 @@ legend style={at={(0.02,0.55)},anchor=west}]
 	(8000, 100 - 8.640000)
 	(9000, 100 - 6.810000)
 	(10000, 100 - 5.930000)
+	(20000, 100 - 8.270000)
+	(30000, 100 - 6.050000)
+	(40000, 100 - 6.930000)
+	(50000, 100 - 6.120000)
+	(60000, 100 - 6.260000)
+	(70000, 100 - 7.050000)
+	(80000, 100 - 8.340000)
+	(90000, 100 - 7.490000)
+	(100000, 100 - 6.330000)
 };
 
-\legend{Policies not enforced (perturbations), Policies enforced (perturbations)}
+\legend{Policies not enforced, Policies enforced}
 \end{semilogxaxis}%
 \end{tikzpicture}%
