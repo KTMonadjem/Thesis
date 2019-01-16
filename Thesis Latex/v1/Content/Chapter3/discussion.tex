@@ -11,10 +11,22 @@ However, implementing three \acp{CNN} is very resource intensive; each has to be
 This takes much more time, memory and processing power than implementing a single \ac{CNN} to classify the input images.
 The \ac{MNN} used more than three times the resources that a single \ac{CNN} would use, but it can be argued that this trade-off is worth the increase in classification accuracy where human lives are concerned.
 
-The second technique showed the largest increase in the systems safety, with less resources required to implement it.
-The runtime enforcer increased the prediction accuracy by 45\% for an extensively trained \ac{MNN}, which is a large improvement compared to the improvement from the \acp{MNN} ensembles alone. 
-The biggest downside to the runtime enforcer is that is uses three different \acp{MNN} to run.
+The second technique, the runtime enforcer, increased the prediction accuracy by 43\% for an extensively trained \ac{MNN} when input perturbations are involved.
+The system only improved by 6\% when there were no input perturbations.
+The enforcer provided an increase in performance regardless of the amount of training the \ac{MNN} had.
+With no training, the classification accuracy of the system matched the accuracy of the \ac{LiDAR} sensor.
+As the system trained, and the \ac{MNN} became more confident with its decisions, the accuracy of the system began to match the accuracy of the \ac{MNN}.
+If the system were to be trained for more than 10,000 epochs, and the accuracy of the \ac{MNN} exceeded the accuracy of the \ac{LiDAR}, the overall accuracy of the system would likely increase beyond the accuracy of the \ac{LiDAR}.
+More extensive training and testing of this system is proposed for future work.
+
+%Using an enforcer to combine the \ac{MNN} output instead of another ANN
+The biggest downside to this system is that it uses three different \acp{MNN} to run.
 Each \ac{MNN} is an ensemble of \acp{CNN}, as introduced previously.
-This means that using the runtime enforcer increases the resource usage of the system by 300\%.
-However, the trade-off for the safety of the system, unlike the previous technique, is well worth the extra resource cost.
+This means that using this layout increases the resource usage of the system by 300\%, as opposed using a single \ac{MNN} ensemble, or 900\% compared to using a single \ac{CNN}.
+However, the trade-off for the safety of the system is well worth the extra resource cost.
+Future work could look into decreasing the resource intensity of this system.
+
+\todo{Read memomcode paper on functional ANNs}
+\todo{Direct comparison to AI2}
+%\todo{Train ANNs more and start at 1k epochs}
 
