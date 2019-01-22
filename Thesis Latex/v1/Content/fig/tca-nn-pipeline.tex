@@ -1,0 +1,34 @@
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,
+node distance=3cm,
+semithick,scale=0.8, transform shape,scale=0.6, font=\LARGE]
+
+\tikzstyle{every state}=[rectangle, minimum width=2cm, minimum height=1.5cm, text centered, 
+fill=blue!20,draw=none,text=black, draw,line width=0.3mm, font=\LARGE]
+
+%start state
+\node[state]
+(n1) 
+{$M_1$}; 
+
+\node[state]
+(n2) [right of=n1]
+{$M_2$};
+
+\node[state]
+(n3) [right of=n2]
+{$M_3$};
+
+\node[state,fill=none, draw=none]
+(el) [right of=n3]
+{...};
+
+\node[state]
+(nn) [right of=el]
+{$M_n$};
+
+\path[->] (n1) edge (n2);
+\path[->] (n2) edge (n3);
+\path[-] (n3) edge (el);
+\path[->] (el) edge (nn);
+
+\end{tikzpicture}

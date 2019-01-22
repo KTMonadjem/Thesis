@@ -99,7 +99,7 @@
    ]{geometry}[2002/07/08]
 \fi
 
-\RequirePackage{subfigure}
+%\RequirePackage{subfigure}
 \RequirePackage{color}
 \RequirePackage{setspace}
 \RequirePackage{fancyhdr}
@@ -229,6 +229,8 @@
   \fontencoding{OT1}\fontfamily{phv}\fontsize{10}{12}\selectfont%
 }
 
+
+\newcommand{\subcaplabelfont}{}
 \renewcommand{\subcaplabelfont}{%
   \fontencoding{OT1}\fontfamily{phv}\fontsize{8}{10}\selectfont%
 }

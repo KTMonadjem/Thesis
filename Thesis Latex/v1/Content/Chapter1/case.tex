@@ -1,15 +1,268 @@
-\section{A Case Study for Time Predictable Synchronous Neural Networks}
-\subsection{An Energy Storage System for an Electric Vehicle Charging Station}
-Cite Kalpesh's paper and describe the system we are using as our case study. 
-Why it is unsafe and how we can make it better.
+\section{Multi-Periodic \acp{SANN} in Esterel}
+\label{sec:esterel-mapping}
 
-\subsection{Energy Storage System and Machine Learning}
-Describe the role of machine learning for the ESS and how the system can be improved.
-Describe the training methods used to train the ANNs, and elaborate on how the ANNs work for this system.
+The mono-periodic implementation of \ac{SANN} using the methodology in Listing~\ref{lst:ai-bro}, while being time predictable, has limitations.
+This is because each \ac{NN} must run to completion before any reaction can complete. 
+For large networks with many hidden layers, this is not ideal --- as
+the overall \ac{WCRT} of the system could become quite large, causing
+violations when considering response to some critical inputs which may
+need immediate attention to ensure safety. We highlight this aspect
+using an \acf{ESS} case study in Section~\ref{sec:results}.
 
-\subsection{Synchronous Neural Network in an ESS}
-Methodology behind implementing the C and Esterel code for the trained ANN.
+There are other approaches for arranging the internals of each network while still meeting Definition~\ref{def:sann}, and to illustrate this, we will use a simple XOR (exclusive or) \ac{MLP}.
+This network is depicted in Figure~\ref{fig:xor-ann}, and as can be seen, it features five neurons in three layers. While we use this simple illustration, the 
+methodology is applicable for any \ac{NN}.
 
-\subsection{Timing Analysis of the ESS}
-Explain how timing was important for this system and how it can improve the safety of this system.
-WCET and WCRT.
+\begin{figure}[t]
+	\centering
+	\scalebox{0.8}{\input{Content/fig/xor-ann.tex}}
+	\caption{Example XOR \ac{MLP} \ac{ANN}.	\label{fig:xor-ann}}
+\end{figure}
+
+Each neuron in this network is based on the model in Figure~\ref{fig:artificial-neuron}, with a simple Boolean step activation function and zero bias. 
+The activation function is represented by Equation~\ref{eqn:xor-neuron}, where $y$ is the output, $x \in X$ are the inputs, and $w \in W$ the weights.
+
+\begin{equation}
+y =
+\begin{cases}
+1 & \text{$\Sigma_{i} \left(x_i \times w_i\right) >= 1$} \\
+0 & \text{otherwise}
+\end{cases}
+\label{eqn:xor-neuron}
+\end{equation}
+
+\begin{definition}
+	\label{def:bb-mlp}
+	An \ac{MLP} is formalised as a tuple $M = \langle I, O, N, L,
+	\alpha, \eta  \rangle$, where:
+	\begin{itemize}
+		\item $I$ is a finite collection of input variables with
+		its domain being $\mathbf{I} = \mathbb{R}^n$
+		\item  $O$ is a finite collection of  output variables with
+		its domain being $\mathbf{O} = \mathbb{R}^m$
+		\item  $N$ denotes a set of neurons
+		\item $L$ denotes a set of layers
+		\item $\alpha: N \rightarrow L$ is the neuron mapping function
+		that maps a given neuron to a layer
+		\item $\eta: \mathbf{I} \rightarrow \mathbf{O}$ is the non-linear
+		function (termed the network function) that provides the behaviour of a given network i.e.
+		when provided a vector of input of size $n$ produces an
+		vector of output of size $m$. Internally, 
+	\end{itemize}
+	\ignore{
+		$i \in I$ is each input to the network, $o \in O$ is each output from the network, 
+		$\eta$ is the set of neurons, $L$ is the set of layer functions $l:i \rightarrow o$ which perform intermediate data transforms, $m: \eta \rightarrow L$ is the neuron mapping function that associates a neuron to a given layer,
+		and $f: I \rightarrow O$ is a function that captures the non-linear behaviour of the entire network 
+		--- i.e. a ``black-box'' untimed non-linear transformation function which converts inputs to outputs via the execution of each layer of neurons in sequence.}
+	%$m \subset \eta \times L$ provides the mapping of neurons to layers. 
+	%	We can describe the operation of $n$ as $n\left(I\right) = O$, i.e. $n$ describes a `black-box' untimed non-linear transformation function which converts inputs to outputs via the execution of each layer of neurons.
+\end{definition} 
+
+\begin{example}
+	The \ac{MLP} presented in Figure~\ref{fig:xor-ann} can be presented formally as $I=\langle x_1, x_2 \rangle$, $O = \langle y \rangle$, $N= \{i_1, i_2, h_1, h_2, h_3, o_1\}$ and $L
+	= \{l_i, l_h, l_o\}$. The function $\alpha$ maps neurons to
+	layers e.g. $\alpha(h_1) = l_1$ and the network function $\eta$
+	given input $\langle 0, 1 \rangle$ produces an output $1$
+	i.e. $\eta(\langle 0, 1 \rangle) = 1$.
+	
+\end{example}
+%\pr{Illustrate this definition using Figure~\ref{fig:xor-ann}. Also, where is this definition used formally?}
+
+Using Definition~\ref{def:bb-mlp}, we can implement the XOR \ac{ANN} as a ``black-box'' function in Esterel, as presented in Figure~\ref{fig:tca-bb-n}. 
+The corresponding mono-periodic \ac{TCA} is shown beside the code.
+The \ac{WCRT} is the time taken to execute the network function
+$\eta$, i.e. $WCRT\left(M\right) = WCRT\left( \eta\right)$. 
+In the following, we use $WCRT(\eta)$ and $\eta$ interchangeably.
+
+\begin{figure}[h]
+	\begin{subfigure}[]{0.15\textwidth}
+		\centering
+		\input{Content/fig/tca-simple-n.tex}
+	\end{subfigure}%
+	\begin{subfigure}[]{0.33\textwidth}
+		\vspace{3mm}
+		\begin{lstlisting}
+		loop
+		emit y(run_XOR_ANN_n(?x1, ?x2));
+		pause;
+		end
+		\end{lstlisting}
+	\end{subfigure}
+	\caption{Mono-periodic `black-box', $WCRT = \eta$}
+	\label{fig:tca-bb-n}
+\end{figure}
+
+It can be noted that by Proposition~\ref{lemma1}, any \ac{ANN} implemented using the approach in Figure~\ref{fig:tca-bb-n} is also an instance of \ac{SANN} defined using Definition~\ref{def:sann}.
+%\pr{This is same as the lemma in section 2. Do we need this?}
+
+\begin{theorem}
+	\label{thm:bb-soundness}
+	(Soundness) A mono-periodic \ac{SANN} given an input vector $\mathbf{i}$
+	produces an output vector $\mathbf{o}$ in a given tick \miff the corresponding \ac{MLP} 
+	given the same input vector $\mathbf{i}$ produces the identical output vector $\mathbf{o}$ during any execution.
+	
+	%The synchronous execution of a ``black-box'' function $n$ will give the same output values $O$ for the same input values $I$ as the non-synchronous execution of the
+	%\ac{MLP} $n$.
+\end{theorem}
+
+\begin{proof}
+	The proof of Theorem~\ref{thm:bb-soundness} trivially follows from the
+	fact that synchronous execution of a black-box function does not change
+	the mathematical properties of that function. %, as all Esterel function
+	%calls are state-less and  side effect free.
+\end{proof}
+
+\ignore{
+	
+	\begin{equation}
+	y = f\Big(b + \sum_{i=1}^{n} \left(x_i \times w_i\right)\Big)
+	\label{eqn:artificial-neuron}
+	\end{equation}
+	
+	In the XOR example, each neuron has a \textit{threshold step function} as its activation function $f$, and has zero bias $b$.
+	Hence, each neuron in the \textit{hidden} and \textit{output} layers is following Equation~\ref{eqn:xor-neuron}.
+	
+	\begin{example}
+		In our XOR \ac{ANN}, let $i_1 = 1$ and $i_2 = 0$. \\
+		Then, as $1 \times 1 \geqslant 1$, $h_1y = 1$. \\
+		However, $\big(\left(1 \times 0.5\right) + \left(0 \times 0.5\right)\big) \ngeqslant 1$, so $h_2y = 0$.
+		Likewise, $h_3y = 0$.  \\
+		Then, as $\big((1 \times 1) + (0 \times -2) + (1 \times 1)\big) \ngeqslant 1$, the final output $o_1y = 1$.  \\
+		This is correct, as $1$ \textit{xor} $0 = 1$.
+	\end{example}
+}
+
+\input{Content/fig/mlp-arrangements.tex}%\pr{This Figure could be split and each aspect properly explained in the text.}
+
+As mentioned, using the approach in Figure~\ref{fig:tca-bb-n} to implement complex \acp{ANN} i.e. \acp{CNN} may lead to implementations that violate their timing requirements. 
+The synchronous approach, however, enables efficient implementations via compositional modelling.
+Esterel supports this via statements such as \texttt{pause} that help to create smaller ticks, \texttt{;} for indicating sequence operation, and \texttt{||}, which enables the modelling of concurrency. 
+
+For example, the \ac{MLP} in Figure~\ref{fig:tca-bb-n} can also be
+compositionally modelled by splitting the neural function $\eta$
+into its constituent layers $l_i$, $l_h$, and $l_o$. 
+While this maintains the overall functionality of the network, it
+reduces the \ac{WCRT} by making the network multi-periodic, where each
+period is shorter. 
+As previously mentioned, the \ac{ESS} case study in Section~\ref{sec:results} examines the benefits of this approach.
+
+%This has no major effect in Figure~\ref{fig:tca-bb}, where the network is still running in a single tick, as function $f$ will call these layers internally anyway.
+%However, if \texttt{pause} statements are introduced between each layer, then the timing of the program changes significantly: 
+%the \ac{WCRT} of the program will decrease, and the execution becomes `multi-cyclic'.
+%Now, multiple \textit{ticks} are required to complete the execution of the neural network, but the program's responsiveness can be increased.
+
+\begin{prop}
+	%As long as a neural network's layers are still executed in
+	%the correct order, the output will be correct after the last
+	%layer is completed.
+	The mono-periodic implementation of the XOR \ac{MLP} is functionally
+	equivalent to the multi-periodic implementation.
+\end{prop}
+
+\begin{proof}
+	For any input, output vectors $\mathbf{i, o}$ respectively, 
+	$\eta\left(\mathbf{i}\right) = l_o\left(
+	l_h\left( l_i\left( \mathbf{i} \right) \right) \right) =
+	\mathbf{o}$
+	%The proof of this follows intuitively as the operation of $\nu$ already recursively calls each layer $l \in L$ of neurons during execution --- we just remove one layer of indirection.
+\end{proof}
+
+\ignore{
+	\begin{example}
+		In the XOR \ac{MLP}, there are three layers $L = \{l_i, l_h, l_o\}$. 
+		During execution, $\eta$ will invoke each layer in order as it executes each neuron. 
+		We can make this explicit by calling layers as functions. 
+		In this case, $\eta\left(i\right) = l_o\left(
+		l_h\left( l_i\left( i \right) \right) \right) = o$
+	\end{example} %\pr{While I agree that this result should hold, it is
+	%unclear how function composition is actually happening in the
+	%code. Code only provides a sequence of function calls without
+	%showing the composition!}
+}
+
+\ignore{
+	For example, a \ac{MLP} $n$ may be compositionally modelled using its constituent layers $l_i$, $l_h$, and $l_o$, as shown in Figure~\ref{fig:tca-bb} (b), (c) and (d).
+	\pr{Explain each approach and the trade off. What is the distinction between approach (a) and (b)? Also, could we have just one theorem to 
+		state that all approaches are equivalent i.e. they produce the same output albeit in different ticks.}
+	
+	\begin{lemma}
+		A single-tick `layer by layer' execution of functions $l \in L$ the same output as executing function $n$ if all layers are executed in order.
+	\end{lemma} 
+}
+
+
+
+
+\ignore{
+	This has not reduced the \ac{WCRT} of the system, as $n$ has the same \ac{WCRT} as the sum of the three layers that make it up.
+	However, if the layers are split over \emph{multiple ticks}, then the system \ac{WCRT} can reduce.
+	
+	An example of this multi-tick `layer by layer' approach is presented in Figure~\ref{fig:tca-layers}.
+	
+	\begin{lemma}
+		A multi-tick `layer by layer' execution of layers $l \in L \in n$ will give the same output as executing network $n$ completely, iff all layers are executed in order and once a number of ticks equivalent to the number of layers has elapsed. I.e. the number of logical ticks $= |L|$.
+	\end{lemma}
+	The proof of this is \todo{?}
+}
+
+Observe that the response time of the multi-periodic implementation is
+$3 \times T_2$, where $T_2$ is the \ac{WCRT} of the multi-periodic
+version. In contrast, the response time as well as the reaction time
+of the mono-periodic version is always its \ac{WCRT} $T_1$. However, it is
+expected that $T_2 << T_1$.
+%It is important to note that a multi-tick execution of an \ac{SANN} will not speed up the generation of outputs of the overall network --- as now, multiple ticks must be completed before a given output will be ready. 
+%However, the length of each individual tick is reduced, which means that overall the system interactivity can be increased.
+
+Like the breaking up of the function $\eta$ into its component
+layers, we can also break each layer $l$ into its component neurons.
+This option is presented in Figure~\ref{fig:tca-neurons}. 
+Unlike in Figure~\ref{fig:tca-bb}, neurons are able to operate concurrently within each layer. 
+This could provide benefits when considering multi-core
+implementations such as in \cite{yuan2011compiling}.
+\ignore{ however, for single-core single-threaded execution (the focus of this paper), this approach does not considerably alter tick length.} 
+
+A summary of these approaches is presented in Table~\ref{tbl:sann-approaches}.
+%we separated each neuron call with \texttt{pause} statements --- i.e. called each neuron in its own tick. 
+\begin{table}[h]
+	\centering
+	\caption{Summary of \ac{SANN} approaches}
+	\label{tbl:sann-approaches}
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		Arrangement    & Figures & WCRT & Cycles & Response Time   \\ \hline
+		Mono-periodic  & \ref{fig:tca-bb-n},\ref{fig:tca-bb} & High & 1 & == WCRT              \\
+		Multi-periodic & \ref{fig:tca-layers},\ref{fig:tca-neurons}& Low  & \textgreater{}1 & \textgreater{}\textgreater{}WCRT \\ \hline
+	\end{tabular}
+\end{table}
+
+
+\ignore{ 
+	\pr{I suggest we use consistent terminology i.e. mono-cyclic TCA and multi-cyclic TCA and their corresponding Esterel implementation. Ideally, the proof of the theorem 
+		can be done using induction. Consider a mono-cyclic implementation and multi-cyclic implementation of length $k$.
+		Base case -- first time outputs after 1 tick and k ticks are same. Hypothesis -- outputs after $m$ executions are equivalent i.e. First network executed for 
+		$m$ ticks while the second network executed for $k\ times m$ ticks and produced the same output starting from the same input. Proof: to show that this holds for $m+1$ executions.}
+}
+
+%\subsection{Implementing `Black-Box' \ac{SANN} in Esterel}
+
+%The basic programming unit in Esterel is a \textit{module}. 
+%Each module contains an interface declaration, followed by a body of executable statements.
+%Variables are known as \textit{signals}, and may consist of a \textit{status} and a \textit{value} component. 
+%Signals with only a status signals are denoted \textit{pure}, while those that contain values are instead denoted \textit{valued}.
+%Sections of code may be separated with either the `\code{;}' or `\code{||}' operator, which denote sequencing and synchronous concurrency respectively.
+%In order to perform manipulation of valued signals, Esterel can call external functions (provided in supplementary C files).
+
+%Presented in Listing~\ref{lst:blackbox} and Listing~\ref{lst:blackbox-composition} are the simplest way of implementing neural networks in Esterel, already seen in the AI-BRO example.
+%As can be seen, entire \acp{ANN} can be composed together and are simply called as external function calls, and will run each tick. 
+%Networks can be composed together
+%This can be considered the `bare minimum' to qualify as a \ac{SANN}, as the network is now running synchronously with its environment.
+
+%Even though this implementation is quite trivial, it can still gives a strong advantage over a general-purpose implementation: when considering the methodology for composing multiple \acp{ANN}. 
+%For example, consider a system that needs three \acp{ANN}, each performing a different task (as is the case in our AI-BRO example, in Section~\ref{sec:motivating-example}). 
+
+%We can compose these multiple \acp{ANN} synchronously in Esterel. 
+%As an example of this, consider an extension of our XOR network that computes $y = \big((x_1$ \textit{xor} $x_2)$ \textit{xor} $(x_3$ \textit{xor} $x_4)\big)$ (i.e. $y$ is $true$ when an odd number of inputs are $true$).
+%We can compose this together still using the `black-box' methodology, as presented in Listing~\ref{lst:blackbox-composition}.
+%Here, it can be seen that the first two \acp{ANN} can be run concurrently with one another, and the third \ac{ANN} can only be run when the first two are complete.
+
+

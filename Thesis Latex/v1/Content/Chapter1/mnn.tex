@@ -1,11 +1,203 @@
 \section{Meta Neural Networks}
-This section describes how MNNs relate to SNNs 
+\label{sec:concurrent-sann}
 
-\subsection{Architecture of Meta Neural Networks}
-Explain how MNNs are created and how they function
+%Compared with asychronous implementations, such as C's \texttt{pthread}, it is very simple to create concurrent `parallel' networks in a synchronous system. 
+%This is because it is simple to express parallel \acp{ANN} as logically concurrent.
+%This logical concurrency will be then compiled away to produce a
+%single thread, although, as mentioned in
+%Section~\ref{sec:motivating-example}, there are approaches which can
+%create truly parallel implementations.
 
-\subsection{Formalisation of Meta Neural Networks}
-Provide the formal definition for MNNs
+Complex \ac{CPS} use several interacting \acp{NN} to achieve their
+functionality. However, to the best of our knowledge, formal modelling
+and timing analysis of such concurrent \acp{NN} is lacking. To this
+end we propose several alternative architectures, facilitated by the
+synchronous approach for formalising the composition and timing of
+several interacting \acp{NN}. We term these as \emph{meta neural networks}.
+We start by formalising the input-output compatibility requirements.
 
-\subsection{Implementation of Meta Neural Networks}
-Explain how MNNs are implemented and why they are useful. Maybe give some basic examples.
+\begin{definition}
+	\label{def:io-compatibility}
+	Let $\mathcal{M}$ be a set of \acp{SANN} according to Definition~\ref{def:bb-mlp}.
+	We term $M_1 = \langle I_1, O_1, N_1, L_1, \alpha_1, \eta_1 \rangle$, $M_2=\langle I_2, O_2, N_2, L_2, \alpha_2, \eta_2  \rangle$ 
+	$\in \mathcal{M}$ input-output compatible,
+	IO-compatible for short, when the following hold:
+	\begin{itemize}
+		\item \emph{Size and type compatibility}: $|I_2|=|O_1|$ and the type of every connection also matches.
+		\item \emph{Timing compatibility}: The outputs of $M_1$ are produced in a tick on or before $M_2$
+		executes.
+	\end{itemize}
+\end{definition} 
+
+Hence, just as we are able to break execution of \acp{ANN} over
+multiple ticks by calling them 
+``layer by layer'', we can also structure the synchronous program such
+that it runs a set of concurrent \acp{SANN} ``network by network''.  We term such an arrangement of 
+multiple \acp{SANN} as \emph{meta-layers} of \acp{SANN}.
+
+\begin{definition}
+	\label{def:nsanns}
+	A network of \acp{SANN} organised into meta-layers is a tuple $H = \langle \mathcal{I}, \mathcal{O}, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta \rangle$ where:
+	\begin{itemize}
+		\item We term the first meta-layer as the input
+		meta-layer and the last one as the output
+		meta-layer.
+		\item  $\mathcal{I}=I_1 \cup .. \cup I_k$,
+		where $I_1..I_k$ are the inputs of the \acp{SANN} in
+		the input meta layer. If $K=|\mathcal{I}|$ then the
+		domain is $\mathbf{I} = \mathbb{R}^K$
+		\item $\mathcal{O}=O_1 \cup .. \cup O_j$,
+		where $O_1..O_j$ are the outputs of the \acp{SANN} in
+		the output meta layer. If $J=|\mathcal{O}|$ then the domain is $\mathbf{O} = \mathbb{R}^J$
+		\item $\mathcal{M}$ is the set $M \in \mathcal{M}$ of
+		\acp{SANN} according to Definition~\ref{def:bb-mlp}
+		such any two connected \acp{SANN} are IO-compatible.
+		\item $\mathcal{L}$ is the set of meta-layers of \acp{SANN}
+		\item $\mathcal{A}: \mathcal{M} \rightarrow \mathcal{L}$ is the network mapping function that maps a given \ac{SANN} to a layer.
+		\item $\Delta \subset \mathcal{M} \times \mathcal{M}$ provides the mapping of IO connectivity information between \acp{SANN} of different meta-layers. %@Partha: I am pretty sure we need a place to store the connections between SANNs - no?
+	\end{itemize}
+\end{definition}
+
+\begin{figure}[t]
+	\begin{subfigure}[t]{0.5\textwidth}
+		\centering
+		\scalebox{0.8}{\input{Content/fig/tca-nn-pipeline.tex}}
+		\caption{Pipeline: $WCRT = M_1 \oplus M_2 \oplus M_3 \oplus \ldots \oplus M_n$}
+		\label{fig:tca-nn-pipeline}
+	\end{subfigure}
+	
+	\vspace{3mm}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\centering
+		\scalebox{0.8}{\input{Content/fig/tca-nn-allparallel.tex}}
+		\caption{Grid: $WCRT = \left(M_1 \odot M_2\right) \oplus \left(M_3 \odot M_4\right) \oplus \ldots \oplus \left(M_n \odot M_{n+1}\right)$}
+		\label{fig:tca-nn-grid}
+	\end{subfigure}
+	
+	\vspace{3mm}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\centering
+		\scalebox{0.8}{\input{Content/fig/tca-nn-someparallel.tex}}
+		\caption{2x1: $WCRT = \left(M_1 \odot M_2\right) \oplus M_3 \oplus \left(M_4 \odot M_5\right) \oplus M_6 \oplus \ldots$}
+		\label{fig:tca-nn-someparallel}
+	\end{subfigure}
+	
+	\caption{Different concurrent \ac{ANN} arrangements}
+	\label{fig:tca-nn}
+\end{figure}
+
+Depending on the application several options may be explored when
+considering the design space for the concurrent arrangement of
+multiple networks. Some of these are presented in Figure~\ref{fig:tca-nn}.
+The first approach, in Figure~\ref{fig:tca-nn-pipeline}, creates a pipeline of networks, where they are simply executed in sequence.
+Alternatively, \acp{SANN} could be arranged in parallel, as in Figure~\ref{fig:tca-nn-grid}. 
+Finally, an arrangement might be more arbitrary, as in Figure~\ref{fig:tca-nn-someparallel}. 
+Due to the synchronous approach, as long as the \emph{size and type
+	compatibility} of Definition~\ref{def:io-compatibility} is
+satisfied, it is simple to achieve \emph{timing compatibility} based on Definition~\ref{def:timing-compatibility}. 
+Moreover, the worst case timing behaviour of each composition is
+straight forward to represent as a formula in \ac{WCRT}-algebra, as
+shown in Figure~\ref{fig:tca-nn}.
+
+\begin{definition}
+	\label{def:timing-compatibility}
+	Timing compatibility between \acp{SANN} in Figure~\ref{fig:tca-nn} may
+	be achieved using the following:
+	\begin{itemize}
+		\item When a \ac{SANN} $M_1$'s output is connected to $M_2$ and the
+		period of $M_1$ is $n$-ticks, then for timing compatibility, $M_2$
+		has $n$-\texttt{pause} statements at the start.
+		\item When a \ac{SANN} $M_1$ and $M_2$'s output is connected to $M_3$ and the
+		period of $M_1$ is $n_1$-ticks and that of $M_2$ is $n_2$-ticks,
+		then $M_3$ has $(n_1 \oplus n_2)$-\texttt{pause} statements at the start.
+		\item When a connectivity self-loop is provided in $\Delta$, we break it explicitly.
+	\end{itemize}
+\end{definition}
+
+%Contrast this with an asynchronous approach, which could require extensive usage of mutexes and locking mechanisms!
+
+%\subsection{Interfaces of concurrent \acp{SANN}}
+
+\ignore{
+	When considering the interconnection of different \ac{SANN} in a network of \ac{SANN} $H$, the connections can only be considered valid iff the source and destination types match, and if the source of an interface is located `earlier' (i.e. on an earlier layer $l \in \mathcal{L}$ or in the global inputs $I$) than the destination interface. 
+	More formally, this can be expressed as Definition~\ref{def:sann-conns}.
+	
+	\begin{definition}
+		\label{def:sann-conns}
+		A network of \acp{SANN} $H = \langle I, O, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta \rangle$ is correctly interconnected iff $\forall \delta \in \Delta, \forall i_d \in I \in n_d \in \delta, \exists i_d \in \left(\mathcal{I} \cup \left(M_s \in \mathcal{M}|\mathcal{A}\left(M_s\right) < \mathcal{A}\left(M_d\right)\right)\right)$, where $i_d$ is the source of connection $\delta$, $M_s$ is the possible source network for the connection, and $M_d$ is the destination network.
+		% this should read as:
+		% for all connections in H, for all sources of those connections, the source exists in either (an output on a network in an earlier layer that the destination of the connection) or (the inputs I) 
+	\end{definition}
+}
+
+\begin{figure}[t]
+	\centering
+	\scalebox{0.8}{\input{Content/fig/tca-nn-simpleparallel.tex}}
+	\caption{Simple three-network XOR system}
+	\label{fig:three-xor}
+\end{figure}
+
+\begin{example}
+	\label{ex:simple-xor}
+	Consider three XOR \ac{MLP} networks $\mathcal{M} = \left(M_1, M_2, M_3\right)$ in a system $H$.
+	They are arranged in the formation shown in Figure~\ref{fig:three-xor}, such that they compute $y = \big(x_1$ \textit{xor} $x_2\big)$ \textit{xor} $\big(x_3$ \textit{xor} $x_4\big)$.
+	The overall network $H$ has two meta-layers in $\mathcal{L}$, an input layer and an output layer. 
+	Hence, the global inputs $I = \langle x_1, x_2, x_3, x_4 \rangle$, and global outputs $O = \langle y \rangle$.
+	The connectivity of $\Delta \in H$ is correctly defined, as the internal connections between $M_1$, $M_2$, and $M_3$ are matching, i.e. they are the same widths and types. 
+	
+	Let us execute the networks $M \in \mathcal{M}$ using the multi-periodic ``layer by layer'' approach. 
+	Hence, for each network $M$, $WCRT = l_i \oplus l_h \oplus l_o$.
+	Using \ac{WCRT} algebra, we can compute the system WCRT is of the form $WCRT = \left(M_1 \odot M_2\right) \oplus M_3$, ergo, the actual system \\ $WCRT = \Big(\left(l_1^i \oplus l_1^h \oplus l_1^o\right) \odot \left(l_2^i \oplus l_2^h \oplus l_2^o\right)\Big) \oplus \left(l_3^i \oplus l_3^h \oplus l_3^o\right)$ , where $l^x_y$ indicates layer $l_x \in L_y$ (in network $M_y$).
+\end{example}
+
+\ignore{
+	Secondly, issues can be caused when considering \emph{alignment} of interconnected networks.
+	If two parallel networks take differing numbers of cycles to execute, how can the outputs match cleanly to the inputs of subsequent layers?
+	However, this proves to not be a difficult issue to resolve, as tick
+	delays can be introduced to parallel networks $n \in l \in
+	\mathcal{L}$ such that the number of cycles to execute each network,
+	and thus to pass each data variable, is the same.}
+
+The Example in~\ref{ex:timing} discusses the issue of timing compatibility.
+
+\begin{figure}
+	\centering
+	\scalebox{0.8}{\input{Content/fig/tca-xor-complexparallel.tex}}
+	\caption{Two-network XOR system}
+	\label{fig:two-xor}
+\end{figure}
+
+\begin{example}
+	\label{ex:timing}
+	Consider the case of a two-input XOR system $H$, as presented in Figure~\ref{fig:two-xor}.
+	This will compute $y = \big(x_1$ \textit{xor} $x_2\big)$ \textit{xor} $x_3$.
+	As in Example~\ref{ex:simple-xor}, there are two meta-layers in $\mathcal{L}$. 
+	Once again, the connectivity of $\Delta$ is correctly defined, as the inputs $I_1 \in M_1$ are simply in the global inputs $I$, and the inputs $I_2 \in M_2$ are provided as both a global input and as the output $O_1 \in M_1$.  
+	
+	However, as can be seen, the sources for $M_2$ will take different numbers of logical ticks to arrive.
+	As a result, we must delay the input $x_3$ by some number of cycles.
+	If we are using the multi-periodic ``layer by layer'' execution timing, this number will be $|L \in M_1|$, i.e. the number of ticks it will take to execute the layers of $M_1$ (in our case, $|L| = 3$ cycles). 
+	Or, if we are using a mono-periodic black-box approach, then we will need to delay the input $x_3$ by one cycle.
+\end{example}
+
+All architectures of meta neural networks discussed thus far are
+devoid of instantaneous cycles. While such cycles in asynchronous settings are difficult
+to deal with, the synchronous approach offers two different
+alternatives. Synchronous compilers can detect such static cycles and flag
+them as \emph{non-causal}~\cite{benveniste2003synchronous} programs, and reject them outright. Alternatively, such instantaneous cycles
+can be broken by inserting an unit delay (i.e. a \texttt{pause}
+statement) to break the cycle.
+%\todo{Partha: I don't like the usage of the word "cycle" in here, because we are using mono-cycles and multi-cycles already. Can we use something else?}
+
+%\pr{Hammond -- please read this section and carefully examine the
+%  Definitions. Please check that the terminology of your examples and
+%  Figures are consistent with my definitions. One question I have
+%  about this section is how these are related to the next section.}
+
+
+%\todo{Discuss how this differs from Asynchronous arragement of ANNs}.
+%\todo{Discuss IO with environment. Capture/compute/release, when to capture / release?}
+
+%\todo{Discuss IO compatiblity. Problems: mismatched IO widths, types. Concurrent networks taking different numbers of cycles (sustaining data?)}.
+
+

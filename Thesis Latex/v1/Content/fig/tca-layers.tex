@@ -1,0 +1,30 @@
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,
+node distance=2.5cm,
+semithick,scale=0.8, transform shape,scale=0.6, font=\huge]
+
+\tikzstyle{every state}=[ellipse, minimum width=2.5cm, minimum height=1.5cm, text centered, 
+fill=blue!20,draw=none,text=black, draw,line width=0.3mm, font=\LARGE]
+
+%start state
+\node[state]
+(l0) 
+{$l_i$};
+
+\node[state]
+(l1) [below of=l0]
+{$l_h$}; 
+
+\node[state]
+(l2) [below of=l1]
+{$l_o$};  
+
+\path[->] (l0) edge (l1);
+\path[->] (l1) edge (l2);
+
+\draw[->] (l2.south) 
+|- ($(l2.south) + (0, -0.75cm)$) 
+-| ($(l2.east) + (1cm, 0)$) 
+|- ($(init.east) + (0, 1.5cm)$) 
+-| (init.north);
+
+\end{tikzpicture}

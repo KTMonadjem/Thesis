@@ -1,15 +1,185 @@
-\section{Timing Analysis of Synchronous Neural Networks}
-\subsection{Patmos}
-Brief description of the Patmos used in timing analysis.
+\section{Timing Analysis of \acp{SANN}}
+\label{sec:wcrt}
 
-\subsection{Time Predictable Software for Patmos}
-What is required of software to be time analysable on Patmos?
+Time in a synchronous program progresses in logical discrete instants called \emph{ticks}. 
+In each tick, the environment is first sampled, then computation takes places, and finally the results are emitted.
+In order for safety-critical \ac{CPS}, such as our \texttt{AI-BRO}, to be verified, we need to ensure that the time taken for the execution of any given tick is less than their environmental deadlines.
+This necessitates the computation of the worst-case tick length via static timing analysis --- also known as \acf{WCRT} analysis~\cite{roop2009tight}.
 
-%\subsection{Time Predictable Synchronous Neural Networks}
-%How were SNNs made to be time predictable?
+\ac{WCRT} analysis needs two things, (1) an architectural model of the
+underlying processor architecture and (2) a \acf{CFG}~\cite{wilhelm2008worst}  representation of
+binary program execution over the architectural model. The analysis
+process then computes the longest path through the \ac{CFG}.
+%For any program, static timing analysis involves first the derivation of a \acf{CFG}~\cite{wilhelm2008worst} which captures the possible execution traces.
+%Then, the \ac{CFG} must be annotated with the time taken to execute each node, so that a worst-case path can be derived.
+While general purpose programs can feature complications which make this process difficult, Esterel is ideally suited to derivation of \acp{CFG} due to inherent features:  (1)
+all loops in Esterel are bounded, as there is a need for at least one \texttt{pause} statement
+within every loop; and (2) compilers ``compile-away'' the logical
+concurrency to produce sequential code. However, as can be seen in
+Listing~\ref{lst:ai-bro}, 
+Esterel programs can also invoke arbitrary C-functions, which may use
+features such as function pointers, unbounded loops, and external interrupts. 
+To this end, we provide a set of guidelines and \ac{ANN}
+implementation libraries in C,
+which restrict these features to make each C function call time
+analysable. 
 
-%\subsection{Timing of Synchronous Neural Networks}
-%Describe how the timing of SNNs was accomplished.
+%\subsection{Guidelines}
+In this paper, we are using the open-source Platin
+tool~\cite{compiler:platin:kps15} for \ac{WCRT}
+analysis. Consequently, we have to consider some tool-specific
+restrictions to avoid the use of generic features in C that are not
+suitable for static analysis, such as system calls, function pointers, interrupt-driven flow, or unbounded loops~\cite{RTOSWCET}.
+Hence, the restrictions considered in this paper are: (1) All neural
+network functions are coded as bounded \texttt{for} loops, (2) all
+memory is statically allocated, (3) variable-length array iterator
+functions are coded using preprocessor macros, and (4) the final binary is executed `bare-metal', requiring no
+RTOS or OS support, thus avoiding scheduling dependencies
+that may be difficult to statically analyse.
+\ignore{
+	\begin{itemize}
+		\item All neural network functions are coded as bounded \texttt{for} loops.
+		\item All memory is statically allocated.
+		\item Variable-length array iterator functions are coded using preprocessor macros.
+		\item The final binary is executed `bare-metal', requiring no
+		RTOS or OS support, thus avoiding scheduling dependencies
+		that may be difficult to statically analyse.
+	\end{itemize}
+}
 
-\subsection{Timing of Meta Neural Networks}
-Describe how the timing of MNNs was accomplished.
+Annotating a \ac{CFG} with execution times is no simple task for many architectures.
+Enhancements such as out-of-order execution, multi-level caches, and deep pipelines can all cause complications when considering the time taken to execute program code.
+For instance, in~\cite{AirplaneWcet}, Ferdinand et. al. demonstrate the difficulties of determining the worst-case time in arguably simple avionics code running on a Motorola ColdFire 5307.
+To avoid these complications, we rely on the Patmos~\cite{patmos:ppes2011} architecture, which is a simple RISC pipeline optimised for static timing analysis. 
+Here, caches have simple replacement policies, and it also has a time-predictable memory hierarchy.
+It relies on an adaptation of the LLVM compiler that targets the Patmos instruction set.
+This simplifies the annotation of the nodes of the \ac{CFG} with
+timing costs, thus allowing for a straightforward static analysis of any
+\ac{SANN}. Consequently, this work is restricted to the single-core
+Patmos architecture and does not examine execution of \acp{SANN} on
+other platform types, such as Intel processors and GPUs.
+%\changed{Consequently, this work is restricted to the single-core Patmos architecture and does not examine execution of \acp{SANN} on other platform types, such as Intel processors or GPUs}.
+
+%The expense of this is program size, and designers can expect slightly increased program memory usage as a result. 
+
+%When it comes to the annotation of these nodes with their execution times, architectural considerations must be taken into account, for instance memory access times and pipelined execution of instructions.
+
+
+%\subsection{Patmos}
+
+
+%We then use the open-source academic timing analysis tool called Platin~\cite{compiler:platin:kps15}, to derive our execution times.
+
+
+\ignore{
+	\begin{example}
+		Consider the case of our AI-BRO example in Listing~\ref{lst:ai-bro}. 
+		We can express this Esterel program using the \ac{CFG} presented in Figure~\ref{fig:cfg-aibro}.
+		\begin{figure}
+			\centering
+			\input{fig/cfg-aibro.tex}
+			\caption{Single-thread AI-BRO \ac{CFG}}
+			\label{fig:cfg-aibro}
+		\end{figure}
+	\end{example} \pr{This figure is somewhat non-standard. There are no
+		conditional nodes. I suggest you examine the syntax of CFGs
+		presented in WCET papers and follow these.}
+}
+
+%Fortunately, it is straightforward to convert the synchronous C code generated by Esterel into its equivalent control flow graph.
+%Then, as long as the external C function calls that it will call are also predictable, and if the code is run on a time-predictable architecture such as Patmos~\cite{patmos:ppes2011}, the code can be %converted into an equivalent \ac{TCFG}.
+
+
+%This section discusses the WCRT analysis of SANNs.
+%Introduce the WCET problem and then introduce WCRT.
+%Intermediate format, timing model, the PATMOS core.
+%Coding guidelines for time analysable code. Steps to improve the 
+%WCRT. These can be the various subsections.
+
+
+%When considering normal C code, such as in our external function calls, it can be extremely difficult to construct \ac{CFG}.
+%This is because it can be difficult to statically an
+%Constructing a \ac{CFG} for a normal general purpose program can be very difficult, especially if it relies on complex software constructs such as system calls, function pointers, interrupts, or unbounded loops.
+%This is because the construction of the \ac{CFG} becomes extremely difficult in the face of large branching potentials or unknown jump destinations.
+
+
+\subsection{\ac{WCRT} algebra}
+\label{sec:wcrt-algebra}
+
+Though Esterel is amenable to timing analysis, it still suffers from state space explosion when considering large programs. 
+Analysing large sequential code generated from Esterel compilers that ignore \emph{infeasible state space} 
+produce large overestimates. \ac{WCRT} algebra, presented in \cite{wang2017timing}, presents a solution to this problem: large synchronous programs can be expressed as 
+networks of simpler \ac{TCA}, which have equivalent timing properties to their \ac{TCFG} counterparts. Considering this, we
+seek to use this framework to develop a compositional timing semantics of \acp{SANN} and their compositions.
+
+We consider a discrete max-plus structure over
+natural numbers $(\Nat_{\infty}, \oplus, \odot, \zero, \one)$ where:
+\begin{itemize}
+	\item $\Nat_{\infty} \dfs \Nat \cup \{ -\infty, +\infty \}$
+	\item  $\oplus$ and $\odot$ are commutative and associate operators that 
+	denote the maximum and addition respectively on $\Nat_{\infty}$. 
+	\item Neutral elements are $\zero \dfs -\infty$ and $\one \dfs 0$,
+	respectively, i.e., $x \oplus \zero = x$ and $x \odot \one = x$. 
+\end{itemize}
+
+In particular, $-\infty \odot +\infty = -\infty$. Addition
+$\odot$ distributes over max $\oplus$, i.e.,
+$x \odot \left(y \oplus z\right) = x + \maxd\left(y, z\right) = \maxd\left(x + y, x + z\right) =
+\left(x \odot y\right) \oplus \left(x \odot z\right)$. However, $\oplus$ does not distribute
+over $\odot$, for instance, $9 \oplus \left(5 \odot 7\right) = \maxd\left(9, 5 + 7\right) = 12$
+while $\left(9 \oplus 5\right) \odot \left(9 \oplus 7\right) = \maxd\left(9, 5\right) + \maxd\left(9, 7\right) = 18$.
+This induces on $\Nat_{\infty}$ a (commutative, idempotent) semi-ring.
+We denote $\mathcal{W}$ as the set of formulae in this algebra.
+
+We use an automaton called \ac{TCA} to capture the timing behaviour of any \ac{SANN}.
+These are mono-cyclic automata, where every state of the automaton is labelled by a
+WCRT formula that associates the state with its worst case timing cost.
+We start by defining \ac{TCA} using Definition~\ref{def:tca}
+%---------------------------------
+
+\begin{definition}
+	A \emph{mono-cyclic tick cost automaton}, here after referred to as tick cost automaton (\ac{TCA}) 
+	is %a tuple 
+	$M = \langle Q, q_0, \rightarrow, \mathcal{W}, L
+	\rangle$, where $Q$ is a finite set of \emph{states} with a
+	distinguished \emph{entry} state $q_0 \in Q$ and $L: Q \rightarrow \mathcal{W}$ is
+	a labeling function that labels every state with its associated timing cost by a formula in $\mathcal{W}$.
+	The \emph{transition relation}
+	${\rightarrow} \subseteq Q \times Q$ satisfying the following:
+	
+	\begin{enumerate}
+		\item From any state $q_i \in Q$ there is at most one transition to a successor state $q_j \in Q$.
+		\item The transitions are such that they form a mono-cycle that starts in $q_0$ and and ends in a 
+		transition from some state $q_{n-1} \rightarrow q_0$, resulting in a
+		cycle of length $n \in \Nat_{>0}$.
+		\item A \ac{TCA} whose cycle length is $1$ is termed
+		\emph{mono-periodic}, while those with cycle length $>1$ are called
+		\emph{multi-periodic}.
+		\item The \emph{reaction time} of a \ac{TCA} is its tick-length, which is
+		always fixed to its \ac{WCRT}. 
+		\item The \emph{response time} of a \ac{TCA} is the time taken for the
+		corresponding \ac{SANN} to produce the outputs given inputs. 
+		The response time of a TCA is given by the formula $n \times WCRT$,
+		where $n$ is the cycle length.
+		%\item The above conditions ensure that a \ac{TCA} is a mono-cyclic automaton.
+	\end{enumerate}
+	\label{def:tca}
+\end{definition}
+
+%---------------------------------
+\ignore{
+	\pr{Hammond: I have defined both reaction and response time of a
+		TCA. We should use these      n our benchmarks, if possible.}
+	\begin{example}
+		$15 \oplus \left(5 \odot 10\right) = 15$, and $\left(15 \oplus 5\right) \odot \left(15 \oplus 10\right) = 30$.
+	\end{example}
+	
+	\begin{example}
+		Consider the program in Listing~\ref{lst:ai-bro}. 
+		This had two concurrent threads, which are compiled away to produce sequential code.
+		We can express this network's \ac{WCRT} as \\
+		$WCRT = \left( a_{await} \odot a_{run} \odot b_{await} \odot b_{run} \odot c_{awaitJoin} \odot c_{run} \odot c_{emit} \right)$, as this is the longest potential path through the system (if we receive both \texttt{A} and \texttt{B} in the same tick).
+	\end{example} \pr{Hammond -- since the figure is removed, this formula
+		doesn't make any sense now. Please check.}}
+%$x \oplus y =$ $MAX(x,y)$ 
+%$x \odot y =$ $x + y$ 
