@@ -1,17 +1,84 @@
-\section{Runtime Enforcement of Synchronous Neural Networks}
-Section showing how we are using RTE with SNNs.
+\section{Related Work}
+\label{sec:related}
 
-\subsection{Safe Synchronous Neural Networks}
-Introduce the concept of combining SNNs and RTE to create a safe SNN
 
-\subsection{Semantics of Safe Synchronous Neural Networks}
-SSNN formal semantics in detail?
+Typical approaches for ensuring that \acp{CPS} are safe involve processes to demonstrate that an acceptable level of risk has been achieved~\cite{scann}. 
+Typically, designers of \ac{AI} software rely on several validation and verification technique, including, but not limited to, conventional testing, run-time monitoring, static analysis, model checking and theorem proving~\cite{menzies2005verification}.
+Unfortunately, due to the complexity of \acfp{ANN}, techniques such as static analysis, model checking and theorem proving are less valuable in \ac{ANN} environments. 
+Conventional testing is a common method to test the accuracy of \acp{ANN}, but this method is not fool-proof and its efficacy relies heavily on the creator of the test cases.
+Run-time monitoring is a technique that could greatly benefit the safety of running \acp{ANN}, but there has been minimal research done in this field.
+%The risk of failure has been reduced to the point that it is thought to be negligible, but failure can still occur. 
+%However, this is a difficult process, and only grows more difficult as \ac{CPS} grow in complexity and features, especially if they start to integrate \ac{ANN} components.
+%\todo{In order to achieve this, designers must typically rely on... (v. brief intro to lit review)}.
 
-\subsection{Safe Meta Neural Networks}
-How does the use of RTE expand to MNNs?
+%\todo{Could you add a "verification of other machine learning techniques" section, and explain why they do/do not work for ANNs? I.e. how do they validate statistical machine learning, etc}
 
-\subsection{Semantics of Safe Meta Neural Networks}
-SMNN formal semantics in detail?
+\subsection{Verification of \acp{ANN}}
+% what has been done before
+There are a variety of pre-existing methods for statically checking the correctness of autonomous (i.e. artificially intelligent) systems.
+%\todo{Any more automata examples? what's the timed-enf-autonomous citation in here?}
+One group of researchers implemented an autonomous line tracing robot using a timed automaton~\cite{timed-enf-autonomous}.
+Model checking done on this automaton allowed the safety and robustness of the system to be discussed.
+While techniques such as model checking work very well on non-\ac{ANN} \ac{AI}, \acp{ANN} are not usually able to be simplified to simple automata.
+%Okano et. al. explore the concept of model checking of autonomous systems that use timed automata~\cite{timed-enf-autonomous}. 
+%This technique is a static technique and cannot be applied to autonomous \ac{ANN} systems, where the behaviour of the \ac{ANN} controller cannot be defined by an automaton.
+%For an autonomous system that includes at least one \ac{ANN} in its controller, novel techniques are required to guarantee the safety properties of the \acp{ANN}
 
-\subsection{Timing of Safe Synchronous Neural Networks}
-Briefly discuss how these can be timed, etc.
+Deep learning is widely and extensively researched field with regards to modern machine learning that refers to the learning of data representations, rather than learning task specific algorithms~\cite{schmidhuber2015deep}.
+Deep learning has applicability in a lot of current \ac{ANN} implementations, such as the autonomous vehicles used by Tesla and Uber.
+%More recently, progress has been made in the field of verification of Deep \acp{ANN}. 
+Verification of \ac{ANN}, specifically, \acfp{DNN}, can be performed for properties (such as robustness and accuracy) using \ac{SMT}~\cite{Gehr2018AI2SA,reluplex,DeepANNverify}. 
+%Using \ac{SMT} and other techniques, certain safety properties of an \ac{ANN}, such as robustness, can be proven. 
+%This is useful, because the robustness of a deep \ac{ANN} is critical property to its safety.
+A robust \ac{ANN} is one that will provide consistently accurate outputs even when the input to the \ac{ANN} is noisy, incorrectly coloured or otherwise distorted. 
+However, \ac{SMT} has issues with scale: as the \acp{ANN} to analyse become larger, analysis time grows exponentially~\cite{Gehr2018AI2SA},
+making it very difficult to verify large, deep \acp{ANN}.
+%Ergo, they are less efficient on larger deep \acp{ANN}.
+In addition, they require the deep \acp{ANN} to meet a set of design constraints, requiring specific activation functions and limiting the \ac{ANN} architectures.
+For instance in \cite{Gehr2018AI2SA}, where the robustness of \acfp{CNN} is verified by using an abstract technique, only \acp{CNN} and \acp{MLP} \acp{ANN} with the \ac{ReLU} activation functions can be statically analysed.
+This limits flexibility, as each \ac{ANN} must be designed around these restrictions. % thus limiting properties of the \ac{ANN}, such as its activation function and size, could result in an \ac{ANN} that is inefficient, not robust, slow, etc.
+
+Due to these difficulties, it can be tempting for designers to simply rely on manual testing to check for the correctness of \ac{ANN}-based systems. 
+However, this is a time-consuming and error-prone process which cannot provide good guarantees, as it is very difficult to ensure that tests have acceptable coverage of all possible situations~\cite{ANN-test}.
+Furthermore, as with the static analysis approaches, as the \acp{ANN} increase in size and complexity, verification and validation of these networks becomes increasingly more difficult to achieve~\cite{Gehr2018AI2SA}.  
+%Test cases, validation and verification of \acp{ANN} in \acp{SCS} systems can only go so far; test data is not unlimited, time is a resource, verification is not 100\% accurate and humans make errors. 
+
+%Finally, no matter the chosen methodology, as 
+
+\subsection{\acfp{SANN}}
+
+% Synchronous runtime enforcement
+\acp{SANN}~\cite{sann} define a methodology for synchronous combinations of \acp{ANN} using the Esterel~\cite{berry2000foundations} programming language with the aim of simplifying static analysis via the utilization of synchronous semantics, which make the \acp{SANN} \textit{causal}, \textit{deterministic} and \textit{reactive}~\cite{benveniste2003synchronous}. 
+Synchronous programming languages such as Esterel see software components as sets of concurrently-executing components which evolve discretely in steps timed with a logical tick.
+As a result of this formalisation, timing analysis is simplified, as the possible search space is constrained.
+It also simplifies compositions of multiple components (e.g. a network and a controller, or multiple \ac{ANN} networks).
+\ac{SANN} networks were thus demonstrated as time-predictable when executed on suitable platforms.
+% allowing for timing analysis if the final code was executed on time-predictable platforms.
+%Roop et. al. showed that \acp{SANN} could be made time predictable and used in real-time system with timing deadlines.
+However, \acp{SANN} only address the timing analysis problem, and do not look at functional verification.
+%when it comes to functional verification rather than timing analysis, the initial approach to \acp{SANN} is quite restrictive due to the analysability problems inherent in \acp{ANN}. 
+%Therefore, in this work, we propose an alternative.
+
+
+Due to their synchronous nature, we propose that \acp{SANN} can be extended, to be composed with another synchronous construct --- a runtime enforcer.
+
+%\subsection{Runtime enforcement}
+
+%, such as \acp{RE}, allowing for \acf{SRE}.
+%the benefits of using \acp{SANN} are plentiful, such as the synchronous composition of \acp{SANN} and \ac{SRE}.
+%Since both \acp{SANN} and \acp{SRE} follow synchronous semantics, the composition of \acp{SANN} and \acp{SRE} provides a system that is easier to formally reason. 
+
+%\todo{Introduce runtime enforcement}.
+
+%\ac{SRE} allows for easier formal reasoning over the possible runtime behaviour of the \acp{ANN} internal to the system, thus no longer requiring difficult static analysis.
+%\ac{SRE} can apply a set of policies on the inputs and outputs of the system to ensure it follows a set of given constraints. % \acp{SANN} to ensure that the policies are never violated. 
+%These policies can also feature timing information to guarantee timing deadlines for real-time systems.
+%A well designed policy can thus ensure that the system never exhibits unsafe events --- therefore keeping the system's inputs and outputs \textit{safe}~\cite{EstSafeCriteria2003}.  
+
+%For example, an \ac{AV} system with an \ac{ANN} controller must respond to dangerous situations within a certain period of time, and an \ac{ANN} that does not produce its outputs in time could result in the system missing its deadline.
+%Policies can be enforced that ensure that the \ac{ANN} always produces \textit{safe} output before the deadline for the outputs expires.
+
+
+
+
+

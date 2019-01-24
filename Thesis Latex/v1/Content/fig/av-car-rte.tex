@@ -1,0 +1,28 @@
+
+
+\begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=5.5 cm, scale = 1, transform shape]
+
+\tikzstyle{accept} = [draw=blue!75,fill=blue!20]
+\tikzstyle{violate} = [draw=red!75,fill=red!20]
+
+\node[initial,state, accepting, accept] (A) {$q_{drive}$};
+\node[state, violate]         (C) [right of=A]  {$q_v$};
+
+\path[->] 
+		(A) edge [loop above]       node [above, xshift=-1em]  
+		{
+			\scriptsize$\let\scriptstyle\textstyle\substack{B_S~\&~(O_{2_C}~|~O_{5_C})~\&\\~(S~>~O_{2_V}~|~S~>~O_{5_V})~|\\~A~\&~O_{4_C}~\&~S~<~O_{4_V}}$
+		} (A)
+	
+		(A) edge [right]	node [above]  
+		{
+			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(B_S~\&~(O_{2_C}~|~O_{5_C})~\&\\~(S~>~O_{2_V}~|~S~>~O_{5_V})~|\\~A~\&~O_{4_C}~\&~S~<~O_{4_V}\Big)}$
+		} (C)
+	
+		(C) edge [loop above]		node [above]  
+		{
+			\scriptsize$\sum$
+		} (C)
+		;
+
+\end{tikzpicture}

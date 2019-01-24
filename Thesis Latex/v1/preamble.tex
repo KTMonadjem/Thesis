@@ -1,4 +1,22 @@
 
+\usepackage[dvipsnames,table]{xcolor}
+
+\usepackage{pgf}
+\usepackage{pgfplots,pgfplotstable}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usetikzlibrary{shapes,backgrounds}
+\usetikzlibrary{arrows,shapes,fit,automata,positioning,decorations,calc}
+\usetikzlibrary{spy,backgrounds}
+\usetikzlibrary{arrows.meta}
+\usepackage{siunitx}
+\pgfplotsset{compat=1.12}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xspace}
+\usepackage{pgfplots}
+
+
 \usepackage{bbold}
 \usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
 %\usepackage[colorlinks=false,bookmarks=false]{hyperref}
@@ -21,7 +39,6 @@
 \usepackage{dblfloatfix} %allows floats to be at bottom of page
 
 %tikz and associated stuff
-\usepackage{tikz}
 \usepackage{verbatim}
 \usetikzlibrary{shapes,backgrounds}
 \usetikzlibrary{arrows,fit,automata,positioning,decorations,calc}
@@ -78,4 +95,13 @@
 %\newtheorem{defn}{definition}[section]
 %\newtheorem{exmp}{example}[section]
 %\newtheorem{rem}{remark}
+
+\pgfplotsset{compat=1.11,
+	/pgfplots/ybar legend/.style={
+		/pgfplots/legend image code/.code={
+			\draw[##1,/tikz/.cd,bar width=3pt,yshift=-0.2em,bar shift=0pt]
+			plot coordinates {(0cm,0.8em)};
+		},
+	},
+}
 

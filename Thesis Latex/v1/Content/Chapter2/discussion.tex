@@ -1,3 +1,17 @@
-\section{Discussion}
-Discussion of the results of the case study and benchmarks.
-Discuss methodology and results.
+\section{Conclusions}
+
+In this work, we have presented an approach for synchronous composition of runtime enforcement with \acfp{ANN} for safety critical systems.
+Our \acfp{SNN} demonstrate that policies specifying safe I/O behaviours for \acp{ANN} can be enforced.
+This means that their systems can behave in a verifiably safer way.
+Our enforcement mechanism, in the three case studies presented, added an average overhead of just 6.035\%.
+
+\subsection{Future Work}
+
+\acp{SANN} supported the concept of meta neural networks, which were synchronous compositions of neural networks. 
+In this work, we did not fully examine the enforcement of multiple networks in a meta-neural network (i.e. each network with its own enforcer).
+Rather, only our controller networks were \acp{SNN}.
+Examining compositions of synchronous neural networks with their enforcers could lead to more capable systems that are still safe. 
+
+\label{sec:conclusion}
+
+

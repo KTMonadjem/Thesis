@@ -1,10 +1,48 @@
 \section{Runtime Enforcement of Safety Critical Systems}
-Introduce the concept of runtime enforcement for safety critical systems.
+\label{sec:intro}
 
-\subsection{Safety Automata}
-Explain how timed (safety) automata are used as policies for runtime enforcement.
-Why these are good.
+%IEEE transactions on cybernetics template.
 
-\subsection{Synchronous Runtime Enforcement}
-How does RTE works with synchronous systems and what are the benefits.
+%\acp{CPS} can be thought of as networks of digital controllers that manage physical processes~\cite{alur2015principles}. 
+%Some \acp{CPS} are considered \acp{SCS}.
+%These have strict timing and functionality requirements --- any errors in control can result in physical damage, injuries, and/or fatalities~\cite{ANNDevModel1999}. 
+%For instance, \acp{SCS} include medical systems, autonomous vehicle controllers, and most industrial automation applications. 
+%Such systems are bound by strict constraints in order to minimize failure in the system, and thus minimize the risk of danger. 
+
+%\acp{ANN} are being increasingly used as controllers in \acp{CPS} due to their ability to learn data relationships in ways that are difficult to replicate~\cite{ANNSafety2007}. 
+%\acp{ANN} can deal with novel inputs to the system and are able to outperform other forms of \ac{AI} at computational efficiency, pattern recognition, function approximation and image identification~\cite{AIComp2016, AIComp2017}. 
+%However, it can be very difficult to ensure the safety of a system involving \acp{ANN}~\cite{ANNSafety2007, ANNSafety2018}.
+%As a result, \acp{ANN} should be restricted to advisory roles in \acp{SCS}, % due to the difficulty in proving the safety arguments of the \acp{ANN}.% i.e. robustness, \ac{WCET}, accuracy, etc.
+%meaning they may not be able to be used to their full capabilities.
+
+\ac{ANN} modules are being increasingly used within the \acp{CPS} domain.
+This is a concern for systems that are \textit{safety-critical}, as even though it is well-known that \acp{ANN} can be thoroughly trained and produce confidence intervals greater than 90~\%, any misbehaviour in a safety-critical system can result in  catastrophic consequences.
+As a result, \acp{ANN} in these systems should be carefully verified to ensure that they are sufficiently safe for their target roles~\cite{scann, ANNSafetyLifecycle2003}.
+%if \ac{ANN} models are used beyond a purely advisory role, i.e. if they make  making control decision, safety considerations are to be made. 
+%The majority of the \acp{CPS} are safety critical, and in order for an \ac{ANN} to be used in any capacity within such a system, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that they it is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}.
+%It is well known that \ac{ANN} modules work well and provide high confidence greater than 90\%, but this confidence should be 100\% where safety is concerned. 
+They must be able to tolerate faults and inconsistencies in their inputs, and should be robust and determinstic on their outputs~\cite{EstSafeCriteria2003}.
+%In order to have \textit{safe} \acp{ANN} in a safety critical system, some key problems to consider are that the \acp{ANN}: must tolerate faults and inconsistencies in their inputs, must not create hazardous outputs, must be robust and repeatable and must be trained on clean, reliable data~\cite{EstSafeCriteria2003}.
+
+To solve these problems, there exist safety measures such as risk management systems that span the entire development process of the \ac{ANN}~\cite{ANNDevModel1999} and standards with which \acp{ANN} can be certified before they are used in \acp{CPS}~\cite{SCANNStandard}, producing \acp{ANN} that are classified as \textit{safe enough} for their role. 
+However, as \acp{ANN} become larger and more full-featured, they  become harder to statically analyse.
+Problematic situations can arise when an \ac{ANN} exhibits unexpected behaviour that the system is unable to safely respond to, and in \acp{CPS} these situations can be life threatening.
+
+To address this issue, we propose the usage of \ac{RE} within the \ac{ANN} domain for \ac{CPS} as a methodology for protecting the safety of \ac{CPS} \textit{at runtime}.
+\ac{RE} is an existing approach to ensuring the safety of \acp{CPS} and is used to enforce safety policies that monitor and edit the events of the target system~\cite{rta-cps}.
+\ac{RE} is formally defined to be used in \acp{CPS}, however there has been no formal approach to combining \ac{RE} with \acp{ANN}. 
+
+%\subsection{\acfp{SNN}}
+
+In this paper, we present a new definition for safe \acp{ANN}, which combine the well-known features of synchronous programming and \ac{RE} with the operation and combination of \acp{ANN}.
+We call these networks \acp{SNN}. 
+Their synchronous composition of \ac{RE} and \acp{ANN} provides a greatly simplified process for validating the safety of their overall systems.
+
+% What is in this paper
+The key contributions of this paper are thus: (1) we propose \acp{SNN} as a model for designing runtime enforced \acp{SANN} for the first time; (2) we provide formalisation for these \acp{SNN} by formally defining the \acp{SANN} and the \ac{RE}; and (3) we show that this synchronous composition results in a system that is safe, i.e. it produces safe outputs and responds to real-time deadlines. 
+
+%We call this new definition \ac{SNN}.
+
+%We aim to target the issue of un-safe \acp{ANN} by developing \acp{SNN}, which use the well known synchronous language Esterel~\cite{benveniste2003synchronous, berry2000foundations}.
+%We then provide an architecture for \acp{SNN}; the synchronous %composition of \acp{SANN} and \ac{SRE}, with discrete timed automata policies that monitor the inputs and outputs of the \acp{SANN} and keep them within safe operating requirements.
 

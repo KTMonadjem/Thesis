@@ -1,19 +1,145 @@
-\section{A Case Study for Safe Synchronous Neural Networks}
-This is the created AV system with runtime enforcement.
+\section{Case study: \acf{AV} braking}
+\label{sec:case}
 
-\subsection{Autonomous Vehicles}
-What are AVs, where are they used, why are they dangerous?
+%The research and development of safe \acp{AV} is a competitive topic. 
+\ac{AV} are safety critical \acfp{CPS} as any faults in their operation can lead to accidents resulting in injuries or fatalities. 
+%What constitutes a safe \ac{AV} and the design of these systems is a highly controversial topic. 
+Unfortunately, such faults have already occurred.
+For instance, both Tesla and Uber have had autonomous vehicle accidents~\cite{stewart_2018,coldewey_2018}.
 
-\subsection{Safety Autonomous Vehicle Systems}
-How is this system unsafe? What did it do to make it unsafe.
+It is difficult to build complete models of these scenarios, as \ac{AV} companies tend to produce or customise their own vehicles with their own proprietary hardware and software.
+Nevertheless, in this paper, we use these unfortunate incidents as inspiration for a case study for this paper, where we examine one aspect of \ac{AV} control: the braking mechanism.
+%, designed differently to each other competitor, and each company has its own, unique issues with the safety of these systems.
+%Each time an incident with an \ac{AV} system occurs, it hits the news headlines.
+%Recently, Tesla and Uber vehicles' fatal accidents have been making news.
 
-\subsection{Runtime Enforcement of Autonomous Vehicles Systems}
-Where can RTE be introduced to AV systems. What are its limitations? 
-Where does our work take RTE of this system.
+%In this case study we 
+%However, the \ac{AV} system in this paper was designed with only the braking aspect of \ac{AV} systems in mind. 
+Here, we integrate a sensor package consisting of five cameras and a \ac{LiDAR} sensor. 
+Each of the five cameras feeds into an \ac{ANN} ensemble~\cite{Maqsood2004} of CNNs, using the Darknet library~\cite{darknet13}.
+These ensembles classify their input image and provide a confidence level for the classified image, before passing this information to the controller.
+The controller \ac{ANN} is a \ac{MLP}, and decides the best course of action given the environment and the status of the vehicle itself. 
+It then outputs controls to the vehicles actuators, which in our case are represented by an accelerator and a brake.
+%Finally, the controller outputs are sent back to the vehicle, where the actuators are then updated accordingly.
+%Here, the actuators for this system are the accelerator, which increases the speed of the vehicle; and the brakes, which slow down the vehicle.
+A diagram of the \ac{AV} used in this system is shown in Figure~\ref{fig:av}. \todo{Consider adding a figure showing the NN layout}
 
-\subsection{Architecture of an Autonomous Vehicle Simulation}
-We created a simulation of an AV system.
-What was done to ensure they were as similar as possible.
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{Content/fig/AV.pdf}
+	\caption{Diagram showing the sensor layout for the \ac{AV}. \label{fig:av}}
+\end{figure}
 
-\subsection{Safety Policy for an Autonomous Vehicle Simulation}
-The enforced safety policy for the above system.
+The controller \ac{MLP} takes seventeen different inputs. 
+Two inputs correspond to the current speed of the vehicle ($S$) and the speed of the vehicle one tick in the past ($P$). 
+The other fifteen inputs are broken into three boolean inputs for each camera's detected object ($O_1$ - $O_5$): the type of object seen in that camera ($N$: nothing, $P$: pedestrian, $C$: car or $U$: unknown), the speed of the object ($V$) and the direction of the object ($D$).
+E.g. a car far in-front of the \ac{AV} would be represented by $O_5$ as $O_{5_C}$, and its speed and direction by $O_{5_V}$ and $O_{5_D}$ respectively.
+Depending on these inputs, the controller outputs three values  $A$: accelerate, $B_S$ soft brake, or $B_H$: hard brake.
+These outputs can each be between 0 and 1.
+If any of the values exceed 0.1, the highest valued action is chosen, otherwise the vehicle takes no action, i.e. it will continue at current speed (which could be zero).
+
+Due to this design of this system, it is possible for the vehicle to behave badly in various ways. 
+These include not driving at all, speeding, unnecessarily slamming the brakes, hitting other vehicles on the road and hitting pedestrians both on and off the road.
+%All of these scenarios can result in fatalities, thus classifying this system as a \ac{SCS}.
+To have a system that is safe, policies need to be enforced that monitor the system's inputs and outputs and ensure that none of the above scenarios take place under any circumstances.
+%This system is designed for two purposes: (1) to conceptualize \acp{SNN} and show their architecture; and (2) to show the efficacy of these \acp{SNN}.
+
+\subsection{\acf{RE}}
+%% TALK ABOUT RA AND RE
+%\todo{Move this to lit review?}
+% Runtime assurance
+\ac{RA} is the ability to to ensure that a system operates safely, even when the system contains components that are not sufficiently reliable or verified~\cite{rta-cps}. 
+Thus, \ac{RA} can be used to bound unpredictable or unsafe behaviour in a target system. 
+\ac{RA} has been used as a reliability and fail-safe tool for some time, for instance in \acp{OS}, intrusion detection, overcurrent breakers and flight controllers. 
+A system that uses \ac{RA} shifts the burden of testing and analysing system parameters from comprehensive off-line verification methods, to a simpler assurance mechanism~\cite{rta-cps}. 
+%This technique has already been suggested for the certification of modern \acp{CPS}. 
+
+% Runtime enforcement
+\ac{RE} is a subset of \ac{RA} that focuses on formal semantics.
+Traditionally, \ac{RE} is developed for reactive systems, where it is able to block, delay, modify and/or re-order events in a system. 
+Processes that are deemed unsafe can be monitored by an enforcer at runtime to ensure that they obey desired policies and remain in a safe state at all times~\cite{theoryRE}. 
+\ac{SA} formally express run-time properties that can be monitored in one direction only (e.g. outputs only)~\cite{enfsafepol}. 
+Edit automata are a type of \ac{SA} that can edit, suppress or insert events~\cite{editautomata}. 
+Safety Automata (or \ac{DTA}) have been proposed that can edit \textit{bi-directional} events at runtime~\cite{recps}. 
+They were designed for reactive \acp{CPS} demonstrated in a pacemaker environment~\cite{recps}. 
+%This paper looks at the use of bi-directional \ac{RE} to enforce safety policies defined as Safety Automata in reactive, autonomous environments. 
+
+\ac{SRE} allows for easier formal reasoning over the possible runtime behaviour of the \acp{ANN} internal to the system, thus no longer requiring difficult static analysis.
+\ac{SRE} can apply a set of policies on the inputs and outputs of the system to ensure it follows a set of given constraints. % \acp{SANN} to ensure that the policies are never violated. 
+These policies can also feature timing information to guarantee timing deadlines for real-time systems.
+A well designed policy can thus ensure that the system never exhibits unsafe events --- therefore keeping the system's inputs and outputs \textit{safe}~\cite{EstSafeCriteria2003}. 
+
+However, these \ac{RE} models look at the enforced system as a black box. 
+For the purpose of \ac{RE} of an \ac{SANN} and its timed properties, the \ac{SANN} needs to be viewed as a white box, i.e. data internal to the \ac{SANN} needs to be able to be viewed and/or modified.
+Given that \acp{SANN} are white boxes, we develop \acp{SANN} with built-in \ac{RE} that monitors the \ac{SANN} as white boxes, and define the combination of the two as \acfp{SNN}.
+
+% Write about exisiting autonomous RE
+%The idea of \ac{RE} of autonomous systems has been looked into previously. 
+%De Niz et. al. propose a type of \ac{RE} they term temporal enforcement, which ensures that the system controller meets timing deadlines where outputs are concerned~\cite{safe-enforce-auto}. 
+%While this shares similarities with the work in this paper, their work does not expand to cover \acp{ANN}, and does not propose the use of \ac{RE} for anything other than meeting timing deadlines.
+%Aniculaesei et. al. propose static formal verification and runtime monitoring of autonomous, robotic systems to prevent physical collisions during system execution~\cite{runtime-monitor}.
+%While this looks at the enforcement of system outputs, the inputs are not monitored and the timing deadlines of the system are not investigated. 
+%Additionally, the case study involves a robot controlled by an automaton, not a highly complex \ac{AI} such as an \ac{ANN}.
+
+\subsection{Defining a Safety Automata}
+
+In order for the \ac{AV} system to operate safely, it must follow a set of policies, defined in English here:
+
+$\varphi_{cnn}$: The output of the vision \ac{CNN} ensemble networks ($O$) must match the \ac{LiDAR} values ($L$) when the confidence of the ensemble networks is low. 
+If the confidence is high, and there is a mismatch, the output should be classified as \textit{unknown} ($U$).
+The system should treat this output as if it were a pedestrian, i.e. with utmost caution.
+
+$\varphi_{drive}$: The vehicle may not exceed the safe speed limit. 
+An \textit{acceleration} command $A$ should be suppressed when the vehicle's speed limit of 100km/h is reached.
+
+$\varphi_{car}$: Ensure that the car does not drive into other vehicles. If an \textit{acceleration} command $A$ is asserted when the car in front (i.e. $O_{2_C}$ or $O_{5_C}$) is driving slower than the \ac{AV} ($O_{2_V}<S|O_{5_V}<S$), then this is suppressed and instead an appropriate brake speed $B_S$ (soft) or $B_H$ (hard) would be asserted instead.
+
+$\varphi_{ped}$: Ensure that the car does not behave unsafely around pedestrians. If a pedestrian appears in-front of the vehicle $P=true$, then the car should select an appropriate braking action (either $B_S$ or $B_H$). If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise or a braking action is appropriate.
+
+We can define these rules of the \ac{AV} system as a \textit{Safety Automata}~\cite{recps}, which are a kind of \acf{DTA}. 
+Examples of this are presented in Figures \ref{fig:avpedrte} - \ref{fig:avcnnrte}, which represent the automata used in the four policies of the \ac{AV} system.
+%Here, $A$ refers to the accelerate action, $B_S$ refers to a slow, or gentle, braking action, $B_H$ refers to a hard braking action.
+$P$ is a flag that denotes the presence of a pedestrian in a position that will be dangerous at any point in the future, and $t$ is a timer that ensures that the \ac{AV} has braked for long enough and in time when a collision with a pedestrian has been detected, denoted by the time $T_{lim}$. 
+$T_{lim}$ is a predefined length of time by which the system should have reacted to a pedestrian in a dangerous position.
+
+Finally, a complete policy framework can be established by simply ANDing the component policies together, i.e. \\ $\varphi_{av} = \varphi_{cnn} \wedge \varphi_{drive} \wedge \varphi_{car} \wedge \varphi_{ped}$.
+
+%The first policy, $\varphi_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
+%If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.
+%The second policy, $\varphi_{drive}$, ensures that the vehicle maintains reasonable driving practices on the road, e.g. not staying stationary in the middle of the road and not speeding.
+%If the \ac{AV} controller outputs that the \ac{AV} should \textbf{accelerate} while the \ac{AV} is at the speed limit, the \textbf{accelerate} command would be changed to a  \textbf{cruise} command.
+%Likewise, if the \ac{AV} controller decides that the \ac{AV} should remain stationary in an empty road, the \textbf{brake} (or \textbf{cruise}) command would be modified to an \textbf{accelerate} command.
+%The third policy, $\varphi_{car}$, checks the environment for other vehicles and ensures that the \ac{AV} does not drive into other vehicles, or cause accidents with other vehicles in any way.
+%If the \ac{AV} would \textbf{accelerate} into a vehicle in front, the \textbf{accelerate} would be changed to a \textbf{cruise}, if the \ac{AV} was driving much faster than the vehicle in front and the \ac{AV} is not braking, the current action would be modified to be a \textbf{brake} action.
+%The fourth, and highest priority, policy ($\varphi_{ped}$) monitors the environment for pedestrians and ensures that the car does not exhibit unsafe behaviour with regards to the pedestrians. 
+%If the \ac{AV} were to \textbf{accelerate}, or \textbf{cruise}, into a pedestrian that is in front of the vehicle, or approaching the road from the sides, the \textbf{accelerate}, or \textbf{cruise}, action would be changed to a \textbf{brake} action.
+%If the \ac{AV} does not brake fast enough with a pedestrian in front of the \ac{AV}, or approaching from the sides, a \textbf{hard brake} action would be initiated instead of the \ac{ANN} proposed action.
+%This policy ensures that the vehicle always drives slowly and cautiously around pedestrians.
+
+
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avpedrte.tikz}
+	\caption{Safety Automaton for Policy $\varphi_{ped}$\label{fig:avpedrte}}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avcarrte.tikz}
+	\caption{Safety Automaton for Policy $\varphi_{car}$\label{fig:avcarrte}}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avdriverte.tikz}
+	\caption{Safety Automaton for Policy $\varphi_{drive}$\label{fig:avdriverte}}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avcnnrte.tikz}
+	\caption{Safety Automaton for Policy $\varphi_{cnn}$\label{fig:avcnnrte}}
+\end{figure}
+
+
+
+
+
