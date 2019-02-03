@@ -75,6 +75,7 @@ A run is \textit{accepted} by $\calV$ if it ends in an accepting state $l_n \in 
 
 
 \begin{example}
+	\label{ex:run}
 	An example run of the VDTA presented in Figure~\ref{fig:avpedrte} is presented here.
 	Assume that the time the vehicle has to be braking $T_{lim} = 2$ (2 clock ticks) and that one event occurs every second. 
 	The starting state is $l_{drive}$, and the first I/O event is $(\{0, 0, 0, 0, 4063232\}, \{\langle 0, 0, 0 \rangle\})$, i.e. nothing is detected in-front of the vehicle and the vehicle does not accelerate or brake, meaning it is cruising at 62 km/h.
@@ -131,6 +132,13 @@ Finally, a complete policy framework can be established by simply ANDing the com
 
 
 \subsection{Enforcing Non-accepting I/O Events}
+Enforcers are designed to prevent a system from generating an input/output trace that is non-accepting, such as Example~\ref{ex:run}.
+\cite{recps} proposed \ac{DTA} semantics with two possible methodologies for editing non-accepting I/O events.
+These are \textit{random} and \textit{minimum} edits; a random edit chooses a random, accepting event from a list of accepting I/O events and minimum edit chooses the closest accepting event to the current non-accepting event.
+However, neither of these edits are not always useful for problems in real scenarios.
+Take Example~\ref{ex:run}, when the transition $l_{drive} \rightarrow l_v$ is taken, Object 2 can be edited such that $l_v$ is not entered, however this will not remove the danger that initially posed this transition.
+However, if the action $\bin{O}$ was changed, e.g. the cruising action in the example that caused the non-accepting trace was changed to a hard braking action, then an accepting event would have occurred \textit{and} the pedestrian in the road would have been safe.
+
 
 %The first policy, $\mathcal{V}_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
 %If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.
@@ -145,9 +153,37 @@ Finally, a complete policy framework can be established by simply ANDing the com
 %This policy ensures that the vehicle always drives slowly and cautiously around pedestrians.
 
 
+\subsection{\ac{SANN}: Defining Artificial Neural Networks for \acp{CPS}}
+\subsubsection{Defining the Layers of a \ac{SANN}}
 
+\begin{definition}
+	\label{def:layer}We define the \emph{\ac{SANN} Layers} as a tuple of layer types $\mathcal{L} = (I, D, O, C, A, M)$ where each layer type consists of $N$ nodes, each with an arrangement of 32-bit signed integers:
+	\begin{itemize}
+		\item $I$ is the input layer that consists only of $N_I$ 32-bit signed integers, where $N_I$ is the total number of inputs to the \ac{SANN}.
+		\item $D$ is a dense layer, consisting of $N_{k-1} \times N_k$ 32-bit signed integer weights, where $N_k$ is the number of neurons in layer $k$ and $N_{k-1}$ is the number of neurons in the previous layer.
+		\item $O$ is the output layer which is an instance of a dense layer $D$, consisting of $N_O$ neurons, where $N_O$ is the number of outputs of the \ac{SNN}.
+		\item $C$ is a convolutional layer consisting of $N_k$ filters, each consisting of $M^2$ 32-bit signed integer weights, where $M$ is the filter size and $N_k$ is the number of filters in layer $k$.
+		\item $A$ represents an average pooling layer, but has no 32-bit signed integer values, only a size with width $w$ and height $h$.
+		\item $M$ represents an maximum pooling layer, but has no 32-bit signed integer values, only a size with width $w$ and height $h$.
+	\end{itemize}
+\end{definition}
 
+\begin{definition}
+	\label{def:cnn}
+	A Synchronous \ac{CNN} is an extension of the previously defined \ac{SANN} from Definition~\ref{def:bb-mlp}.We define a \emph{Synchronous \ac{CNN}} as a tuple $\mathcal{C} = (I, O, L, A, \nu)$ where
+	\begin{itemize}
+		\item $I$ is a finite collection of 32-bit signed integer input variables with the domain \textbf{I} = $32^n$, where $n$ is the number of inputs.
+		\item $O$ is a finite collection of 32-bit signed integer output variables with the domain \textbf{O} = $32^m$, where $m$ is the number of outputs.
+		\item $L$ denotes a set of layers, defined by \ref{def:layer}.
+		\item $A$ denotes the finite set of instantiated, connected layers in the \ac{CNN}, starting with the input layer $L_I$ and ending with the output layer $L_O$, with any assortment of layers from $L$ in-between, e.g. $A = (L_I, L_C, L_C, L_M, L_C, L_D, L_O)$.
+		\item $\nu$: \textbf{I} $\rightarrow$ \textbf{O} is the non-linear function, termed the network functions, that provides the behaviour of a given network, i.e. when provided a vector of $n$ inputs produces a vector of $m$ outputs. 
+	\end{itemize}
+\end{definition}
 
+\subsubsection{Running a Synchronous CNN}
+A synchronous CNN can be run two different ways depending on the synchronous tick assignment of the CNN, see Section~\ref{sec:esterel-mapping} for more on tick analysis of \ac{SNN}. 
+If the entire CNN is run each tick, the CNN is run using the function $\nu(I_k) = O_k$, where $I_k$ are the inputs for tick $k$ and $O_k$ are the outputs for tick $k$.
+If only a single layer of the CNN is run each tick, the layer at $A_k$ is run as a function, where $k$ is the position of the layer in $A$ of the current tick.
 
 
 
