@@ -1,0 +1,180 @@
+\section{Definitions}
+\subsection{\ac{VDTA}: Defining Safety Policies for \ac{CPS}}
+
+We consider our industrial \ac{CPS} systems to have finite ordered sets of input values $\bin{I} = \{\bin{i_1}, \bin{i_2}, \ldots \bin{i_n}\}$ and output values $\bin{O} = \{\bin{o_1}, \bin{o_2}, \ldots \bin{o_n}\}$, where input and output values $\bin{i_n}$ and $\bin{o_n}$ are typed finite binary values.
+However, for the purpose of the \ac{AV} case study used in this chapter, the input and output values $\bin{i_n}$ and $\bin{o_n}$ are fixed-point values, taking the form of 32-bit signed integer values.
+The input alphabet is $\bin{\Sigma_I} = 32^{\bin{I}}$, i.e. the set made of all possible input value sets; and the output alphabet $\bin{\Sigma_O} = 32^{\bin{O}}$ is likewise the set made of all possible output value sets.
+Finally, the input-output alphabet $\bin{\Sigma} = \bin{\Sigma_I} \times \bin{\Sigma_O}$. 
+Each input and output event is denoted as a complete set of values, and an input-output event or reaction is of the form $(\bin{x_i}, \bin{y_i})$, where $\bin{x_i} \in \bin{\Sigma_I}$ and $\bin{y_i} \in \bin{\Sigma_O}$. 
+
+\begin{example}
+	\label{ex:io}
+	Within our \ac{AV} braking example, using the \ac{VDTA} defined by the $\mathcal{V}_{ped}$ safety policy~\ref{fig:avpedrte}, let $\bin{I} = \{\bin{O_2}, \bin{O_5}, \bin{O_{2_v}}, \bin{O_{5_v}}, \bin{S}\}$ are 32-bit signed integers representing objects 2 and 5 in the system, their velocities and the speed of the vehicle respectively.
+	Then, let the output $\bin{O} = \{\bin{D}\} = \{\bin{\langle A, B_S, B_H \rangle}\}$, where $\bin{D}$ is a vector of signed 32-bit integers, representing the \textit{decision} (action) taken by the vehicle this tick (\textit{Accelerate}, \textit{Soft Brake} and \textit{Hard Brake}).
+	
+	Then the input-output event $\bin{O_2}=65536$, $\bin{O_5}=0$, $\bin{O_{2_v}} = 655360$, $\bin{O_{5_v}} = 0$,  $\bin{S} = 4063232$, $\bin{D} = \langle 0, 0, 65536 \rangle$ is denoted as:\\$(\{65536, 0, 655360, 0, 4063232\}, \{\langle 0, 0, 65536 \rangle\})$ where each value is a fixed-point (32-bit signed integer) representation of a floating point value, i.e. Object 2 is a pedestrian, Object 5 is nothing, Object 2 is travelling at 10 km/h, Object 5 is not moving, and the vehicle's speed is 62 km/h, while the decided action for this tick is hard braking ($B_H$).
+\end{example}
+
+\begin{definition}
+	\label{def:vdta}We define a \emph{\acf{VDTA}} as a tuple $\mathcal{V} = (L, l_0, l_v, \bin{\Sigma}, \bin{\Sigma_M}, V, F, \Delta)$ where
+	\begin{itemize}
+		\item $L$ is the set of \emph{locations},
+		\item $l_0 \in L$ is the initial location,
+		\item $l_v$ is a unique non-accepting \emph{trap} location,
+		\item $\bin{\Sigma}$ is the valued input-output alphabet,
+		\item $\bin{\Sigma_M} = 32^{\bin{M}}$ is the valued internal variable alphabet made from a set of internal variables $\bin{M}$,
+		\item $V$ is a set of integer clocks,
+		\item and $F \subseteq L$ is the set of accepting locations.
+	\end{itemize}
+	
+	The transition relation $\Delta$ is $\Delta \subseteq L \times G(V,\bin{\Sigma},\bin{M}) \times R \times J \times L$ where ${G}(V,\bin{\Sigma},\bin{M})$ denotes the set of {\em guards}, i.e. constraints defined as conjunctions of simple constraints of the form $f(x) \bowtie g(y)$, with $x \in V \cup \bin{\Sigma} \cup \bin{M}$, $y \in V \cup \bin{\Sigma} \cup \bin{M} \cup \bbn$, $\bowtie~\in \{<,\leq,=,\geq,>\}$, and $f$ and $g$ any transformation functions. 
+	
+	$R\subseteq V$ is a subset of integer clocks that are reset to 0,
+	and $J : V \times \bin{\Sigma} \times \bin{\Sigma}_{M} \times \bbn \rightarrow \bin{M}$ is an assignment function for the internal variables.
+\end{definition}
+
+\begin{example}
+	Our case study can be presented as a \ac{VDTA} $\mathcal{V}_{oc}$, as depicted in Figure~\ref{fig:avpedrte}. 
+	This \ac{VDTA} specifies that driving into a pedestrian in-front (if any) and not braking hard is a violation, and approaching a pedestrian from a distance (if any) and not starting to slow down (braking softly) is a violation.
+	
+	This is encoded as a \ac{VDTA} with accepting location $l_{drive}$ and non-accepting, non-violation location $l_{brake}$, with the initial state $l_{drive}$.
+	We use the I/O specified in Example~\ref{ex:io}.
+	
+	In this \ac{VDTA} there are two violation transitions.
+	$l_{drive} \rightarrow l_v$ occurs when 
+	
+	It can be seen that there are three violation transitions.
+	$l_{safe} \rightarrow l_{vio}$ occurs when $\bin{i_{set}}$ is greater than some safe physical value $i_{max}$, which is a physical property of the system itself. 
+	$l_{unsafe} \rightarrow l_{vio}$ can also occur for this case.
+	There is also the other $l_{unsafe} \rightarrow l_{vio}$ case, transition \textcircled{a}, where (among other things) $v > \tau(\bin{i}, \bin{i_{set}})$.
+	This represents the case where the overcurrent time exceeds the safe time without the circuit breaker `trip' command being issued.
+	The green boxes with dotted outlines are annotations discussed later in this paper.
+\end{example}
+
+Policy \ac{VDTA} are required to be \textit{deterministic}, i.e. for any given state, the conjunction of any guards of any other outgoing transitions may not be satisfiable; and \textit{complete}, i.e. for any given state at any given time and any given input-output event, at least one transition guard is satisfied.
+
+\subsection{Semantics for \ac{VDTA}}
+
+The semantics of a \ac{VDTA} are defined as a transition system where each state $q$ consists of the current location $l$, the current values of all the integer clocks $\chi$, and the current values of all internal variables $\bin{m}$.
+The semantics of a \ac{VDTA} are defined as follows.
+
+\begin{definition}[Semantics of \ac{VDTA}]
+	\label{def:vdta:semantics}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	The {\em semantics} of a \ac{VDTA} is a transition system $\sem{\calV}=(Q, l_0, \bin{\Sigma}, Q_F, l_v, \to)$ where
+	\begin{itemize}
+		\item $Q= L \times \bbn^V \times \bin{\Sigma_M}$ is the set of {\em states},
+		\item $l_0=(l_0, \chi_0, \bin{m}_0)$ is the {\em initial state}, where $\chi_0$ is the
+		valuation that maps every integer clock variable in $V$ to zero, and $\bin{m}_0$ maps every internal value $\bin{\Sigma_M}$ to zero,
+		\item $\bin{\Sigma}$ is the I/O alphabet,
+		\item $Q_F= F \times \bbn^V \times \bin{\Sigma_M}$ is the set of {\em accepting states},
+		\item and $l_v = l_v\times\bbn^V \times \bin{\Sigma_M}$ is the set of trap states.
+	\end{itemize}
+	The transition relation $\to \subseteq Q\times \bin{\Sigma} \times Q$ is a set of transitions of the form
+	$(l,\chi,\bin{m})\xrightarrow{\bin{a}}(l',\chi',\bin{m}')$, with $\bin{a} \in \bin{\Sigma}$, $\chi'=(\chi+1)[r \leftarrow 0]$ and $\bin{m}' = j(\chi, \bin{a}, \bin{m})$, i.e. a transition between locations $l$ and $l'$ can occur whenever there exists $(l, g, r, j, l') \in \Delta$ and $\bin{a} \in \bin{\Sigma}$ and $\bin{m} \in \bin{\Sigma_M}$ such that $(\chi, \bin{a}, \bin{m}) \models g$, and when transitions occur, all clocks advance except for those which are reset to 0 by reset relation $r$, and all internal variables $\bin{m}$ are updated to new values by function $j$. 
+\end{definition}
+
+A {\em run} $\rho$ of $\calV$ is a sequence of moves in $\sem{\calV}$ denoted as $\rho = q \xrightarrow {\bin{a}_1} l_1\cdots l_{n-1}\xrightarrow {\bin{a}_n} l_{n}$, for some $n\in\bbn$. %, and is denoted as $q \xrightarrow {\bin{\sigma}} l_n$.
+A run is \textit{accepted} by $\calV$ if it ends in an accepting state $l_n \in Q_F$, and a run is \textit{non-accepting} if it ends in a non-accepting state $l_n \in l_v$.
+
+
+\begin{example}
+	An example run of the VDTA presented in Figure~\ref{fig:vsa-overcurrent} is presented here.
+	Assume $i_{max} = 10000$, and one event occurs every second.
+	We start in state $l_{safe}$, and I/O event $(\{4000, 5000\},\{1\})$ occurs.
+	We remain in state $l_{safe}$.
+	Now $(\{8000, 5000\},\{1\})$ occurs.
+	As $\bin{i} > \bin{i_{set}}$, we now advance to $l_{unsafe}$ and set $v = 0$.
+	We now receive $(\{7000, 5000\},\{1\})$.
+	$\tau(7000, 5000) = 3.375$, and $v = 0$, so we can remain in $l_{unsafe}$ and set $v = 1$.
+	Then, we receive $(\{8000, 5000\},\{1\})$.
+	$\tau(8000, 5000) = 2.25$, and $v = 1$, so we can remain, and set $v = 2$.
+	We receive $(\{8000, 5000\},\{1\})$ again, so we can remain, and set $v = 3$.
+	We receive $(\{8000, 5000\},\{1\})$ again, and now, $(v = 3) \geq (\tau = 2.25)$, so we take the violation transition to $l_{vio}$.
+	As a result, this run was \textit{non-accepting}.
+	
+	
+\end{example}
+
+
+\subsubsection{Defining a Runtime Enforcer}
+
+\subsubsection{Example of a Runtime Enforcer}
+
+
+
+
+
+
+
+
+
+\subsection{Defining a Safety Automata}
+
+In order for the \ac{AV} system to operate safely, it must follow a set of policies ($\mathcal{V}$), defined in English here:
+
+$\mathcal{V}_{cnn}$: The output of the vision \ac{CNN} ensemble networks ($O$) must match the \ac{LiDAR} values ($L$) when the confidence of the ensemble networks is low. 
+If the confidence is high, and there is a mismatch, the output should be classified as \textit{unknown} ($U$).
+The system should treat this output as if it were a pedestrian, i.e. with utmost caution.
+
+$\mathcal{V}_{drive}$: The vehicle may not exceed the safe speed limit. 
+An \textit{acceleration} command $A$ should be suppressed when the vehicle's speed limit of 100km/h is reached.
+
+$\mathcal{V}_{car}$: Ensure that the car does not drive into other vehicles. If an \textit{acceleration} command $A$ is asserted when the car in front (i.e. $O_{2_C}$ or $O_{5_C}$) is driving slower than the \ac{AV} ($O_{2_V}<S|O_{5_V}<S$), then this is suppressed and instead an appropriate brake speed $B_S$ (soft) or $B_H$ (hard) would be asserted instead.
+
+$\mathcal{V}_{ped}$: Ensure that the car does not behave unsafely around pedestrians. If a pedestrian appears in-front of the vehicle $P=true$, then the car should select an appropriate braking action (either $B_S$ or $B_H$). If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise or a braking action is appropriate.
+
+We can define these rules of the \ac{AV} system as a \textit{Safety Automata}~\cite{recps}, which are a kind of \acf{DTA}. 
+Examples of this are presented in Figures \ref{fig:avpedrte} - \ref{fig:avcnnrte}, which represent the automata used in the four policies of the \ac{AV} system.
+%Here, $A$ refers to the accelerate action, $B_S$ refers to a slow, or gentle, braking action, $B_H$ refers to a hard braking action.
+$P$ is a flag that denotes the presence of a pedestrian in a position that will be dangerous at any point in the future, and $t$ is a timer that ensures that the \ac{AV} has braked for long enough and in time when a collision with a pedestrian has been detected, denoted by the time $T_{lim}$. 
+$T_{lim}$ is a predefined length of time by which the system should have reacted to a pedestrian in a dangerous position.
+
+Finally, a complete policy framework can be established by simply ANDing the component policies together, i.e. \\ $\mathcal{V}_{av} = \mathcal{V}_{cnn} \wedge \mathcal{V}_{drive} \wedge \mathcal{V}_{car} \wedge \mathcal{V}_{ped}$.
+
+%The first policy, $\mathcal{V}_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
+%If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.
+%The second policy, $\mathcal{V}_{drive}$, ensures that the vehicle maintains reasonable driving practices on the road, e.g. not staying stationary in the middle of the road and not speeding.
+%If the \ac{AV} controller outputs that the \ac{AV} should \textbf{accelerate} while the \ac{AV} is at the speed limit, the \textbf{accelerate} command would be changed to a  \textbf{cruise} command.
+%Likewise, if the \ac{AV} controller decides that the \ac{AV} should remain stationary in an empty road, the \textbf{brake} (or \textbf{cruise}) command would be modified to an \textbf{accelerate} command.
+%The third policy, $\mathcal{V}_{car}$, checks the environment for other vehicles and ensures that the \ac{AV} does not drive into other vehicles, or cause accidents with other vehicles in any way.
+%If the \ac{AV} would \textbf{accelerate} into a vehicle in front, the \textbf{accelerate} would be changed to a \textbf{cruise}, if the \ac{AV} was driving much faster than the vehicle in front and the \ac{AV} is not braking, the current action would be modified to be a \textbf{brake} action.
+%The fourth, and highest priority, policy ($\mathcal{V}_{ped}$) monitors the environment for pedestrians and ensures that the car does not exhibit unsafe behaviour with regards to the pedestrians. 
+%If the \ac{AV} were to \textbf{accelerate}, or \textbf{cruise}, into a pedestrian that is in front of the vehicle, or approaching the road from the sides, the \textbf{accelerate}, or \textbf{cruise}, action would be changed to a \textbf{brake} action.
+%If the \ac{AV} does not brake fast enough with a pedestrian in front of the \ac{AV}, or approaching from the sides, a \textbf{hard brake} action would be initiated instead of the \ac{ANN} proposed action.
+%This policy ensures that the vehicle always drives slowly and cautiously around pedestrians.
+
+
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avpedrte.tikz}
+	\caption{Safety Automaton for Policy $\mathcal{V}_{ped}$\label{fig:avpedrte}}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avcarrte.tikz}
+	\caption{Safety Automaton for Policy $\mathcal{V}_{car}$\label{fig:avcarrte}}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avdriverte.tikz}
+	\caption{Safety Automaton for Policy $\mathcal{V}_{drive}$\label{fig:avdriverte}}
+\end{figure}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\linewidth]{avcnnrte.tikz}
+	\caption{Safety Automaton for Policy $\mathcal{V}_{cnn}$\label{fig:avcnnrte}}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+

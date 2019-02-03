@@ -81,63 +81,7 @@ Given that \acp{SANN} are white boxes, we develop \acp{SANN} with built-in \ac{R
 %While this looks at the enforcement of system outputs, the inputs are not monitored and the timing deadlines of the system are not investigated. 
 %Additionally, the case study involves a robot controlled by an automaton, not a highly complex \ac{AI} such as an \ac{ANN}.
 
-\subsection{Defining a Safety Automata}
 
-In order for the \ac{AV} system to operate safely, it must follow a set of policies, defined in English here:
-
-$\varphi_{cnn}$: The output of the vision \ac{CNN} ensemble networks ($O$) must match the \ac{LiDAR} values ($L$) when the confidence of the ensemble networks is low. 
-If the confidence is high, and there is a mismatch, the output should be classified as \textit{unknown} ($U$).
-The system should treat this output as if it were a pedestrian, i.e. with utmost caution.
-
-$\varphi_{drive}$: The vehicle may not exceed the safe speed limit. 
-An \textit{acceleration} command $A$ should be suppressed when the vehicle's speed limit of 100km/h is reached.
-
-$\varphi_{car}$: Ensure that the car does not drive into other vehicles. If an \textit{acceleration} command $A$ is asserted when the car in front (i.e. $O_{2_C}$ or $O_{5_C}$) is driving slower than the \ac{AV} ($O_{2_V}<S|O_{5_V}<S$), then this is suppressed and instead an appropriate brake speed $B_S$ (soft) or $B_H$ (hard) would be asserted instead.
-
-$\varphi_{ped}$: Ensure that the car does not behave unsafely around pedestrians. If a pedestrian appears in-front of the vehicle $P=true$, then the car should select an appropriate braking action (either $B_S$ or $B_H$). If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise or a braking action is appropriate.
-
-We can define these rules of the \ac{AV} system as a \textit{Safety Automata}~\cite{recps}, which are a kind of \acf{DTA}. 
-Examples of this are presented in Figures \ref{fig:avpedrte} - \ref{fig:avcnnrte}, which represent the automata used in the four policies of the \ac{AV} system.
-%Here, $A$ refers to the accelerate action, $B_S$ refers to a slow, or gentle, braking action, $B_H$ refers to a hard braking action.
-$P$ is a flag that denotes the presence of a pedestrian in a position that will be dangerous at any point in the future, and $t$ is a timer that ensures that the \ac{AV} has braked for long enough and in time when a collision with a pedestrian has been detected, denoted by the time $T_{lim}$. 
-$T_{lim}$ is a predefined length of time by which the system should have reacted to a pedestrian in a dangerous position.
-
-Finally, a complete policy framework can be established by simply ANDing the component policies together, i.e. \\ $\varphi_{av} = \varphi_{cnn} \wedge \varphi_{drive} \wedge \varphi_{car} \wedge \varphi_{ped}$.
-
-%The first policy, $\varphi_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
-%If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.
-%The second policy, $\varphi_{drive}$, ensures that the vehicle maintains reasonable driving practices on the road, e.g. not staying stationary in the middle of the road and not speeding.
-%If the \ac{AV} controller outputs that the \ac{AV} should \textbf{accelerate} while the \ac{AV} is at the speed limit, the \textbf{accelerate} command would be changed to a  \textbf{cruise} command.
-%Likewise, if the \ac{AV} controller decides that the \ac{AV} should remain stationary in an empty road, the \textbf{brake} (or \textbf{cruise}) command would be modified to an \textbf{accelerate} command.
-%The third policy, $\varphi_{car}$, checks the environment for other vehicles and ensures that the \ac{AV} does not drive into other vehicles, or cause accidents with other vehicles in any way.
-%If the \ac{AV} would \textbf{accelerate} into a vehicle in front, the \textbf{accelerate} would be changed to a \textbf{cruise}, if the \ac{AV} was driving much faster than the vehicle in front and the \ac{AV} is not braking, the current action would be modified to be a \textbf{brake} action.
-%The fourth, and highest priority, policy ($\varphi_{ped}$) monitors the environment for pedestrians and ensures that the car does not exhibit unsafe behaviour with regards to the pedestrians. 
-%If the \ac{AV} were to \textbf{accelerate}, or \textbf{cruise}, into a pedestrian that is in front of the vehicle, or approaching the road from the sides, the \textbf{accelerate}, or \textbf{cruise}, action would be changed to a \textbf{brake} action.
-%If the \ac{AV} does not brake fast enough with a pedestrian in front of the \ac{AV}, or approaching from the sides, a \textbf{hard brake} action would be initiated instead of the \ac{ANN} proposed action.
-%This policy ensures that the vehicle always drives slowly and cautiously around pedestrians.
-
-
-
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=\linewidth]{avpedrte.tikz}
-	\caption{Safety Automaton for Policy $\varphi_{ped}$\label{fig:avpedrte}}
-\end{figure}
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=\linewidth]{avcarrte.tikz}
-	\caption{Safety Automaton for Policy $\varphi_{car}$\label{fig:avcarrte}}
-\end{figure}
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=\linewidth]{avdriverte.tikz}
-	\caption{Safety Automaton for Policy $\varphi_{drive}$\label{fig:avdriverte}}
-\end{figure}
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=\linewidth]{avcnnrte.tikz}
-	\caption{Safety Automaton for Policy $\varphi_{cnn}$\label{fig:avcnnrte}}
-\end{figure}
 
 
 

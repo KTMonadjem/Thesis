@@ -5,8 +5,8 @@
 \tikzstyle{accept} = [draw=blue!75,fill=blue!20]
 \tikzstyle{violate} = [draw=red!75,fill=red!20]
 
-\node[initial,state, accepting, accept] (A) {$q_{drive}$};
-\node[state, violate]         (C) [right of=A]  {$q_v$};
+\node[initial,state, accepting, accept] (A) {$l_{drive}$};
+\node[state, violate]         (C) [right of=A]  {$l_v$};
 
 \path[->] 
 (A) edge [loop above]       node [above, xshift=-1em]  
