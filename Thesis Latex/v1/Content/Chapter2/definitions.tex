@@ -159,9 +159,9 @@ However, if the action $\bin{O}$ was changed, e.g. the cruising action in the ex
 \begin{definition}
 	\label{def:layer}We define the \emph{\ac{SANN} Layers} as a tuple of layer types $\mathcal{L} = (I, D, O, C, A, M)$ where each layer type consists of $N$ nodes, each with an arrangement of 32-bit signed integers:
 	\begin{itemize}
-		\item $I$ is the input layer that consists only of $N_I$ 32-bit signed integers, where $N_I$ is the total number of inputs to the \ac{SANN}.
+		\item $I$ is the input layer that consists only of $N$ 32-bit signed integers, where $N$ is the total number of inputs to the \ac{SANN}.
 		\item $D$ is a dense layer, consisting of $N_{k-1} \times N_k$ 32-bit signed integer weights, where $N_k$ is the number of neurons in layer $k$ and $N_{k-1}$ is the number of neurons in the previous layer.
-		\item $O$ is the output layer which is an instance of a dense layer $D$, consisting of $N_O$ neurons, where $N_O$ is the number of outputs of the \ac{SNN}.
+		\item $O$ is the output layer which is an instance of a dense layer $D$, consisting of $N$ neurons, where $N$ is the number of outputs of the \ac{SNN}.
 		\item $C$ is a convolutional layer consisting of $N_k$ filters, each consisting of $M^2$ 32-bit signed integer weights, where $M$ is the filter size and $N_k$ is the number of filters in layer $k$.
 		\item $A$ represents an average pooling layer, but has no 32-bit signed integer values, only a size with width $w$ and height $h$.
 		\item $M$ represents an maximum pooling layer, but has no 32-bit signed integer values, only a size with width $w$ and height $h$.
@@ -170,22 +170,46 @@ However, if the action $\bin{O}$ was changed, e.g. the cruising action in the ex
 
 \begin{definition}
 	\label{def:cnn}
-	A Synchronous \ac{CNN} is an extension of the previously defined \ac{SANN} from Definition~\ref{def:bb-mlp}.We define a \emph{Synchronous \ac{CNN}} as a tuple $\mathcal{C} = (I, O, L, A, \nu)$ where
+	A Synchronous \ac{CNN} is an extension of the previously defined \ac{SANN} from Definition~\ref{def:bb-mlp}.We define a \emph{Synchronous \ac{CNN}} as a tuple $\mathcal{C} = (I, O, L, A, \eta)$ where
 	\begin{itemize}
-		\item $I$ is a finite collection of 32-bit signed integer input variables with the domain \textbf{I} = $32^n$, where $n$ is the number of inputs.
-		\item $O$ is a finite collection of 32-bit signed integer output variables with the domain \textbf{O} = $32^m$, where $m$ is the number of outputs.
+		\item $I$ is a finite collection of 32-bit signed integer input variables with the domain \textbf{I}$ = 32^n$, where $n$ is the number of inputs.
+		\item $O$ is a finite collection of 32-bit signed integer output variables with the domain \textbf{O}$ = 32^m$, where $m$ is the number of outputs.
 		\item $L$ denotes a set of layers, defined by \ref{def:layer}.
-		\item $A$ denotes the finite set of instantiated, connected layers in the \ac{CNN}, starting with the input layer $L_I$ and ending with the output layer $L_O$, with any assortment of layers from $L$ in-between, e.g. $A = (L_I, L_C, L_C, L_M, L_C, L_D, L_O)$.
-		\item $\nu$: \textbf{I} $\rightarrow$ \textbf{O} is the non-linear function, termed the network functions, that provides the behaviour of a given network, i.e. when provided a vector of $n$ inputs produces a vector of $m$ outputs. 
+		\item $A$ denotes the finite set of instantiated, connected layers in the \ac{CNN}, starting with the input layer $L_I$ and ending with the output layer $L_O$, with any assortment of layers from $L$ in-between, e.g. $A = (L_I, ..., L_O)$.
+		\item $\eta$: \textbf{I} $\rightarrow$ \textbf{O} is the non-linear function, termed the network functions, that provides the behaviour of a given network, i.e. when provided a vector of $n$ inputs produces a vector of $m$ outputs. 
 	\end{itemize}
 \end{definition}
 
+\begin{example}
+	\label{ex:cnn}
+	An example of one of the nine the object detection \acp{CNN} used in the the \ac{AV} case study is presented here.
+	Any of the nine \acp{CNN} have $28 \times 28 \times 3 = 2352$, therefore \textbf{I}$ = \langle I_0, I_1 ..., I_2351 \rangle$.
+	Likewise, each CNN has seven outputs resulting in \textbf{O}$ = \langle O_0, O_1 O_2 ..., O_7 \rangle$.
+	Each \ac{CNN} has a set of layers $L$ defined by Definition \ref{def:layer}.
+	The arrangement of layers $A$ consists of twelve layers in the following order: $A = \langle L_I, L_C, L_M, L_C, L_C, L_M, L_C, L_C, L_C, L_C, L_A, L_O \rangle$.
+	The network function $\eta$ runs the \ac{CNN} such that an input image of size $28 \times 28 \times 3$ produces an output vector of size $7$.
+\end{example}
+
 \subsubsection{Running a Synchronous CNN}
 A synchronous CNN can be run two different ways depending on the synchronous tick assignment of the CNN, see Section~\ref{sec:esterel-mapping} for more on tick analysis of \ac{SNN}. 
-If the entire CNN is run each tick, the CNN is run using the function $\nu(I_k) = O_k$, where $I_k$ are the inputs for tick $k$ and $O_k$ are the outputs for tick $k$.
+If the entire CNN is run each tick, the CNN is run using the function $\eta(I_k) = O_k$, where $I_k$ are the inputs for tick $k$ and $O_k$ are the outputs for tick $k$.
 If only a single layer of the CNN is run each tick, the layer at $A_k$ is run as a function, where $k$ is the position of the layer in $A$ of the current tick.
 
-
+\begin{example}
+	\label{ex:runcnn}
+	An example run of one of the nine the object detection \acp{CNN} used in Example \ref{ex:cnn} is presented here.
+	An input image of a car, $28 \times 28$ pixels in colour is given to the \ac{CNN} network function $\eta$ as the input \textbf{I}.
+	These pixels are flattened into a single layer of 2352 32-bit signed integers inputs and made into the input layer $L_I$.
+	These inputs are then passed to the next layer of the \ac{CNN}, in this case a convolutional layer $L_C$.
+	This convolutional layer has 32 filters and thus, after the 32 sets of matrix convolution, produces 32 sets of 2352 32-bit signed integer values.
+	These $32 \times 2352$ values are then passed on to the next layer: a $2 \times 2$ maxpooling layer $L_M$.
+	This layer takes each set of 2352 values and trims them down to $2353 / (2 \times 2) = 588$ values.
+	These 32 sets of 588 values are then passed on to the next convolutional layer $L_C$ with 16 filters.
+	And so on.
+	Until the values reach the output layer, where they are condensed into 7 distinct output values, making up the output matrix \textbf{O} which classifies the image with the values $\langle 0.02, 0.91, 0.03, 0.04, 0.00, 0.00, 0.00 \rangle$.
+	This means that the \ac{CNN} is 91 \% confident that the input image is a vehicle, and only 2 \% confident that it is a person.
+	Therefore $\eta(2352_{car}) = \langle 0.02, 0.91, 0.03, 0.04, 0.00, 0.00, 0.00 \rangle$
+\end{example}
 
 
 
