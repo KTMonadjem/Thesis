@@ -13,17 +13,17 @@
 \path[->] 
 		(A) edge [loop above]       node [above, xshift=-1em]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{B_H}~\&\\~ \overline{(B_S~\&~(O_{2_P} | O_{5_P}))}, \\ t := 0}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{B_H}~\&\\~ \overline{(B_S~\&~O_{5_P})}, \\ t := 0}$
 		} (A)
 		
 		(A) edge [bend left]		node [above]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{B_H~|~(B_S~\&\\~(O_{2_P} | O_{5_P})), \\ t := 0}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{A}~\&~(B_H~|~(B_S~\&~O_{5_P})), \\ t := 0}$
 		} (B)
 	
 		(A) edge [right]	node [left, xshift=-1em]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big((\overline{B_H}~\&~\overline{(B_S~\&~(O_{2_P} | O_{5_P}))})~|\\~B_H~|~(B_S~\&~(O_{2_P} | O_{5_P}))\Big)}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big((\overline{B_H}~\&~\overline{(B_S~\&~ O_{5_P})})~|\\~(\overline{A}~\&~(B_H~|~(B_S~\&~O_{5_P})))\Big)}$
 		} (C)
 	
 		(B) edge [loop above]		node [above, xshift=1em]  
@@ -33,12 +33,12 @@
 	
 		(B) edge [bend left]				node [below]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&\\~\overline{(B_S~\&~(O_{2_P} | O_{5_P}))}}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&~\overline{B_S}}$
 		} (A)
 		
 		(B) edge [left]			node [right, xshift=2em]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(t < T_{lim}~|~B_H~|~B_S|\\(t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&\\~\overline{B_S \& (O_{2_P} | O_{5_P})})\Big)}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(t < T_{lim}~|~B_H~|~B_S|\\(t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&\\~\overline{B_S~\&~O_{5_P}})\Big)}$
 		} (C)
 	
 		(C) edge [loop left]		node [left]  
