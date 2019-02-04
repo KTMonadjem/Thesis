@@ -32,7 +32,7 @@ A diagram of the \ac{AV} used in this system is shown in Figure~\ref{fig:av}. \t
 
 The controller \ac{MLP} takes seventeen different inputs. 
 Two inputs correspond to the current speed of the vehicle ($S$) and the speed of the vehicle one tick in the past ($P$). 
-The other fifteen inputs are broken into three boolean inputs for each camera's detected object ($O_1$ - $O_5$): the type of object seen in that camera ($N$: nothing, $P$: pedestrian, $C$: car or $U$: unknown), the speed of the object ($V$) and the direction of the object ($D$).
+The other fifteen inputs are broken into three boolean inputs for each camera's detected object ($O_1$ - $O_5$ as shown in Figure \ref{fig:av}): the type of object seen in that camera ($N$: nothing, $P$: pedestrian, $C$: car or $U$: unknown), the speed of the object ($V$) and the direction of the object ($D$).
 E.g. a car far in-front of the \ac{AV} would be represented by $O_5$ as $O_{5_C}$, and its speed and direction by $O_{5_V}$ and $O_{5_D}$ respectively.
 Depending on these inputs, the controller outputs three values  $A$: accelerate, $B_S$ soft brake, or $B_H$: hard brake.
 These outputs can each be between 0 and 1.

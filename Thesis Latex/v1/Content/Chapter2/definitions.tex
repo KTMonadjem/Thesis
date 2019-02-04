@@ -180,8 +180,8 @@ However, if the action $\bin{O}$ was changed, e.g. the cruising action in the ex
 
 \begin{example}
 	\label{ex:cnn}
-	An example of one of the nine the object detection \acp{CNN} used in the the \ac{AV} case study is presented here.
-	Any of the nine \acp{CNN} have $28 \times 28 \times 3 = 2352$, therefore \textbf{I}$ = \langle I_0, I_1 ..., I_2351 \rangle$.
+	An example of one of the fifteen the object detection \acp{CNN} used in the the \ac{AV} case study is presented here.
+	Any of the fifteen \acp{CNN} have $28 \times 28 \times 3 = 2352$, therefore \textbf{I}$ = \langle I_0, I_1 ..., I_2351 \rangle$.
 	Likewise, each CNN has seven outputs resulting in \textbf{O}$ = \langle O_0, O_1 O_2 ..., O_7 \rangle$.
 	Each \ac{CNN} has a set of layers $L$ defined by Definition \ref{def:layer}.
 	The arrangement of layers $A$ consists of twelve layers in the following order: $\mathcal{A} = \langle \mathcal{L}_\mathcal{I}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{M}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{M}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{A}, \mathcal{L}_\mathcal{O} \rangle$.
@@ -195,7 +195,7 @@ If only a single layer of the CNN is run each tick, the layer at $\mathcal{A}_k$
 
 \begin{example}
 	\label{ex:runcnn}
-	An example run of one of the nine the object detection \acp{CNN} used in Example \ref{ex:cnn} is presented here.
+	An example run of one of the fifteen the object detection \acp{CNN} used in Example \ref{ex:cnn} is presented here.
 	An input image of a car, $28 \times 28$ pixels in colour is given to the \ac{CNN} network function $\eta$ as the input \textbf{I}.
 	These pixels are flattened into a single layer of 2352 32-bit signed integers inputs and made into the input layer $\mathcal{L}_\mathcal{I}$.
 	These inputs are then passed to the next layer of the \ac{CNN}, in this case a convolutional layer $\mathcal{L}_\mathcal{C}$.
@@ -234,12 +234,44 @@ If only a single layer of the CNN is run each tick, the layer at $\mathcal{A}_k$
 \end{definition}
 
 \subsubsection{Running a \ac{SNN}}
-\todo{Fill}
+A \ac{SNN} can be run differently, depending on the tick frequency for the \ac{SNN}, similar to the running of a synchronous \ac{CNN}.
+Either the \ac{SNN} can be run as a black box, where the inputs to the \ac{SNN} are given and, one tick later, the outputs are produced.
+In this case the \ac{SNN} is run as the cumulative function of all meta blocks, be it synchronous \acp{CNN}, synchronous \acp{RE} or any other synchronous block, where the outputs of each block are passed to the next block, depending on the $\Delta$ function for that \ac{SNN}.
+
+A \ac{SNN} can also be run so that the meta blocks are each run in one tick, such that concurrent blocks are run at the same time and consecutive blocks are run one after the other.
+Each meta block is run as a single black box function, with inputs provided at the beginning of the tick and outputs provided at the end.
+At the start of each tick, each block receives its input as per the $\Delta$ function describing the I/O mapping for the \ac{SNN}.
+
+Alternatively, a \ac{SNN} can be run tick-by-tick, such that each meta block is also run tick-by-tick.
+In this case, each meta block of the \ac{SNN} can run over multiple ticks, e.g. running one layer of a synchronous \ac{CNN} every tick.
+Care has to be taken when running the \ac{SNN} like this to ensure that outputs reach the appropriate input of the next block in a synchronous manner so that deadlines are not missed and each block runs on the correct set of inputs, i.e. a \ac{CNN} block should not run until all its inputs are present.
 
 \begin{example}
 	\label{ex:runsnn}
-	\todo{Fill}
+	An example run of the fifteen the object detection \acp{CNN}, with a single \ac{CNN}'s run described in Example \ref{ex:cnn} and the definition of each \ac{CNN} given in Definition \ref{def:cnn}, and their respective ensembles and enforcers (as shown in Figure \ref{fig:avmnn}) is presented here.
+	
+	The \ac{RE} used in this system has been defined in~\cite{recps}, and is enforcing the policy, Definition \ref{def:vdta}, $l_{cnn}$ specified by Figure \ref{fig:avcnnrte}.
+	
+	The ensembles shown in Figure \ref{fig:avmnn} are each defined as $\mathcal{E} = (\mathcal{I}, \mathcal{O}, \Sigma)$, where $\mathcal{I}$ is a finite vector of 32-bit signed integer \ac{CNN} classifications and $\mathcal{O}$ is a single 32-bit signed integer classification.
+	Each ensemble is run with its $\Sigma$ function, which produces $\mathcal{I} \rightarrow \mathcal{O}$.
+	
+	
+	For the purposes of this example, the \ac{SNN} will be run such that each block of the \ac{SNN} is executed in one tick.
+	
+	Assuming the system has not been run yet, at the start of tick 1, the five input images from the five camera positions, shown in Figure \ref{fig:av}, are given to their respective \ac{CNN} ensembles.
+	Each \ac{CNN} ensemble receives one image, and that image is fed to each \ac{CNN} in that ensemble such that the image is the input $\mathcal{I}$ for that \ac{CNN}.
+	Over tick 1, each \ac{CNN} is run concurrently using the network function $\eta$ so that each \ac{CNN} produces one output set $\eta(\mathcal{I_{i_j}}) = \mathcal{O_{i_j}}$ at the end of tick 1, where $i$ is the ensemble number and $j$ is the number of the \ac{CNN} in that ensemble.
+	At the start of tick 2, each ensemble receives its inputs $\mathcal{I}$ from each of the three connected \acp{CNN}' outputs.
+	The functions $\Sigma$ of each ensemble are run concurrently over tick 2, producing an output $\mathcal{O}$ at the end of tick 2 for each ensemble, which is the cumulative prediction of the three \acp{CNN} in that ensemble.
+	At the start of tick 3, the \ac{RE} receives input from each of the five ensembles, and produces enforced outputs at the end of tick 3.
+	At the start of tick 4, this process repeats.
 \end{example}
+
+\begin{figure}[b]
+	\centering
+	\includegraphics[width=\linewidth]{Content/fig/AV-MNN.pdf}
+	\caption{Diagram showing the \ac{SNN} for the \ac{AV}. \label{fig:avmnn}}
+\end{figure}
 
 
 
