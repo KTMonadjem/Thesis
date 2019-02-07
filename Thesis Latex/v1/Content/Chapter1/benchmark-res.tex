@@ -2,13 +2,13 @@
 	\centering
 	\caption{Benchmarks and descriptions}
 	\label{table:benchmarks}
-	\begin{tabular}{@{}llllll@{}}
+	\begin{tabular}{|p{0.1\textwidth}|p{0.06\textwidth}|p{0.16\textwidth}|p{0.4\textwidth}|p{0.08\textwidth}|p{0.11\textwidth}|}
 		\toprule
 		Name & \ac{ANN} Type                 & Real-time Classification                             & Description                                                   & \#\acp{ANN} & \#Neurons \\ \midrule
 		AI-BRO & \ac{MLP}           & Hard real-time                            & The steering controller described in Section~\ref{sec:motivating-example}.                 & 3      & (11, 11, 13)      \\
 		ESS & \ac{MLP}   & Hard real-time & Controls an EV charging station with a storage battery. & 3     & (74, 23, 18)      \\
-		XOR & \ac{MLP} & Hard real-time                            & Performs Exclusive-Or of two boolean inputs.                 & 1      & 5      \\
-		ADDER & \ac{MLP}          & Hard real-time              & Adds two 31-bit numbers together.              & 1      & 7           \\ 
+		XOR & \ac{MLP} & Hard real-time                            & Performs Exclusive-Or of two boolean inputs.                 & 1      & 6      \\
+		ADDER & \ac{MLP}          & Hard real-time              & Adds two 31-bit numbers together.              & 1      & 5           \\ 
 		HELLO & \ac{RNN}     & Hard real-time              & \ac{RNN} trained to remember the letters of `hello'. & 1      & 14      \\
 		RABBIT & \ac{MLP}     & Soft real-time              & Turn based, zero-sum game played between two teams of \acp{ANN} & 3      & (50, 60, 60)      \\
 		SENSOR & \ac{CNN}     & Soft real-time              & Section~\ref{sec:motivating-example} front sensor implementation for object detection using images. & 1      & 1000+      \\
@@ -236,11 +236,11 @@ due to their simple 3-layer designs, and their \acp{WCRT} are presented in Table
 		\multicolumn{3}{|l|}{\texttt{XOR}}  \\ \hline
 		Black-box        & 0.82 & 0.82   \\ 
 		Layer by layer   & 0.57 & 1.71  \\ 
-		Neuron by neuron & 0.6  & 1.8 \\ \hline
+		Neuron by neuron & 0.6  & 1.8 \\  \hline
 		\multicolumn{3}{|l|}{\texttt{ADDER}}  \\ \hline
 		Black-box        & 0.49 & 0.49   \\ 
 		Layer by layer   & 0.39 & 1.17  \\ 
-		Neuron by neuron & 0.33 & 0.99 \\ \hline
+		Neuron by neuron & 0.33 & 0.99 \\  \hline
 	\end{tabular}
 \end{table}
 
@@ -339,6 +339,51 @@ of many types of \acp{ANN} in C, including \acp{CNN}.
 %on input images, an Esterel system was created to run this \ac{CNN}, using the
 %mentioned blackbox approach and the layer--by--layer approach.}
 Using this system, an Esterel application was developed to recognize images using the black-box and the layer by layer approaches.%}
+
+\begin{table}[H]
+	\centering
+	\caption{MNN2C \ac{WCRT} results for \texttt{ESS}, \texttt{AI-BRO}, \texttt{XOR} and \texttt{ADDER}}
+	\label{tbl:res-mnn2c}
+	\begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
+		\hline
+		Benchmark         & Original WCRT (ms) & MNN2C Black-box WCRT (ms)  &  \% increase & MNN2C Layer-by-layer WCRT (ms) & \% increase\\ \hline
+		\texttt{ESS}        & 14 & 99.02 & 700.07 & 73.63 & 525.93 \\  \hline
+		\texttt{AI-BRO}        & 2.8 & 73.44 & 2622.9 & 47.47 & 1695.4 \\ \hline
+		\texttt{XOR}        & 0.82 & 17.26 & 2104.9 & 17.26 & 2104.9 \\  \hline
+		\texttt{ADDER}        & 0.49 & 13.02 & 2657.1 & 13.02 & 2657.1 \\ \hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{Combined \ac{WCRT} results for \texttt{ESS}, \texttt{AI-BRO}, \texttt{XOR}, \texttt{ADDER} and \texttt{HELLO}}
+	\label{tbl:res-sann}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		Approach         & WCRT (ms) & Response Time (ms) & Size (neurons) \\ \hline
+		\multicolumn{4}{|l|}{\texttt{ESS}} \\ \hline
+		Black-box        & 14  & 14 & 125 \\ 
+		Layer by layer   & 9.8  & 58.8 & 125 \\ \hline
+		\multicolumn{4}{|l|}{\texttt{AI-BRO}}  \\ \hline
+		Black-box        & 2.8  & 2.8 & 35 \\ 
+		Layer by layer   & 1.9  & 11.4 & 35 \\ 
+		Neuron by neuron & 1.8  & 10.8 & 35 \\ 
+		MNN2C			 & 73.44 & 73.44 & 6 \\ \hline
+		\multicolumn{4}{|l|}{\texttt{XOR}}  \\ \hline
+		Black-box        & 0.82 & 0.82 & 6  \\ 
+		Layer by layer   & 0.57 & 1.71 & 6 \\ 
+		Neuron by neuron & 0.6  & 1.8 & 6 \\ 
+		MNN2C			 & 17.26 & 17.26 & 6 \\ \hline
+		\multicolumn{4}{|l|}{\texttt{ADDER}}  \\ \hline
+		Black-box        & 0.49 & 0.49 & 5  \\ 
+		Layer by layer   & 0.39 & 1.17 & 5 \\ 
+		Neuron by neuron & 0.33 & 0.99 & 5 \\ 
+		MNN2C			 & 13.02 & 13.02 & 5 \\ \hline
+		\multicolumn{4}{|l|}{\texttt{HELLO}}  \\ \hline
+		Black-box        & 2.22  & 2.22 & 14 \\ 
+		Layer by layer   & 1.33  & 3.99 & 14 \\ \hline
+	\end{tabular}
+\end{table}
 
 \ignore{
 	\pr{How
