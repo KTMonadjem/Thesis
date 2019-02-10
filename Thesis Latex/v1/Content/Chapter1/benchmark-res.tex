@@ -342,15 +342,15 @@ Using this system, an Esterel application was developed to recognize images usin
 
 \begin{table}[H]
 	\centering
-	\caption{MNN2C \ac{WCRT} results for \texttt{ESS}, \texttt{AI-BRO}, \texttt{XOR} and \texttt{ADDER}}
+	\caption{MNN2C Static \ac{WCRT} results for \texttt{ESS}, \texttt{AI-BRO}, \texttt{XOR} and \texttt{ADDER}}
 	\label{tbl:res-mnn2c}
 	\begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|p{0.15\textwidth}|}
 		\hline
-		Benchmark         & Original WCRT (ms) & MNN2C Black-box WCRT (ms)  &  \% increase & MNN2C Layer-by-layer WCRT (ms) & \% increase\\ \hline
-		\texttt{ESS}        & 14 & 99.02 & 700.07 & 73.63 & 525.93 \\  \hline
-		\texttt{AI-BRO}        & 2.8 & 73.44 & 2622.9 & 47.47 & 1695.4 \\ \hline
-		\texttt{XOR}        & 0.82 & 17.26 & 2104.9 & 17.26 & 2104.9 \\  \hline
-		\texttt{ADDER}        & 0.49 & 13.02 & 2657.1 & 13.02 & 2657.1 \\ \hline
+		Benchmark         & Original Black-box WCRT (ms) & MNN2C Black-box WCRT (ms)  &  \% decrease & MNN2C Multicore WCRT (ms) & \% decrease\\ \hline
+		\texttt{ESS}        & 14 & 4.41 & 68.5 & 2.43 & 82.64 \\  \hline
+		\texttt{AI-BRO}        & 2.8 & 2.29 & 18.21 & 1.47 & 47.5 \\ \hline
+		\texttt{XOR}        & 0.82 & 0.53 & 35.37 & 0.53 & 35.37 \\  \hline
+		\texttt{ADDER}        & 0.49 & 0.37 & 24.49 & 0.37 & 24.49 \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -363,22 +363,23 @@ Using this system, an Esterel application was developed to recognize images usin
 		Approach         & WCRT (ms) & Response Time (ms) & Size (neurons) \\ \hline
 		\multicolumn{4}{|l|}{\texttt{ESS}} \\ \hline
 		Black-box        & 14  & 14 & 125 \\ 
-		Layer by layer   & 9.8  & 58.8 & 125 \\ \hline
+		Layer by layer   & 9.8  & 58.8 & 125 \\
+		MNN2C			 & 4.41 & 4.41 & 125 \\ \hline
 		\multicolumn{4}{|l|}{\texttt{AI-BRO}}  \\ \hline
 		Black-box        & 2.8  & 2.8 & 35 \\ 
 		Layer by layer   & 1.9  & 11.4 & 35 \\ 
 		Neuron by neuron & 1.8  & 10.8 & 35 \\ 
-		MNN2C			 & 73.44 & 73.44 & 6 \\ \hline
+		MNN2C			 & 2.29 & 2.29 & 35 \\ \hline
 		\multicolumn{4}{|l|}{\texttt{XOR}}  \\ \hline
 		Black-box        & 0.82 & 0.82 & 6  \\ 
 		Layer by layer   & 0.57 & 1.71 & 6 \\ 
 		Neuron by neuron & 0.6  & 1.8 & 6 \\ 
-		MNN2C			 & 17.26 & 17.26 & 6 \\ \hline
+		MNN2C			 & 0.53 & 0.53 & 6 \\ \hline
 		\multicolumn{4}{|l|}{\texttt{ADDER}}  \\ \hline
 		Black-box        & 0.49 & 0.49 & 5  \\ 
 		Layer by layer   & 0.39 & 1.17 & 5 \\ 
 		Neuron by neuron & 0.33 & 0.99 & 5 \\ 
-		MNN2C			 & 13.02 & 13.02 & 5 \\ \hline
+		MNN2C			 & 0.37 & 0.37 & 5 \\ \hline
 		\multicolumn{4}{|l|}{\texttt{HELLO}}  \\ \hline
 		Black-box        & 2.22  & 2.22 & 14 \\ 
 		Layer by layer   & 1.33  & 3.99 & 14 \\ \hline
