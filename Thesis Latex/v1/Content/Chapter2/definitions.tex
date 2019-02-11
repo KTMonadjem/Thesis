@@ -1,87 +1,174 @@
 \section{Defining Runtime Enforced Synchronous Neural Networks}
 \subsection{\ac{VDTA}: Defining Safety Policies for \ac{CPS}}
 
-We consider our industrial \ac{CPS} systems to have finite ordered sets of input values $\bin{I} = \{\bin{i_1}, \bin{i_2}, \ldots \bin{i_n}\}$ and output values $\bin{O} = \{\bin{o_1}, \bin{o_2}, \ldots \bin{o_n}\}$, where input and output values $\bin{i_n}$ and $\bin{o_n}$ are typed finite binary values.
-However, for the purpose of the \ac{AV} case study used in this chapter, the input and output values $\bin{i_n}$ and $\bin{o_n}$ are fixed-point values, taking the form of 32-bit signed integer values.
-The input alphabet is $\bin{\Sigma_I} = 32^{\bin{I}}$, i.e. the set made of all possible input value sets; and the output alphabet $\bin{\Sigma_O} = 32^{\bin{O}}$ is likewise the set made of all possible output value sets.
-Finally, the input-output alphabet $\bin{\Sigma} = \bin{\Sigma_I} \times \bin{\Sigma_O}$. 
-Each input and output event is denoted as a complete set of values, and an input-output event or reaction is of the form $(\bin{x_i}, \bin{y_i})$, where $\bin{x_i} \in \bin{\Sigma_I}$ and $\bin{y_i} \in \bin{\Sigma_O}$. 
+\ignore{
+We consider our industrial \ac{CPS} systems to have finite ordered sets of input values ${I} = \{{i_1}, {i_2}, \ldots {i_n}\}$ and output values ${O} = \{{o_1}, {o_2}, \ldots {o_n}\}$, where input and output values ${i_n}$ and ${o_n}$ are typed finite binary values.
+However, for the purpose of the \ac{AV} case study used in this chapter, the input and output values ${i_n}$ and ${o_n}$ are fixed-point values, taking the form of 32-bit signed integer values.
+The input alphabet is ${\Sigma_I} = 32^{{I}}$, i.e. the set made of all possible input value sets; and the output alphabet ${\Sigma_O} = 32^{{O}}$ is likewise the set made of all possible output value sets.
+Finally, the input-output alphabet ${\Sigma} = {\Sigma_I} \times {\Sigma_O}$. 
+Each input and output event is denoted as a complete set of values, and an input-output event or reaction is of the form $({x_i}, {y_i})$, where ${x_i} \in {\Sigma_I}$ and ${y_i} \in {\Sigma_O}$. 
 
 \begin{example}
 	\label{ex:io}
-	Within our \ac{AV} braking example, using the \ac{VDTA} defined by the $\mathcal{V}_{ped}$ safety policy~\ref{fig:avpedrte}, let $\bin{I} = \{\bin{O_2}, \bin{O_5}, \bin{O_{2_v}}, \bin{O_{5_v}}, \bin{S}\}$ are 32-bit signed integers representing objects 2 and 5 in the system, their velocities and the speed of the vehicle respectively.
-	Then, let the output $\bin{O} = \{\bin{D}\} = \{\bin{\langle A, B_S, B_H \rangle}\}$, where $\bin{D}$ is a vector of signed 32-bit integers, representing the \textit{decision} (action) taken by the vehicle this tick (\textit{Accelerate}, \textit{Soft Brake} and \textit{Hard Brake}).
+	Within our \ac{AV} braking example, using the \ac{VDTA} defined by the $\mathcal{V}_{ped}$ safety policy represented by Figure~\ref{fig:avpedrte}, let ${I} = \{{O_2}, {O_5}, {O_{2_v}}, {O_{5_v}}, {S}\}$ which are 32-bit signed integers representing objects 2 and 5 in the system, their velocities and the speed of the vehicle respectively.
+	Then, let the output ${O} = \{{D}\} = \{{\langle A, B_S, B_H \rangle}\}$, where ${D}$ is a vector of signed 32-bit integers, representing the \textit{decision} (action) taken by the vehicle this tick (\textit{Accelerate}, \textit{Soft Brake} and \textit{Hard Brake}).
 	
-	Then the input-output event $\bin{O_2}=65536$, $\bin{O_5}=0$, $\bin{O_{2_v}} = 655360$, $\bin{O_{5_v}} = 0$,  $\bin{S} = 4063232$, $\bin{D} = \langle 0, 0, 65536 \rangle$ is denoted as:\\$(\{65536, 0, 655360, 0, 4063232\}, \{\langle 0, 0, 65536 \rangle\})$ where each value is a fixed-point (32-bit signed integer) representation of a floating point value, i.e. Object 2 is a pedestrian, Object 5 is nothing, Object 2 is travelling at 10 km/h, Object 5 is not moving, and the vehicle's speed is 62 km/h, while the decided action for this tick is hard braking ($B_H$).
+	Then the input-output event ${O_2}=65536$, ${O_5}=0$, ${O_{2_v}} = 655360$, ${O_{5_v}} = 0$,  ${S} = 4063232$, ${D} = \langle 0, 0, 65536 \rangle$ is denoted as:\\$(\{65536, 0, 655360, 0, 4063232\}, \{\langle 0, 0, 65536 \rangle\})$ where each value is a fixed-point (32-bit signed integer) representation of a floating point value, i.e. Object 2 is a pedestrian, Object 5 is nothing, Object 2 is travelling at 10 km/h, Object 5 is not moving, and the vehicle's speed is 62 km/h, while the decided action for this tick is hard braking ($B_H$).
 \end{example}
+}
 
-\begin{definition}
-	\label{def:vdta}We define a \emph{\acf{VDTA}} as a tuple $\mathcal{V} = (L, l_0, l_v, \bin{\Sigma}, \bin{\Sigma_M}, V, F, \Delta)$ where
-	\begin{itemize}
-		\item $L$ is the set of \emph{locations},
-		\item $l_0 \in L$ is the initial location,
-		\item $l_v$ is a unique non-accepting \emph{trap} location,
-		\item $\bin{\Sigma}$ is the valued input-output alphabet,
-		\item $\bin{\Sigma_M} = 32^{\bin{M}}$ is the valued internal variable alphabet made from a set of internal variables $\bin{M}$,
-		\item $V$ is a set of integer clocks,
-		\item and $F \subseteq L$ is the set of accepting locations.
-	\end{itemize}
-	
-	The transition relation $\Delta$ is $\Delta \subseteq L \times G(V,\bin{\Sigma},\bin{M}) \times R \times J \times L$ where ${G}(V,\bin{\Sigma},\bin{M})$ denotes the set of {\em guards}, i.e. constraints defined as conjunctions of simple constraints of the form $f(x) \bowtie g(y)$, with $x \in V \cup \bin{\Sigma} \cup \bin{M}$, $y \in V \cup \bin{\Sigma} \cup \bin{M} \cup \bbn$, $\bowtie~\in \{<,\leq,=,\geq,>\}$, and $f$ and $g$ any transformation functions. 
-	
-	$R\subseteq V$ is a subset of integer clocks that are reset to 0,
-	and $J : V \times \bin{\Sigma} \times \bin{\Sigma}_{M} \times \bbn \rightarrow \bin{M}$ is an assignment function for the internal variables.
+
+
+We consider our industrial \ac{CPS} systems to have finite ordered sets of valued input channels ${I} = \{{i_1}, {i_2}, \ldots {i_n}\}$ and valued output channels ${O} = \{{o_1}, {o_2}, \ldots {o_n}\}$.
+
+
+
+A VDTA can be seen as a DTA with finite set of locations, and a finite set of discrete clocks used to represent time evolution, extended with internal variables and external input (resp. output channels) called as external variables used for representing system data.
+In a VDTA, a transition consists of an action carrying values of external variables, a guard on internal variables, external variables and clocks, and an assignment of internal variables, and reset of clocks.
+In a VDTA, internal variables are used for internal computation, and
+external variables model the data carried by the actions from the monitored system (resp. environment). 
+%Thus, each input (resp. output channel) is considered as an external variable. 
+
+%
+For a variable (resp. channel) $v$, ${\cal D}_v$ denotes its domain,
+and for a tuple of variables $V= (v_1, \ldots, v_n)$,
+${\cal D}_V$ is the product domain ${\cal D}_{v_1} \times \cdots \times {\cal D}_{v_n}$.
+%A predicate $P(V)$ on a tuple of variables $V$ is a logical formula whose semantics is a function ${\cal D}_V \rightarrow \{\true, \false\}$.
+A valuation of the variables in $V$
+is a mapping $\nu$ which maps every variable $v \in V$ to a value $\nu(v)$ in ${\cal D}_v$.
+%
+Let $X=\{x_1,\ldots, x_k\}$ be a finite set of integer variables (i.e., discrete clocks).
+%
+A {\em valuation} for $x$ is an element of $\bbn$, that is a function from $x$ to $\bbn$.
+The set of valuations for the set of clocks $X$ is denoted by $\chi$.
+%
+For $\chi\in\bbn^V$, $\chi+1$ is the valuation assigning $\chi(x)+1$ to each clock variable $x$ of $X$.
+Given a set of clock variables $X' \subseteq X$, $\chi[X' \leftarrow 0]$ is the valuation of clock variables $\chi$ where all the clock variables in $X'$ are assigned to $0$.
+
+Monitors input and output words. A word is a sequence $\sigma = e_1\cdot e_2 \cdots e_n$ where $\forall i \in [1,n]: e_i = a_i(\eta_i)$ where $a_i \in \Sigma$ is an action and $\eta_i \in {\cal D}_V$ is a vector of values of a tuple of variables $V$. 
+
+
+%
+\begin{definition}[Syntax of {VDTA}s]
+	\label{def:ptav}
+	A {VDTA} is a tuple \\
+	$\calA = \left(\Sigma, L, {l_0}, X, V, C, \Theta, F,  \Delta \right)$ where:
+	\squishlist
+	\item $\Sigma$ is a non-empty finite set of actions,
+	and an action $a \in \Sigma$ has a signature $sig(a) = ( t_0, t_1, \ldots, t_k )$ which is a tuple of types of the external variables,
+	\item $L$ is a finite non-empty set of locations, with $l_0 \in L$ the initial location, and $F \subseteq L$ the set of accepting locations;
+	\item $X$ is a finite set of discrete clocks;
+	\item $V$ is a tuple of typed internal variables \item $C$ is a tuple of external variables, where $C = I \cup O$, where $I$ is the set of input channels, and $O$ is the set of output channels; 
+	\item $\Theta\subseteq {\cal D}_{V }$ the initial condition, is a computable predicate over $V$;
+	\item $\Delta$ is a finite set of transitions, and each transition $t \in \Delta$ is a tuple $( l, a, c, G, A, l' )$
+	also written\\
+	$l \xrightarrow{a(c), G(V,c), V':=A(V,c)} l'$
+	such that,
+	\squishlist
+	\item[\textbullet] $l, l' \in L$ are respectively the origin and target locations of the transition;
+	\item[\textbullet] $a \in \Sigma$ is the action, and $c=( c_1, \ldots c_k )$ is a tuple of external variables local to the transition;
+	\item[\textbullet] $G = G^D \wedge G^X$ is the guard where
+	\squishlist
+	\item[-] $G^D \subseteq {\cal D}_V \times {\cal D}_{sig(a)}$
+	is a computable predicate over internal variables and external variables  in $V \cup c$;
+	\item[-] $G^X$ is a clock constraint over $X$ defined as a Boolean combinations of constraints of the form $x \sharp f(V \cup c)$, where $x \in X$ and $f(V \cup c)$ is a computable function, and $\sharp \in \{ <, \leq, =, \geq, > \}$;
+	\squishend
+	\item[\textbullet] $A$$=$$(A^D, A^X)$ is the assignment of the transition where
+	\squishlist
+	\item[-] $A^D :{\cal D}_V \times {\cal D}_{sig(a)} \rightarrow {\cal D}_V$ defines the evolution of internal variables.
+	\item[-] $A^X \subseteq X$ is the set of clocks to be reset.
+	\squishend
+	\squishend
+	\squishend
 \end{definition}
+%
 
 \begin{example}
 	The case study can be presented by four, different \acp{VDTA}; $\mathcal{V}_{ped}$, $\mathcal{V}_{car}$, $\mathcal{V}_{drive}$ and $\mathcal{V}_{cnn}$, as depicted in Figures~\ref{fig:avpedrte}, \ref{fig:avcarrte}, \ref{fig:avdriverte} and \ref{fig:avcnnrte} respectively. 
 	For the purposes of these examples, the \ac{VDTA} for the pedestrian safety policy, $\mathcal{V}_{ped}$, is used.
 	This \ac{VDTA} specifies that driving into a pedestrian in-front (if any) and not braking hard is a violation, and approaching a pedestrian from a distance (if any) and not starting to slow down (braking softly) is a violation.
 	
-	This is encoded as a \ac{VDTA} with accepting location $l_{drive}$ and non-accepting, non-violation location $l_{brake}$, with the initial state $l_{drive}$.
-	We use the I/O specified in Example~\ref{ex:io}.
+	This is encoded as a \ac{VDTA} with a set of locations $L = \{l_{drive}, l_{brake}, l_v\}$ and accepting locations $F = \{l_{drive}\}$, with the initial state being $l_{drive}$.
+	The set of external variables $C = \{O_2, O_5, O_{2_v}, O_{5_v}, S, A, B_S, B_H\}$ are all 32-bit signed integers, where $O_2$, $O_5$, $O_{2_v}$, $O_{5_v}$ and $S$ are input channels and $A$, $B_S$ and $B_H$ are output channels.
+	The set of actions $\Sigma = \{tk(O_2, O_5, O_{2_v}, O_{5_v}, S, A, B_S, B_H)\}$, and the set of internal variables $V = \{T_{lim}\}$, where $T_{lim}$ is a 32-bit signed integer.
+	In the example, $\tau$ is a function with $O_2$, $O_5$, $O_{2_v}$, $O_{5_v}$ and $S$ as input parameters. 
 	
-	In this \ac{VDTA} there are two violation transitions.
-	$l_{drive} \rightarrow l_v$ occurs when the vehicle does anything else other than braking when there is a pedestrian in-front or not braking when there is no pedestrian ahead of the vehicle.
-	$l_{brake} \rightarrow l_v$ can also occur when the vehicle has not braked enough within a certain period of time $T_{lim}$, or when the vehicle remains braking longer than is safe or necessary.
+	In this \ac{VDTA} there are two violation transitions, labelled \textcircled{a} and \textcircled{b} in Figure~\ref{fig:avpedrte}.
+	\textcircled{a} occurs when the vehicle does anything else other than braking when there is a pedestrian in-front or not braking when there is no pedestrian ahead of the vehicle.
+	\textcircled{b} can also occur when the vehicle has not braked enough within a certain period of time $T_{lim}$, or when the vehicle remains braking longer than is safe or necessary.
 	This represents the vehicle taking further unsafe actions when already in an unsafe state.
 \end{example}
 
-Policy \ac{VDTA} are required to be \textit{deterministic}, i.e. for any given state, the conjunction of any guards of any other outgoing transitions may not be satisfiable; and \textit{complete}, i.e. for any given state at any given time and any given input-output event, at least one transition guard is satisfied.
+Policy \ac{VDTA} are required to be \textit{deterministic}, i.e. for any given state, the conjunction of any guards of any other outgoing transitions may not be satisfiable; and \textit{complete}, i.e. for any given state at any given time and any given event, at least one transition guard is satisfied.
 
 \subsection{Semantics for \ac{VDTA}}
 
-The semantics of a \ac{VDTA} are defined as a transition system where each state $q$ consists of the current location $l$, the current values of all the integer clocks $\chi$, and the current values of all internal variables $\bin{m}$.
-The semantics of a \ac{VDTA} are defined as follows.
+Let $\calA = \left(\Sigma, L, {l_0}, X, V, C, \Theta, F,  \Delta \right)$  be a VDTA.
+The semantics of $\calA$ is a timed transition system,
+where a state consists of a location, and valuations of internal variables $V$ and clocks $X$, and actions associated with values of external variables in $C$.
 
-\begin{definition}[Semantics of \ac{VDTA}]
+\begin{definition}[Semantics of {VDTA}s]
 	\label{def:vdta:semantics}
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	The {\em semantics} of a \ac{VDTA} is a transition system $\sem{\calV}=(Q, l_0, \bin{\Sigma}, Q_F, l_v, \to)$ where
-	\begin{itemize}
-		\item $Q= L \times \bbn^V \times \bin{\Sigma_M}$ is the set of {\em states},
-		\item $l_0=(l_0, \chi_0, \bin{m}_0)$ is the {\em initial state}, where $\chi_0$ is the
-		valuation that maps every integer clock variable in $V$ to zero, and $\bin{m}_0$ maps every internal value $\bin{\Sigma_M}$ to zero,
-		\item $\bin{\Sigma}$ is the I/O alphabet,
-		\item $Q_F= F \times \bbn^V \times \bin{\Sigma_M}$ is the set of {\em accepting states},
-		\item and $l_v = l_v\times\bbn^V \times \bin{\Sigma_M}$ is the set of trap states.
-	\end{itemize}
-	The transition relation $\to \subseteq Q\times \bin{\Sigma} \times Q$ is a set of transitions of the form
-	$(l,\chi,\bin{m})\xrightarrow{\bin{a}}(l',\chi',\bin{m}')$, with $\bin{a} \in \bin{\Sigma}$, $\chi'=(\chi+1)[r \leftarrow 0]$ and $\bin{m}' = j(\chi, \bin{a}, \bin{m})$, i.e. a transition between locations $l$ and $l'$ can occur whenever there exists $(l, g, r, j, l') \in \Delta$ and $\bin{a} \in \bin{\Sigma}$ and $\bin{m} \in \bin{\Sigma_M}$ such that $(\chi, \bin{a}, \bin{m}) \models g$, and when transitions occur, all clocks advance except for those which are reset to 0 by reset relation $r$, and all internal variables $\bin{m}$ are updated to new values by function $j$. 
+	The semantics of $\calA$ is a timed transition system $\sem{\calA}=( Q, q_0, Q_F, \Gamma, \to )$, defined as follows:
+	\squishlist
+	\item $Q = L \times {\cal D}_V \times \bbn^V$, is the set of states of the form $q= ( l,\nu ,\chi )$ where
+	$l \in L$ is a location,
+	$\nu \in {\cal D}_V$ is a valuation of internal variables,
+	$\chi$ is a valuation of clocks;
+	\item $Q_0 = \{ ( l_0,\nu, \chi_{[X \leftarrow 0]} )  \mid \Theta(\nu)=\true \}$ is the set of initial states;
+	\item $Q_F = F \times {\cal D}_V \times \bbn^V$ is the set of accepting states;
+	\item $\Gamma = \{ a(\eta) \mid
+	a \in \Sigma \wedge \eta \in {\cal D}_{sig(a)}  \}$ is the set of transition labels;
+	\item $\to\subseteq Q\times \Gamma\times Q$  the transition relation
+	is the smallest set of transitions of the form
+	$( l,\nu,\chi \rangle \longrightarrow {a(\eta)} \langle l',\nu',\chi')$
+	such that  $\exists ( l, a, c, G, A, l' ) \in \Delta$,
+	with $G^X(\chi + 1) \wedge G^D(\nu, \eta) $ evaluating to {\true},
+	$\nu'= A^D(\nu, \eta)$ and $\chi'=(\chi+1)[A^X \leftarrow 0]$.
+	\squishend
 \end{definition}
 
-A {\em run} $\rho$ of $\calV$ is a sequence of moves in $\sem{\calV}$ denoted as $\rho = q \xrightarrow {\bin{a}_1} l_1\cdots l_{n-1}\xrightarrow {\bin{a}_n} l_{n}$, for some $n\in\bbn$. %, and is denoted as $q \xrightarrow {\bin{\sigma}} l_n$.
-A run is \textit{accepted} by $\calV$ if it ends in an accepting state $l_n \in Q_F$, and a run is \textit{non-accepting} if it ends in a non-accepting state $l_n \in l_v$.
+
+%The set of timed words over $\Sigma$ where the actions carry parameter value and other data is denoted by $\tw(\Lambda)$.
+A {\em run} $\rho$ of $\sem{\calA}$ from a state $q\in Q$ over a {\em trace} $w =  a_1(\eta_1)\cdot a_2(\eta_2)\cdots a_n(\eta_n)$ is a sequence of moves in $\sem{\calA}$:
+$\rho = q \xrightarrow {a_1(\eta_1)} q_1
+\cdots q_{n-1}\xrightarrow {a_n(\eta_n)} q_{n}$,
+for some $n\in\bbn$.
+The set of runs from the initial state $q_0\in Q$,  is denoted $\Run(\calA)$ and $\Run_{Q_F}(\calA)$ denotes the subset of those runs {\em accepted} by $\calA$, i.e.,  ending in an accepting state $q_n \in Q_F$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ignore{
+\begin{example}[Run of a VDTA]
+	Let us consider the VDTA discussed in Example\ref{eg:vdta} presented in Figure\ref{fig:vsa-overcurrent}. 
+	An example run of the VDTA presented in Figure~\ref{fig:vsa-overcurrent} is presented here.
+	Let the internal variable $i_{max}$ be initialized with 10000.
+	A run of this VDTA starting from the initial state $(l_{safe}, i_{max}=10000, x = 0)$ for the word $\sigma = tk(4000, 5000,1)\cdot tk(8000, 5000,1)\cdot tk(7000, 5000,1)\cdot tk(8000, 5000,1)\cdot tk(8000, 5000,1)\cdot tk(8000, 5000,1)$ is given below:\\
+	
+	$(l_{safe}, i_{max}=10000, x = 0)\xrightarrow {tk(4000, 5000,1)} (l_{safe}, i_{max}=10000, x = 1)
+	\xrightarrow {tk(8000, 5000,1)}
+	(l_{unsafe}, i_{max}=10000, x = 0)
+	\xrightarrow { tk(7000, 5000,1)}
+	(l_{unsafe}, i_{max}=10000, x = 1)
+	\xrightarrow { tk(8000, 5000,1)}
+	(l_{unsafe}, i_{max}=10000, x = 2)
+	\xrightarrow { tk(8000, 5000,1)}
+	(l_{unsafe}, i_{max}=10000, x = 3)
+	\xrightarrow { tk(8000, 5000,1)}
+	(l_{vio}, i_{max}=10000, x = 4)
+	$
+\end{example}
+}
 
 
-\begin{example}
+\begin{example}[Run of a VDTA]
 	\label{ex:run}
 	An example run of the VDTA presented in Figure~\ref{fig:avpedrte} is presented here.
-	Assume that the time the vehicle has to be braking $T_{lim} = 2$ (2 clock ticks) and that one event occurs every second. 
+	Assume that the time the vehicle has to be braking is $T_{lim} = 2$. 
 	The starting state is $l_{drive}$, and the first I/O event is $(\{0, 0, 0, 0, 4063232\}, \{\langle 0, 0, 0 \rangle\})$, i.e. nothing is detected in-front of the vehicle and the vehicle does not accelerate or brake, meaning it is cruising at 62 km/h.
 	Thus, the automaton remains in state $l_{drive}$.
 	Next tick, $(\{0, 65536, 0, 655360, 4063232\}, \{\langle 0, 65536, 0 \rangle\})$ occurs, i.e. a pedestrian is detected quite far ahead of the vehicle, moving across the road at 10 km/h, and the vehicle is taking a soft braking action from 62 km/h.
-	Since $\bin{O} = \{\langle 0, 65536, 0 \rangle\}$ which is a soft brake $B_S$ and Object 5, far ahead of the vehicle, is a pedestrian $O_5 = 65536 = O_{5_P}$ the system enters the unsafe state $l_{brake}$ and $t = 0$ is set.
+	Since ${O} = \{\langle 0, 65536, 0 \rangle\}$ which is a soft brake $B_S$ and Object 5, far ahead of the vehicle, is a pedestrian $O_5 = 65536 = O_{5_P}$ the system enters the unsafe state $l_{brake}$ and $t = 0$ is set.
 	Then,  $(\{65536, 0, 0, 0, 2621440\}, \{\langle 0, 0, 0 \rangle\})$ is received, i.e. the pedestrian has stopped moving in the road and is now close to the vehicle, however the vehicle is not braking, but rather cruising at 40 km/h.
 	Since no braking is detected, the violation transition $l_v$ is taken.
 	As such, this run was \textit{non-accepting}.
@@ -137,9 +224,20 @@ Enforcers are designed to prevent a system from generating an input/output trace
 These are \textit{random} and \textit{minimum} edits; a random edit chooses a random, accepting event from a list of accepting I/O events and minimum edit chooses the closest accepting event to the current non-accepting event.
 However, neither of these edits are not always useful for problems in real scenarios.
 Take Example~\ref{ex:run}, when the transition $l_{drive} \rightarrow l_v$ is taken, Object 2 can be edited such that $l_v$ is not entered, however this will not remove the danger that initially posed this transition.
-However, if the action $\bin{O}$ was changed, e.g. the cruising action in the example that caused the non-accepting trace was changed to a hard braking action, then an accepting event would have occurred \textit{and} the pedestrian in the road would have been safe.
+However, if the action ${O}$ was changed, e.g. the cruising action in the example that caused the non-accepting trace was changed to a hard braking action, then an accepting event would have occurred \textit{and} the pedestrian in the road would have been safe.
 
+In general, then, the designer of any given policy should also select their preferred edit actions out of the list of possible safe edits for each violation transition, thus ensuring practical runtime enforcement.
 
+\begin{example}[Selected Edit Actions for a VDTA]
+	In Figure~\ref{fig:avpedrte}, there are many different actions in $\Sigma$ that, when taken in a specific location $L$ result in a violation transition.
+	In this example, a situation where the current locations is $l_{drive}$ and the action is $\Sigma = \{tk(1, 0, 10, 0, 30, 1, 0, 0)\}$, i.e. there is a pedestrian directly in front of the vehicle moving at 10 km/h, while the vehicle is moving directly forward at 30 km/h and is accelerating.
+	Thus, the violation transition \textcircled{a} occurs.
+	\squishlist
+	\item Transition \textcircled{a}: $A := 0$, $B_S := 0$ and $B_H := 1$
+	\squishend
+	The recovery for this violation transition changes the vehicle to not accelerate, but rather brake hard.
+	This instead changes the transition to $l_{drive} \rightarrow l_{brake}$, which is a safe transition that slows the vehicle down before it hits the pedestrian.
+\end{example}
 %The first policy, $\mathcal{V}_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
 %If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.
 %The second policy, $\mathcal{V}_{drive}$, ensures that the vehicle maintains reasonable driving practices on the road, e.g. not staying stationary in the middle of the road and not speeding.
