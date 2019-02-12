@@ -265,23 +265,22 @@ In general, then, the designer of any given policy should also select their pref
 
 \begin{definition}[Synchronous \acp{CNN}]
 	\label{def:cnn}
-	A Synchronous \ac{CNN} is an extension of the previously defined \ac{SANN} from Definition~\ref{def:bb-mlp}.We define a \emph{Synchronous \ac{CNN}} as a tuple $\mathcal{C} = (\mathcal{I}, \mathcal{O}, \mathcal{L}, \mathcal{A}, \eta)$ where
+	A Synchronous \ac{CNN} is an extension of the previously defined \ac{SANN} from Definition~\ref{def:bb-mlp}. We define a \emph{Synchronous \ac{CNN}} as a tuple $\mathcal{C} = (\mathcal{I}, \mathcal{O}, \mathcal{A}, \eta)$ where
 	\begin{itemize}
 		\item $\mathcal{I}$ is a finite collection of 32-bit signed integer input variables with the domain \textbf{I}$ = 32^n$, where $n$ is the number of inputs.
 		\item $\mathcal{O}$ is a finite collection of 32-bit signed integer output variables with the domain \textbf{O}$ = 32^m$, where $m$ is the number of outputs.
-		\item $\mathcal{L}$ denotes a set of layers, defined by \ref{def:layer}.
-		\item $\mathcal{A}$ denotes the finite set of instantiated, connected layers in the \ac{CNN}, starting with the input layer $\mathcal{L}_\mathcal{I}$ and ending with the output layer $\mathcal{L}_\mathcal{O}$, with any assortment of layers from $\mathcal{L}$ in-between, e.g. $\mathcal{A} = (\mathcal{L}_\mathcal{I}, ..., \mathcal{L}_\mathcal{O})$.
-		\item $\eta$: \textbf{I} $\rightarrow$ \textbf{O} is the non-linear function, termed the network functions, that provides the behaviour of a given network, i.e. when provided a vector of $n$ inputs produces a vector of $m$ outputs. 
+		\item $\mathcal{A}$ denotes the finite set of instantiated, connected layers in the \ac{CNN}, with any assortment of layers defined by $\mathcal{L}$ in Definition~\ref{def:layer}.
+		\item $\eta$: \textbf{I} $\rightarrow$ \textbf{O} is the non-linear function, termed the network function, that provides the behaviour of a given network, i.e. when provided $\mathcal{I}$ inputs produces $\mathcal{O}$ outputs. 
 	\end{itemize}
 \end{definition}
 
 \begin{example}
 	\label{ex:cnn}
 	An example of one of the fifteen the object detection \acp{CNN} used in the the \ac{AV} case study is presented here.
-	Any of the fifteen \acp{CNN} have $28 \times 28 \times 3 = 2352$, therefore \textbf{I}$ = \langle I_0, I_1 ..., I_2351 \rangle$.
-	Likewise, each CNN has seven outputs resulting in \textbf{O}$ = \langle O_0, O_1 O_2 ..., O_7 \rangle$.
-	Each \ac{CNN} has a set of layers $L$ defined by Definition \ref{def:layer}.
-	The arrangement of layers $A$ consists of twelve layers in the following order: $\mathcal{A} = \langle \mathcal{L}_\mathcal{I}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{M}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{M}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{C}, \mathcal{L}_\mathcal{A}, \mathcal{L}_\mathcal{O} \rangle$.
+	Any of the fifteen \acp{CNN} have $28 \times 28 \times 3 = 2352$, therefore \textbf{I}$~= \langle I_0, I_1 ..., I_2351 \rangle$.
+	Likewise, each CNN has seven outputs resulting in \textbf{O}$~= \langle O_0, O_1 O_2 ..., O_7 \rangle$.
+	Each \ac{CNN} has a set of twelve layers: $\mathcal{A} = \langle\mathcal{L}_0, \mathcal{L}_1, ..., \mathcal{L}_{11}\rangle$ defined in Definition \ref{def:layer}.
+	The arrangement of layers the following: $\mathcal{A} = \langle\mathcal{L}_{Dense}, ~\mathcal{L}_{Convolutional},\\~\mathcal{L}_{Maximum~pool}, ~\mathcal{L}_{Convolutional},~\mathcal{L}_{Convolutional}, ~\mathcal{L}_{Maximum~pool},~\mathcal{L}_{Convolutional},~\mathcal{L}_{Convolutional},\\~\mathcal{L}_{Convolutional},~\mathcal{L}_{Convolutional},~\mathcal{L}_{Average~pool},~\mathcal{L}_{Dense}\rangle$.
 	The network function $\eta$ runs the \ac{CNN} such that an input image of size $28 \times 28 \times 3$ produces an output vector of size $7$.
 \end{example}
 
@@ -294,14 +293,14 @@ If only a single layer of the CNN is run each tick, the layer at $\mathcal{A}_k$
 	\label{ex:runcnn}
 	An example run of one of the fifteen the object detection \acp{CNN} used in Example \ref{ex:cnn} is presented here.
 	An input image of a car, $28 \times 28$ pixels in colour is given to the \ac{CNN} network function $\eta$ as the input \textbf{I}.
-	These pixels are flattened into a single layer of 2352 32-bit signed integers inputs and made into the input layer $\mathcal{L}_\mathcal{I}$.
-	These inputs are then passed to the next layer of the \ac{CNN}, in this case a convolutional layer $\mathcal{L}_\mathcal{C}$.
+	These pixels are flattened into a single layer of 2352 32-bit signed integers inputs and passed to the input layer $\mathcal{L}_0$.
+	These inputs are then passed to the next layer of the \ac{CNN} $\mathcal{L}_1$, in this case a convolutional layer.
 	This convolutional layer has 32 filters and thus, after the 32 sets of matrix convolution, produces 32 sets of 2352 32-bit signed integer values.
-	These $32 \times 2352$ values are then passed on to the next layer: a $2 \times 2$ maxpooling layer $\mathcal{L}_\mathcal{M}$.
+	These $32 \times 2352$ values are then passed on to the next layer $\mathcal{L}_2$; a $2 \times 2$ maximum pooling layer.
 	This layer takes each set of 2352 values and trims them down to $2353 / (2 \times 2) = 588$ values.
-	These 32 sets of 588 values are then passed on to the next convolutional layer $\mathcal{L}_\mathcal{C}$ with 16 filters.
+	These 32 sets of 588 values are then passed on to the next convolutional layer $\mathcal{L}_3$ with 16 filters.
 	And so on.
-	Until the values reach the output layer, where they are condensed into 7 distinct output values, making up the output matrix \textbf{O} which classifies the image with the values $\langle 0.02, 0.91, 0.03, 0.04, 0.00, 0.00, 0.00 \rangle$.
+	Until the values reach the output layer $\mathcal{L}_11$, a dense layer, where they are condensed into 7 distinct output values, making up the output matrix \textbf{O} which classifies the image with the values $\langle 0.02, 0.91, 0.03, 0.04, 0.00, 0.00, 0.00 \rangle$.
 	This means that the \ac{CNN} is 91 \% confident that the input image is a vehicle, and only 2 \% confident that it is a person.
 	Therefore $\eta(2352_{car}) = \langle 0.02, 0.91, 0.03, 0.04, 0.00, 0.00, 0.00 \rangle$
 \end{example}
