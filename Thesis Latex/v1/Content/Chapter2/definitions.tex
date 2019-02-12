@@ -50,7 +50,7 @@ Monitors input and output words. A word is a sequence $\sigma = e_1\cdot e_2 \cd
 
 %
 \begin{definition}[Syntax of {VDTA}s]
-	\label{def:ptav}
+	\label{def:vdta}
 	A {VDTA} is a tuple \\
 	$\calA = \left(\Sigma, L, {l_0}, X, V, C, \Theta, F,  \Delta \right)$ where:
 	\squishlist
@@ -306,59 +306,64 @@ If only a single layer of the CNN is run each tick, the layer at $\mathcal{A}_k$
 \end{example}
 
 \subsection{\ac{SNN}: Defining Safe \acp{MNN} for \acp{CPS}}
-\begin{definition}
+A \acf{MNN} is generally composed of, but not limited to \acp{ANN}.
+A \ac{MNN} may include modules of any type, given that they are (1) synchronous and (2) fit the following definition (Definition~\ref{def:comp}):
+\begin{definition}[Defining Meta Neural Network Components]
+	\label{def:comp}
+	We define a \ac{MNN} Component, 'meta component', as a tuple $\mathcal{K} = (\mathcal{I}, \mathcal{O}, \Sigma)$ where
+	\begin{itemize}
+		\item $\mathcal{I} = \{i_0, i_1, ..., i_k \}$ are the $k$ inputs to the meta component, represented by a vector of 32-bit signed integers.
+		\item $\mathcal{O} = \{o_0, o_1, ..., o_k \}$ are the $k$ outputs from the meta component, represented by a vector of 32-bit signed integers.
+		\item $\Sigma: \mathcal{I} \rightarrow \mathcal{O}$ is the non-linear function that produces outputs $\mathcal{O}$ given inputs $\mathcal{I}$. 
+	\end{itemize}
+\end{definition}
+
+\begin{definition}[Defining Safe Meta Neural Networks]
 	\label{def:snn}
 	We define a Safe \ac{MNN}, termed \ac{SNN}, as an extension of the previously defined \ac{MNN} from Definition~\ref{def:nsanns}. We define a \emph{\ac{SNN}} as a tuple $\mathcal{S} = (\mathcal{I}, \mathcal{O}, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta)$ where
 	\begin{itemize}
-		\item We term the first meta-layer as the input
-		meta-layer and the last one as the output
-		meta-layer.
-		\item  $\mathcal{I}=I_1 \cup .. \cup I_k$,
-		where $I_1..I_k$ are the inputs of the synchronous blocks in
-		the input meta layer. If $K=|\mathcal{I}|$ then the
-		domain is $\mathbf{I} = \mathbb{R}^K$.
-		\item $\mathcal{O}=O_1 \cup .. \cup O_j$,
-		where $O_1..O_j$ are the outputs of the synchronous blocks in
-		the output meta layer. If $J=|\mathcal{O}|$ then the domain is $\mathbf{O} = \mathbb{R}^J$.
-		\item $\mathcal{M}$ is the set $M \in \mathcal{M}$ of
-		Synchronous \acp{CNN}, according to Definition~\ref{def:cnn}, and other synchronous blocks, e.g. Synchronous \acfp{RE}, 
-		such any two connected synchronous blocks are IO-compatible.
-		\item $\mathcal{L}$ is the set of meta-layers of various synchronous blocks.
-		\item $\mathcal{A}: \mathcal{M} \rightarrow \mathcal{L}$ is the network mapping function that maps a given synchronous block to a layer.
-		\item $\Delta \subset \mathcal{M} \times \mathcal{M}$ provides the mapping of IO connectivity information between synchronous blocks of different meta-layers.
+		\item We term the first meta-layer as the input meta-layer and the last one as the output meta-layer.
+		\item  $\mathcal{I}=I_1 \cup .. \cup I_k$, where $I_1..I_k$ are the inputs of the meta components in the input meta layer. If $K=|\mathcal{I}|$ then the domain is $\mathbf{I} = \mathbb{R}^K$.
+		\item $\mathcal{O}=O_1 \cup .. \cup O_j$, where $O_1..O_j$ are the outputs of the meta components in the output meta layer. If $J=|\mathcal{O}|$ then the domain is $\mathbf{O} = \mathbb{R}^J$.
+		\item $\mathcal{M}$ is the set $M \in \mathcal{M}$ of Synchronous \acp{CNN} $\mathcal{C}$, according to Definition~\ref{def:cnn}, and \ac{MNN} Components $\mathcal{K}$ defined in Definition~\ref{def:comp}, such any two connected meta components are IO-compatible.
+		\item $\mathcal{L}$ is the set of meta-layers of various \acp{CNN} and meta components.
+		\item $\mathcal{A}: \mathcal{M} \rightarrow \mathcal{L}$ is the network mapping function that maps a given \ac{CNN} or meta component to a layer.
+		\item $\Delta \subset \mathcal{M} \times \mathcal{M}$ provides the mapping of IO connectivity information between \acp{CNN} and meta components of different meta-layers.
 	\end{itemize}
 \end{definition}
 
 \subsubsection{Running a \ac{SNN}}
 A \ac{SNN} can be run differently, depending on the tick frequency for the \ac{SNN}, similar to the running of a synchronous \ac{CNN}.
-Either the \ac{SNN} can be run as a black box, where the inputs to the \ac{SNN} are given and, one tick later, the outputs are produced.
-In this case the \ac{SNN} is run as the cumulative function of all meta blocks, be it synchronous \acp{CNN}, synchronous \acp{RE} or any other synchronous block, where the outputs of each block are passed to the next block, depending on the $\Delta$ function for that \ac{SNN}.
+A \ac{SNN} can be run as a black box, where the inputs to the \ac{SNN} are given and, one tick later, the outputs are produced.
+In this case the \ac{SNN} is run as the cumulative function of all meta components, be it synchronous \acp{CNN}, synchronous \acp{RE} or any other synchronous component, where the outputs of each component are passed to the next component, depending on the $\Delta$ function for that \ac{SNN}.
 
-A \ac{SNN} can also be run so that the meta blocks are each run in one tick, such that concurrent blocks are run at the same time and consecutive blocks are run one after the other.
-Each meta block is run as a single black box function, with inputs provided at the beginning of the tick and outputs provided at the end.
-At the start of each tick, each block receives its input as per the $\Delta$ function describing the I/O mapping for the \ac{SNN}.
+A \ac{SNN} can also be run so that each meta component is run in one logical tick, i.e. concurrent components are run at the same time and consecutive components are run in order.
+Each meta component is run as a single black box function, with inputs provided at the beginning of the tick and outputs provided at the end.
+At the start of each tick, each component receives its input according to the \ac{SNN} specific $\Delta$ function describing its I/O mapping.
 
-Alternatively, a \ac{SNN} can be run tick-by-tick, such that each meta block is also run tick-by-tick.
-In this case, each meta block of the \ac{SNN} can run over multiple ticks, e.g. running one layer of a synchronous \ac{CNN} every tick.
-Care has to be taken when running the \ac{SNN} like this to ensure that outputs reach the appropriate input of the next block in a synchronous manner so that deadlines are not missed and each block runs on the correct set of inputs, i.e. a \ac{CNN} block should not run until all its inputs are present.
+Alternatively, a \ac{SNN} can be run tick-by-tick, such that each meta component is also run tick-by-tick.
+In this case, each meta component of the \ac{SNN} can run over multiple ticks, e.g. running one layer of a synchronous \ac{CNN} every tick.
+
+\ignore{Care has to be taken when running the \ac{SNN} like this to ensure that outputs reach the appropriate input of the next component in a synchronous manner so that deadlines are not missed and each component runs on the correct set of inputs, i.e. a \ac{CNN} component should not run until all its inputs are present.}
 
 \begin{example}
 	\label{ex:runsnn}
 	An example run of the fifteen the object detection \acp{CNN}, with a single \ac{CNN}'s run described in Example \ref{ex:cnn} and the definition of each \ac{CNN} given in Definition \ref{def:cnn}, and their respective ensembles and enforcers (as shown in Figure \ref{fig:avmnn}) is presented here.
 	
-	The \ac{RE} used in this system has been defined in~\cite{recps}, and is enforcing the policy, Definition \ref{def:vdta}, $l_{cnn}$ specified by Figure \ref{fig:avcnnrte}.
+	The \ac{RE} used in this system has been defined in~\cite{recps}, and is enforcing the safety policy $\mathcal{V}_{cnn}$ specified by Figure \ref{fig:avcnnrte}.
+	This \ac{RE} is represented as a meta component $\mathcal{K}$, where $\mathcal{I}$ is a finite vector of 32-bit signed integer \ac{CNN} inputs and $\mathcal{O}$ is a finite vector of 32-bit signed integer outputs.
+	The \ac{RE} is run with the $\Sigma$ function, which applies a logical tick to the enforced \ac{VDTA} (Definition~\ref{def:vdta}) and, where necessary, \textit{edits} the meta components inputs $\mathcal{I}$ providing edited outputs $\mathcal{O}$.
 	
-	The ensembles shown in Figure \ref{fig:avmnn} are each defined as $\mathcal{E} = (\mathcal{I}, \mathcal{O}, \Sigma)$, where $\mathcal{I}$ is a finite vector of 32-bit signed integer \ac{CNN} classifications and $\mathcal{O}$ is a single 32-bit signed integer classification.
-	Each ensemble is run with its $\Sigma$ function, which produces $\mathcal{I} \rightarrow \mathcal{O}$.
+	The ensembles shown in Figure \ref{fig:avmnn} are each defined as meta components $\mathcal{K}$, where $\mathcal{I}$ is a finite vector of 32-bit signed integer \ac{CNN} classifications and $\mathcal{O}$ is a single 32-bit signed integer classification.
+	Each ensemble is run with its $\Sigma$ function, which combines its inputs $\mathcal{I}$ to produce a single, more accurate output.
 	
-	
-	For the purposes of this example, the \ac{SNN} will be run such that each block of the \ac{SNN} is executed in one tick.
+	For the purposes of this example, the \ac{SNN} will be run such that each meta component of the \ac{SNN} is executed in one tick.
 	
 	Assuming the system has not been run yet, at the start of tick 1, the five input images from the five camera positions, shown in Figure \ref{fig:av}, are given to their respective \ac{CNN} ensembles.
 	Each \ac{CNN} ensemble receives one image, and that image is fed to each \ac{CNN} in that ensemble such that the image is the input $\mathcal{I}$ for that \ac{CNN}.
 	Over tick 1, each \ac{CNN} is run concurrently using the network function $\eta$ so that each \ac{CNN} produces one output set $\eta(\mathcal{I_{i_j}}) = \mathcal{O_{i_j}}$ at the end of tick 1, where $i$ is the ensemble number and $j$ is the number of the \ac{CNN} in that ensemble.
 	At the start of tick 2, each ensemble receives its inputs $\mathcal{I}$ from each of the three connected \acp{CNN}' outputs.
-	The functions $\Sigma$ of each ensemble are run concurrently over tick 2, producing an output $\mathcal{O}$ at the end of tick 2 for each ensemble, which is the cumulative prediction of the three \acp{CNN} in that ensemble.
+	The functions $\Sigma$ of each ensemble are run concurrently over tick 2, producing an output $\mathcal{O}_i$ at the end of tick 2 for each ensemble $i$, which is the cumulative prediction of the three \acp{CNN} in that ensemble.
 	At the start of tick 3, the \ac{RE} receives input from each of the five ensembles, and produces enforced outputs at the end of tick 3.
 	At the start of tick 4, this process repeats.
 \end{example}
