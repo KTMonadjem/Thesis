@@ -196,24 +196,24 @@ $T_{lim}$ is a predefined length of time by which the system should have reacted
 
 Finally, a complete policy framework can be established by simply ANDing the component policies together, i.e. \\ $\mathcal{V}_{av} = \mathcal{V}_{cnn} \wedge \mathcal{V}_{drive} \wedge \mathcal{V}_{car} \wedge \mathcal{V}_{ped}$.
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{avpedrte.tikz}
 	\caption{Safety Automaton for Policy $\mathcal{V}_{ped}$\label{fig:avpedrte}}
 \end{figure}
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{avcarrte.tikz}
+	\includegraphics[width=0.5\linewidth]{avcarrte.tikz}
 	\caption{Safety Automaton for Policy $\mathcal{V}_{car}$\label{fig:avcarrte}}
 \end{figure}
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{avdriverte.tikz}
+	\includegraphics[width=0.5\linewidth]{avdriverte.tikz}
 	\caption{Safety Automaton for Policy $\mathcal{V}_{drive}$\label{fig:avdriverte}}
 \end{figure}
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{avcnnrte.tikz}
+	\includegraphics[width=0.5\linewidth]{avcnnrte.tikz}
 	\caption{Safety Automaton for Policy $\mathcal{V}_{cnn}$\label{fig:avcnnrte}}
 \end{figure}
 
@@ -252,15 +252,14 @@ In general, then, the designer of any given policy should also select their pref
 
 
 \subsection{\ac{SANN}: Defining Artificial Neural Networks for \acp{CPS}}
-\begin{definition}[Layers of a Synchronous \ac{CNN}]
-	\label{def:layer}We define the \emph{\ac{SANN} Layers} as a tuple of layer types $\mathcal{L} = (\mathcal{I}, \mathcal{D}, \mathcal{O}, \mathcal{C}, \mathcal{A}, \mathcal{M})$ where each layer type consists of a finite number of $N$ nodes, each with an arrangement of 32-bit signed integers:
+\begin{definition}[Layer of a Synchronous \ac{CNN}]
+	\label{def:layer}We define the \emph{\ac{SANN} Layers} as a tuple $\mathcal{L} = (\mathcal{I}, \mathcal{O}, \mathcal{W}, \mathcal{T}, \tau)$:
 	\begin{itemize}
-		\item $\mathcal{I}$ is the input layer that consists only of $N$ 32-bit signed integers, where $N$ is the total number of inputs to the \ac{SANN}.
-		\item $\mathcal{D}$ is a dense layer, consisting of $N_{k-1} \times N_k$ 32-bit signed integer weights, where $N_k$ is the number of neurons in layer $k$ and $N_{k-1}$ is the number of neurons in the previous layer.
-		\item $\mathcal{O}$ is the output layer which is an instance of a dense layer $\mathcal{D}$, consisting of $N$ neurons, where $N$ is the number of outputs of the \ac{SNN}.
-		\item $\mathcal{C}$ is a convolutional layer consisting of $N_k$ filters, each consisting of $M^2$ 32-bit signed integer weights, where $M$ is the filter size and $N_k$ is the number of filters in layer $k$.
-		\item $\mathcal{A}$ represents an average pooling layer, but has no 32-bit signed integer values, only a size with width $w$ and height $h$.
-		\item $\mathcal{M}$ represents an maximum pooling layer, but has no 32-bit signed integer values, only a size with width $w$ and height $h$.
+		\item $\mathcal{I} = \{i_0, i_1, ..., i_k \}$ are the $k$ inputs to the layer, represented by a vector of 32-bit signed integers.
+		\item $\mathcal{O} = \{o_0, o_1, ..., o_k \}$ are the $k$ outputs from the layer, represented by a vector of 32-bit signed integers.
+		\item $\mathcal{W} = \{w_0, w_1, ..., w_k\}$ are the $k$ weights associated with the layer, represented by a vector of 32-bit signed integers.
+		\item $\mathcal{T}$ is the layer type and determines the operations applied to the weights and inputs, where $\mathcal{T}~\in~\{Dense, Convolutional, Maximum~pool, Average~pool\}$.
+		\item $\tau(\mathcal{I}, \mathcal{W}, \mathcal{T}) = \mathcal{O}$ is the non-linear function that produces an output set $\mathcal{O}$ given inputs $\mathcal{I}$, weights $\mathcal{W}$ and layer type $\mathcal{T}$. 
 	\end{itemize}
 \end{definition}
 
