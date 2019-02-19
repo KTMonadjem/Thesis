@@ -31,7 +31,7 @@ The camera outputs were fed into a \ac{MNN} (see Figure~\ref{fig:mnn}) where the
 Sensor fusion happened after classification occurred and was done using an enforcer during runtime.
 
 \subsection{Input Perturbation Safety Policy}
-A safety (timed) automata~\ref{recps} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
+A safety (timed) automata~\cite{recps} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
 The automata started in a safe state, where control of the vehicle was autonomously handled by the system controller.
 If a misclassification was detected, the enforced policy entered an unstable state, still under autonomous control. 
 Once enough time passed without further misclassifications, the vehicle entered the safe state again.
