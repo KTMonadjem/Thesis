@@ -5,8 +5,6 @@ The issue of input perturbations was addressed using a \acf{MNN} of different co
 Misclassification by the system's controller was addressed by implementing sensor fusion between cameras and \ac{LiDAR}.
 This was done using a run-time enforcer that enforced a safety automaton.
 
-\todo{fix results with new graphs}
-
 To test the \ac{MNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2012 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
 Table~\ref{tbl:sign-res} shows that without perturbations, the accuracy of the \ac{MNN} was increased from 87.07\% to 93.7\% when using an enforced policy.
 Table~\ref{tbl:sign-respert} shows that the accuracy of the \ac{MNN} hugely decreases when perturbations are present, from 87.07\% to 41.6\%.
@@ -15,47 +13,54 @@ However, with sensor fusion and a relative safety policy, the accuracy is increa
 \begin{table}[h]
 	\centering
 	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
+		\begin{tabular}{|p{0.2\linewidth}||p{0.2\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|}
 			\hline
-			Epochs trained & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Uncaught misclassifications (\%) \\ \hline
-			\multicolumn{5}{|l|}{Original Inputs} \\ \hline
-			0 & 95.16 & 95.16 & 4.84 & 4.84 \\ 
-			10 & 95.16 & 95.16 & 4.84 & 4.84 \\
-			100 & 82.67 & 61.09 & 1.83 & 23.41 \\
-			1000 & 29.36 & 21.39 & 2.92 & 10.89 \\
-			10000 & 12.38 & 8.55 & 2.11 & 5.93 \\ 
-			100000 & 11.98 & 7.79 & 2.13 & 6.33 \\
-			6000 (best) & 10.59 & 7.32 & 2.04 & 5.31 \\ \hline
-			\multicolumn{5}{|l|}{Perturbed Inputs} \\ \hline
-			0 & 95.16 & 95.16 & 4.84 & 4.84 \\
-			10 & 95.16 & 95.16 & 4.84 & 4.84 \\ 
-			100 & 93.63 & 71.89 & 0.56 & 22.29 \\
-			1000 & 76.69 & 63.71 & 1.25 & 14.23 \\
-			10000 & 57.89 & 45.89 & 2.27 & 14.28 \\ 
-			100000 & 58.03 & 45.72 & 2.39 & 14.69 \\
-			7000 (best) & 60.42 & 49.13 & 2.20 & 13.49 \\ \hline
+			Epochs trained & No. of misclassifications (/100) & Caught misclassifications (/100) & Uncaught misclassifications (/100) \\ \hline
+			\multicolumn{4}{|l|}{Original Inputs} \\ \hline
+			0 & 95.16 & 95.16 & 0 \\ 
+			10 & 95.16 & 95.16 & 0 \\
+			100 & 82.67 & 61.09 & 21.58 \\
+			1000 & 29.36 & 21.39 & 7.97 \\
+			10000 & 12.38 & 8.55 & 3.83 \\ 
+			100000 & 11.98 & 7.79 & 4.19 \\
+			6000 (best) & 10.59 & 7.32 & 3.27 \\
+			100 (MNN2C) & 25.01 & 24.22 & 0.79 \\  \hline
+			\multicolumn{4}{|l|}{Perturbed Inputs} \\ \hline
+			0 & 95.16 & 95.16 & 0 \\
+			10 & 95.16 & 95.16 & 0 \\ 
+			100 & 93.63 & 71.89 & 21.74 \\
+			1000 & 76.69 & 63.71 & 12.98 \\
+			10000 & 57.89 & 45.89 & 12 \\ 
+			100000 & 58.03 & 45.72 & 12.31 \\
+			7000 (best) & 60.42 & 49.13 & 11.11 \\
+			100 (MNN2C) & 41.95 & 39.61 & 2.34 \\ \hline
 		\end{tabular}%
 	}
 	\caption{Table showing the results of the \ac{AV} prediction \ac{SNN}}
 	\label{tbl:sign-resultsfull}
 \end{table}
 
+\begin{figure}[t]
+	\centering
+	\scalebox{0.9}{\input{Content/fig/sign-graph-acc.tex}}
+	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{MNN} \label{fig:sign-graph_acc}}
+\end{figure}
 
 \begin{figure}[t]
 	\centering
-	\scalebox{1}{\input{Content/fig/sign-graph.tex}}
+	\scalebox{0.9}{\input{Content/fig/sign-graph.tex}}
 	\caption{Line graph showing the performance of the system trained over an increasing amount of epochs using unperturbed inputs \label{fig:sign-graph}}
 \end{figure}
 
 \begin{figure}[t]
 	\centering
-	\scalebox{1}{\input{Content/fig/sign-graphpert.tex}}
+	\scalebox{0.9}{\input{Content/fig/sign-graphpert.tex}}
 	\caption{Line graph showing the number of misclassifications made by the system with perturbed inputs \label{fig:sign-graphpert}}
 \end{figure}
 
 \begin{figure}[t]
 	\centering
-	\scalebox{1}{\input{Content/fig/sign-graphboth.tex}}
+	\scalebox{0.9}{\input{Content/fig/sign-graphboth.tex}}
 	\caption{Line graph showing the number of misclassifications made by the system with all inputs \label{fig:sign-graphboth}}
 \end{figure}
 
@@ -77,15 +82,19 @@ Additionally, the time-predictable \ac{MNN} was run through the Patmos \ac{WCET}
 		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
 			\hline
 			Epochs trained & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Uncaught misclassifications (\%) \\ \hline
-			\multicolumn{5}{|c|}{Original Inputs} \\ \hline
+			\multicolumn{5}{|l|}{Original Inputs} \\ \hline
 			100 & 25.01 & 24.22 & 17.50 & 18.29 \\ \hline
-			\multicolumn{5}{|c|}{Perturbed Inputs} \\ \hline
+			\multicolumn{5}{|l|}{Perturbed Inputs} \\ \hline
 			100 & 41.95 & 39.61 & 21.44 & 23.78 \\ \hline 
 		\end{tabular}%
 	}
 	\caption{Table showing the results of the \ac{AV} prediction \ac{SNN}}
 	\label{tbl:sign-resultsfullmnn2c}
 \end{table}
+
+Wcet: 0.02034 + 0.20536 + 2.89764 + 47254 ms
+WCET: 47 s
+Meas: 0.21 s
 
 
 
