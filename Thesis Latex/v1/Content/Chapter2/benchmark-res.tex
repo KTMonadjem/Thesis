@@ -1,14 +1,14 @@
 
 \section{Results}
-\label{sec:results}
+\label{sec:resultsc4}
 
 We have developed a set of benchmark applications to evaluate the efficacy of the \acp{SNN}.
-These benchmarks are presented in Table \ref{table:benchmarks}, and the code is available publicly at \textit{https://github.com/PRETgroup/ssann}. 
+These benchmarks are presented in Table \ref{table:benchmarks4}.
 All benchmarks were written in Esterel and C, and the enforcers implemented according to~\cite{recps}.
 
 
 Benchmarks include: an \acf{AV} braking system, described in Section \ref{sec:case}; an \acf{ESS} inspired by~\cite{chaudhari2017hybrid}; and a simple, two-team, zero-sum game called RABBIT.
-The \ac{ESS} (described in Section~\ref{sec:ess}) has two different policies; ensuring that the system battery's \ac{SoC} never drops too low or rises too high  ($\varphi_{soc}$) and ensuring that the power by which the battery is charging or discharging is never too high ($\varphi_{charge}$).
+The \ac{ESS} (described in Section~\ref{sec:ess4}) has two different policies; ensuring that the system battery's \ac{SoC} never drops too low or rises too high  ($\varphi_{soc}$) and ensuring that the power by which the battery is charging or discharging is never too high ($\varphi_{charge}$).
 RABBIT (described in Section~\ref{sec:rabbit}) has two policies, one policy ensures that the players never move out of the game's bounds ($\varphi_{bound}$), and the other policy ensures that all players do not make decisions that would result in loss of score ($\varphi_{score}$) (or opportunity to gain score) thus ensuring more successes for both teams.
 %These examples all include various \acp{SNN} arrangements that use \acp{MLP} as the \acp{SANN}, however the \ac{AV} system is the only system to use deep \acp{ANN} in the form of \acp{CNN} in addition to \acp{MLP}.
 Each benchmarks are analysed with and without \ac{RE} in place, to show the improvement in each system's safety when using \ac{RE}.
@@ -21,7 +21,7 @@ The overhead for the \ac{AV} combined policy was less than 10\%, but this policy
 \begin{table}[b]
 	\centering
 	\caption{Benchmarks and descriptions}
-	\label{table:benchmarks}
+	\label{table:benchmarks4}
 	\begin{tabular}{@{}|l|l|l|l|@{}}
 		\hline
 		Name & \ac{SANN} Type(s) & \#\acp{SANN} & \#Enforced Policies \\ \hline
@@ -59,19 +59,19 @@ The overhead for the \ac{AV} combined policy was less than 10\%, but this policy
 	\end{tabular}
 \end{table}
 
-\subsection{\acf{ESS}} \label{sec:ess}
+\subsection{\acf{ESS}} \label{sec:ess4}
 The \ac{ESS} is inspired by \cite{chaudhari2017hybrid}, in which an \ac{EV} charging station has a separate battery that it uses to assist the charging of the \acp{EV}, with the general idea that the battery is charged when power is cheap, and discharged when demand is high or power is expensive.
 The \ac{ESS} uses a three-layer \ac{MLP} to decide the action for the battery in the next tick.
-%The overall output of this \ac{MLP} is whether the battery is charging or discharging, and how much power it is charging or discharging.
-%Since the ideal outputs of the \ac{ESS} are unknown, the \ac{ESS} controller was trained using a type of reinforcement learning called Q-learning~\cite{qlearning2010}.
-%While the \ac{AV} system is a hard real-time system the \ac{ESS} system is a soft real-time system, as a missed deadline won't result in fatalities.
-%Failures in this system could cause damage to electrical components and potentially cause fires (from overcharging or overcurrents) and maybe even customer property, i.e. the charging station and the \acp{EV}, and thus appropriate policies can be put into place to make the system safer.
-Even though this system's \ac{MLP} was well-trained (via Q-learning~\cite{qlearning2010}), and tests of it only showed safe behaviour (it never outputted dangerous commands that could have overcharged the battery or allowed for an overcurrent discharge to occur), it is very difficult for testing to be fully comprehensive of any system.
-Hence, \ac{SRE} can be used to formally guarantee that the controller will behave safely at all times.
-%This allows us to show that even though the system has been well trained and hardly even makes mistakes, \ac{SRE} can still be used to improve the system's safety without affecting the performance of the system.
-%The enforced policies monitor the controller's \ac{MLP} outputs and ensure that (1) the battery levels never reach critical levels, and (2) that too much power is never given or taken from the battery in too short a period of time.
-%Running this system with enforced policies shows that the battery's \ac{SoC} never exceeds critical values and that the battery never charges or discharges too much power.
-%The charge of buying and selling electricity to the customer's \ac{EV} does not change by any significant amount when the enforcer is in place, i.e. it does not affect the performance of the system while it keeps the system safe.customer's
+The overall output of this \ac{MLP} is whether the battery is charging or discharging, and how much power it is charging or discharging.
+Since the ideal outputs of the \ac{ESS} are unknown, the \ac{ESS} controller was trained using a type of reinforcement learning called Q-learning~\cite{qlearning2010}.
+While the \ac{AV} system is a hard real-time system the \ac{ESS} system is a soft real-time system, as a missed deadline won't result in fatalities.
+Failures in this system could cause damage to electrical components and potentially cause fires (from overcharging or overcurrent) and maybe even customer property, i.e. the charging station and the \acp{EV}, and thus appropriate policies can be put into place to make the system safer.
+Even though this system's \ac{MLP} was well-trained, and tests of it only showed safe behaviour (it never outputted dangerous commands that could have overcharged the battery or allowed for an overcurrent discharge to occur), it is very difficult for testing to be fully comprehensive of any system.
+Hence, \ac{RE} can be used to formally guarantee that the controller will behave safely at all times.
+This allows us to show that even though the system has been well trained and hardly even makes mistakes, \ac{RE} can still be used to improve the system's safety without affecting the performance of the system.
+The enforced policies monitor the controller's \ac{MLP} outputs and ensure that (1) the battery levels never reach critical levels, and (2) that too much power is never given or taken from the battery in too short a period of time.
+Running this system with enforced policies shows that the battery's \ac{SoC} never exceeds critical values and that the battery never charges or discharges too much power.
+The charge of buying and selling electricity to the customer's \ac{EV} does not change by any significant amount when the enforcer is in place, i.e. it does not affect the performance of the system while it keeps the system safe.customer's
 The results of the system with and without the policies enforced are shown in Table~\ref{table:essres}, while the policies' structure and overhead are shown in Table~\ref{table:policies}.
 
 % Ess results
@@ -93,7 +93,7 @@ The results of the system with and without the policies enforced are shown in Ta
 \subsection{\acf{AV}}
 The \acp{ANN} in this system were trained for varying amounts of epochs, notably 1, 10, 100, 1,000, 10,000 and 100,000 epochs.
 A partially trained \ac{ANN} will exhibit behaviour that is unexpected, and perhaps unsafe, because \acp{ANN} gain robustness through training, i.e. a less trained \ac{ANN} will be less robust.
-This partially trained system is used to show how \ac{SRE} can prevent unsafe events in a system that does not behave as expected.
+This partially trained system is used to show how \ac{RE} can prevent unsafe events in a system that does not behave as expected.
 
 The \ac{AV} system's performance was measured by the amount of time the \ac{AV} was able to run before a accident occurred within the system.
 At every level of training, the whole system was run 10,000 times, where one run consisted of running the system for 100 ticks, noting if and when an accident occurred and what caused the accident. 
@@ -138,11 +138,6 @@ An additional measure of performance was the percentage of brake actions the veh
 	\end{tabular}
 \end{table}
 
-%\begin{figure}[t]
-%	\centering
-%	\includegraphics[width=\linewidth]{fig/AV-trained.png}
-%	\caption{Graph showing the performance of the AV system with and without the enforcer with different lengths of \ac{ANN} training.	\label{fig:avtrained} \todo{Graph is completely useless, make fonts bigger, draw using pgfplots?}}
-%\end{figure}
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\linewidth]{avgraph.tikz}
@@ -152,13 +147,15 @@ An additional measure of performance was the percentage of brake actions the veh
 \subsection{RABBIT} \label{sec:rabbit}
 RABBIT is a simple game that is played between two teams: a team with one rabbit on it, and an opposing team with two wolves. 
 The goal of the game differs for the two teams; the rabbit must make it safely off the playing field using a rabbit hole, while the wolves need to try reach the rabbit before it escapes.
-%The playing field is an $m\times{n}$ matrix, where each coordinate is a possible position that each animal could move in to.
-%The rabbit holes are place on the game boundary, i.e. the edges of the matrix.
+The playing field is an $m\times{n}$ matrix, where each coordinate is a possible position that each animal could move in to.
+The rabbit holes are place on the game boundary, i.e. the edges of the matrix.
 Each animal is controlled using a single \ac{ANN} that decides, based on the animal's "vision", into which adjacent space the animal is moving to next.
-%The \acp{ANN} were trained using reinforcement learning, as the ideal actions of each animal in any given state were unknown, there are simply too many states to compute that.
+The \acp{ANN} were trained using reinforcement learning, as the ideal actions of each animal in any given state were unknown, there are simply too many states to compute that.
 RABBIT has no safety implications to humans, as it is a game played between two teams of \ac{AI}, but policies can be enforced to increase the efficiency of the animals and reduce the errors made by the animals.
 The policies ensure that the animals never leave the playing field, and that their movements are more refined, e.g. not getting stuck in one place, not moving away from their objective, etc.
 The results of the policies are shown in Table~\ref{table:rabbitres}, and the structure and overhead of these policies are described in Table~\ref{table:policies}.
+It is shown that, without the enforcer in place, the ``animals'' in the system are unable to score many points, on either side.
+However, with the enforcer in place, they are able to score significantly more points as the enforcer prevents undesirable outputs, i.e. no points being scored.
 
 % Rabbit results
 \begin{table}[h]

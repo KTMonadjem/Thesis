@@ -34,12 +34,13 @@ To address this issue, we propose the usage of \ac{RE} within the \ac{ANN} domai
 
 %\subsection{\acfp{SNN}}
 
-In this paper, we present a new definition for safe \acp{ANN}, which combine the well-known features of synchronous programming and \ac{RE} with the operation and combination of \acp{ANN}.
-We call these networks \acp{SNN}. 
-Their synchronous composition of \ac{RE} and \acp{ANN} provides a greatly simplified process for validating the safety of their overall systems.
+In this chapter, we present a new definition for safe \acp{ANN}, as well as a new definition for \acfp{MNN}, termed \acfp{SNN}.
+\acp{SNN} combine the previously defined \acp{MNN} in Chapter 3 with other, synchronous components, i.e. not necessarily only \acp{SANN}.
+Additionally, the definition of a \ac{SANN} is redefined to encompass \acfp{CNN} in the definition of a \ac{SANN}.
+Using \acp{SNN}, we can combine \ac{RE} with \acp{SANN}; this synchronous composition of \ac{RE} and \acp{ANN} provides a greatly simplified process for validating the safety of their overall systems.
 
 % What is in this paper
-The key contributions of this paper are thus: (1) we propose \acp{SNN} as a model for designing runtime enforced \acp{SANN} for the first time; (2) we provide formalisation for these \acp{SNN} by formally defining the \acp{SANN} and the \ac{RE}; and (3) we show that this synchronous composition results in a system that is safe, i.e. it produces safe outputs and responds to real-time deadlines. 
+The key contributions of this paper are thus: (1) we propose \acp{SNN} as a model for combing \acp{SANN} and other components, notably \ac{RE}, for the first time; (2) we provide formalisation for these \acp{SNN} by formally defining the \acp{SANN} and the \ac{RE}; and (3) we show that this synchronous composition results in a system that is safe, i.e. it produces safe outputs and responds to real-time deadlines. 
 
 %We call this new definition \ac{SNN}.
 

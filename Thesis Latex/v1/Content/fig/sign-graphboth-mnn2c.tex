@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+\begin{axis}[
+xlabel={Number of epochs trained},
+ylabel={\% of total misclassifications},
+x=1.5mm, y=1.0mm, 
+ymin=0, ymax=120,
+legend style={at={(0.45,0.9)},anchor=west}]
+
+\addplot[color=black,mark=x] coordinates {
+	(10, 71.428574)
+	(20, 75.471695)
+	(30, 68.181816)
+	(40, 84.337349)
+	(50, 85.057472)
+	(60, 73.239433)
+	(70, 84.482758)
+	(80, 98.816566)
+	(90, 98.181816)
+	(100, 97.033897)
+};
+
+\addplot[color=green,mark=*] coordinates {	
+	(10, 78.109451)
+	(20, 65.550240)
+	(30, 62.765957)
+	(40, 76.651985)
+	(50, 82.710281)
+	(60, 77.450981)
+	(70, 83.712120)
+	(80, 95.945946)
+	(90, 95.750000)
+	(100, 95.372749)
+};
+
+\legend{Caught misclassifications (unperturbed), Caught misclassifications (perturbed)}
+\end{axis}%
+\end{tikzpicture}%

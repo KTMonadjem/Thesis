@@ -41,7 +41,13 @@ However, this is a time-consuming and error-prone process which cannot provide g
 Furthermore, as with the static analysis approaches, as the \acp{ANN} increase in size and complexity, verification and validation of these networks becomes increasingly more difficult to achieve~\cite{Gehr2018AI2SA}.  
 %Test cases, validation and verification of \acp{ANN} in \acp{SCS} systems can only go so far; test data is not unlimited, time is a resource, verification is not 100\% accurate and humans make errors. 
 
-%Finally, no matter the chosen methodology, as 
+
+%\subsection{\acf{RE}} 
+
+%\ac{RE} allows for easier formal reasoning over the possible runtime behaviour of the \acp{ANN} internal to the system, thus no longer requiring difficult static analysis.
+%\ac{RE} can apply a set of policies on the inputs and outputs of the system to ensure it follows a set of given constraints. % \acp{SANN} to ensure that the policies are never violated. 
+%These policies can also feature timing information to guarantee timing deadlines for real-time systems.
+%A well designed policy can thus ensure that the system never exhibits unsafe events --- therefore keeping the system's inputs and outputs \textit{safe}~\cite{EstSafeCriteria2003}.
 
 \subsection{\acfp{SANN}}
 
@@ -59,23 +65,6 @@ However, \acp{SANN} only address the timing analysis problem, and do not look at
 
 
 Due to their synchronous nature, we propose that \acp{SANN} can be extended, to be composed with another synchronous construct --- a runtime enforcer.
-
-%\subsection{Runtime enforcement}
-
-%, such as \acp{RE}, allowing for \acf{SRE}.
-%the benefits of using \acp{SANN} are plentiful, such as the synchronous composition of \acp{SANN} and \ac{SRE}.
-%Since both \acp{SANN} and \acp{SRE} follow synchronous semantics, the composition of \acp{SANN} and \acp{SRE} provides a system that is easier to formally reason. 
-
-%\todo{Introduce runtime enforcement}.
-
-%\ac{SRE} allows for easier formal reasoning over the possible runtime behaviour of the \acp{ANN} internal to the system, thus no longer requiring difficult static analysis.
-%\ac{SRE} can apply a set of policies on the inputs and outputs of the system to ensure it follows a set of given constraints. % \acp{SANN} to ensure that the policies are never violated. 
-%These policies can also feature timing information to guarantee timing deadlines for real-time systems.
-%A well designed policy can thus ensure that the system never exhibits unsafe events --- therefore keeping the system's inputs and outputs \textit{safe}~\cite{EstSafeCriteria2003}.  
-
-%For example, an \ac{AV} system with an \ac{ANN} controller must respond to dangerous situations within a certain period of time, and an \ac{ANN} that does not produce its outputs in time could result in the system missing its deadline.
-%Policies can be enforced that ensure that the \ac{ANN} always produces \textit{safe} output before the deadline for the outputs expires.
-
 
 
 

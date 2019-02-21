@@ -146,25 +146,28 @@ The \ac{CNN} can be trained to 99.9\% accuracy according to the test cases used 
 However, this means that the \ac{CNN} fails 0.1\% of the time, and that is only on the tested population, not even taking the entire population into consideration.
 Having a method to verify this \ac{CNN} while it is running and pick up any inevitable failures would allows for this \ac{CNN} to be used in systems where safety is critical.
 
-\subsection{Runtime Assurance}
-% Runtime assurance
-\ac{RA} is the ability to to ensure that a system operates safely, even when the system contains components that are not sufficiently reliable or verified~\cite{rta-cps}. 
-Thus, \ac{RA} can be used to bound unpredictable or unsafe behaviour in a target system. 
-\ac{RA} has been used as a reliability and fail-safe tool for some time, for instance in \acp{OS}, intrusion detection, overcurrent breakers and flight controllers. 
-A system that uses \ac{RA} shifts the burden of testing and analysing system parameters from comprehensive off-line verification methods, to a simpler assurance mechanism~\cite{rta-cps}. 
-
 \subsection{Runtime Enforcement}
 % Runtime enforcement
 \ac{RE} is a subset of \ac{RA} that focuses on formal semantics and blocking, delaying, modifying and/or re-ordering of events in a system. 
 Processes that are deemed unsafe can be monitored by an enforcer at runtime to ensure that they obey desired policies and remain in a safe state at all times~\cite{theoryRE}. 
-\ac{SA} formally express run-time properties that can be monitored in one direction only (e.g. outputs only)~\cite{enfsafepol}. 
+Formal runtime verification methodologies mathematically guarantee the detection of improper system behaviour \cite{RuntimeAssuranceForComplexCPS}.
+For example, \ac{SA} have been proposed, which formally monitor uni-directional run-time properties only (e.g. outputs only)~\cite{enfsafepol}.
 Edit automata are a type of \ac{SA} that can edit, suppress or insert events~\cite{editautomata}. 
-Safety Automata (or \ac{DTA}) have been proposed that can edit \textit{bi-directional} events at runtime~\cite{recps}. 
+\ac{DTA} have been proposed that can edit \textit{bi-directional} events at runtime~\cite{recps}. 
 They were designed for reactive \acp{CPS} demonstrated in a pacemaker environment~\cite{recps}. 
+
+An example of the placement of an enforcer, in this case a \ac{DTA}, in a \ac{CPS} is shown in Figure~\ref{fig:re} for an \acf{ESS}.
+It shows that the enforcer sits between the plant and the controller, monitoring the inputs and outputs of the controller.
+It will be able to detect unsafe inputs/outputs to/from the controller and allow the system to act in a safe manner.
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{Content/fig/ESS-RE.pdf}
+	\caption{Example \ac{RE} \label{fig:re}}
+\end{figure}
 
 \subsection{Runtime Enforcement of \acp{ANN}}
 % Write about exisiting autonomous RE
-The idea of \ac{RE} of autonomous systems has been looked into previously. 
+The idea of \ac{RE} of autonomous systems is a researched topic. 
 De Niz et. al. propose a type of \ac{RE} they term temporal enforcement, which ensures that the system controller meets timing deadlines where outputs are concerned~\cite{safe-enforce-auto}. 
 While this shares similarities with the work in this paper, their work does not expand to cover \acp{ANN}, and does not propose the use of \ac{RE} for anything other than meeting timing deadlines.
 Aniculaesei et. al. propose static formal verification and runtime monitoring of autonomous, robotic systems to prevent physical collisions during system execution~\cite{runtime-monitor}.
@@ -176,6 +179,13 @@ Additionally, the case study involves a robot controlled by an automaton, not a 
 
 
 \section{Summary}
-Summary of above.
+This chapter covers the basics of the concepts introduced in this thesis.
 
-\todo{IMAGES PLEASE}
+A description of what \acp{ANN} are, their functionality and their safety properties is given.
+
+The basics of synchronous programming is given, while Esterel is described in more detail.
+A complete example of an Esterel program is given, with a description of how it works.
+
+Finally, dynamic verification is discussed as a technique to verify autonomous systems.
+
+\todo{MORE IMAGES PLEASE}

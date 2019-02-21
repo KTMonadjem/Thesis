@@ -3632,3 +3632,24 @@ and Walker, David},
 	ISSN={0018-9219}, 
 	month={Sep.},
 }
+
+@TechReport{RuntimeAssuranceForComplexCPS,
+	Title                    = {A study on run time assurance for complex cyber physical systems},
+	Author                   = {Clark, Matthew and Koutsoukos, Xenofon and Porter, Joseph and Kumar, Ratnesh and Pappas, George and Sokolsky, Oleg and Lee, Insup and Pike, Lee},
+	Institution              = {Air Force Research Laboratory, Vanderbilt University, Iowa State University, University of Pennsylvania, Galois Inc.},
+	Year                     = {2013}
+}
+
+@proceeding{safe-enforce-auto,
+	author = { Dionisio  de Niz,Bjorn  Andersson,Gabriel  Moreno},
+	title = {Safety enforcement for the verification of autonomous systems},
+	journal = {Proc.SPIE},
+	volume = {10643},
+	number = {},
+	pages = {10643 - 10643 - 10},
+	abstract = {Verifying that the behavior of an autonomous systems is safe is fundamental for safety-critical properties like preventing crashes in autonomous vehicles. Unfortunately, exhaustive verification techniques fail to scale to the size of real-life systems. Moreover, these systems frequently use algorithms whose runtime behavior cannot be determined at design time (e.g., machine learning algorithms). This presents another problem given that these algorithms cannot be verified at design time. Fortunately, a technique known as runtime assurance can be used for these cases. The strategy that runtime assurance uses to verify a system is to add small components (known as enforcers) to the system that monitor its output and evaluate whether the output is safe or not. If the output is safe, then the enforcer lets it pass; if the output is unsafe, the enforcer replaces it with a safe output. For instance, in a drone system that must be restricted to fly within a constrained area (a.k.a. geo-fence) an enforcer can be used to monitor the movement commands to the drone. Then, if a movement command keeps the drone within the geo-fence, the enforcer lets it pass, but if the command takes the drone outside of this area, the enforcer replaces it with a safe command (e.g., hovering). Given that enforcers are small components fully specified at design time, it is possible to use exhaustive verification techniques to prove that they can keep the behavior of the whole system safe (e.g., the drone flying within the geo-fence) even if the system contains unverified code.},
+	year = {2018},
+	doi = {10.1117/12.2307575},
+	URL = {https://doi.org/10.1117/12.2307575},
+	eprint = {}
+}
