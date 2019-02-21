@@ -1,19 +1,97 @@
 \section{Artificial Neural Networks}
 \subsection{Machine Learning}
-What is machine learning. Where is it used. Some examples.
-
-\subsection{Efficacy of Machine Learning}
-How does machine learning (ANNs) improve systems these days?
+\acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio temporal patterns~\cite{rolston2007precisely}. 
+Similar timed activity of neurons in the cerebellum has been reported in~\cite{bullock1994neural, moore1989adaptively}. 
+A number of types of \ac{NN} which mimic their biological counterparts exist, varying in complexity and accuracy, including the \ac{SNN}~\cite{izhikevich2003spiking,maass1997spiking}, which was designed to model the brain and has been demonstrated to be periodic and run with discrete time intervals when implemented in software. 
 
 \subsection{Structure of an Artificial Neural Network}
-How does an ANN run, how does it train, what does it look like.
+Most \acp{ANN} do not feature such complex models like those of spiking neural networks, as they are more difficult to use, implement, and train. 
+Instead, they rely on simpler networks, which can be considered as \emph{un-timed non-linear} functions, where the outputs change relative to the inputs, but the timing of the change is not precisely defined. 
+An example of such a network is provided in Figure~\ref{fig:mlp-ann}, which is using neurons defined in Figure~\ref{fig:artificial-neuron}. 
+This is a type of \ac{NN} known as an \acf{MLP}~\cite{yegnanarayana1994artificial}.
+
+Specialised neural networks, called \acfp{RNN}~\cite{medsker2001recurrent}, were introduced to classify temporal sequences. 
+These operate in a step by step manner, where the operation in the current time step relies on the context from some previous step. Thus, \acp{RNN} may be viewed as a periodic networks, whosemperiod is one. 
+However, the use of such networks in \ac{CPS} is yet to be thoroughly investigated. 
+Moreover, \acp{RNN} and their compositions are not formalised especially from the point of view of designing timed AI systems used in \ac{CPS}.  
+
+\begin{figure}
+	\centering
+	\scalebox{0.8}{\input{fig/mlp-ann.tex}}
+	\caption{Example \ac{MLP} \ac{ANN}.	\label{fig:mlp-ann}}
+\end{figure}
+\begin{figure}
+	\centering
+	\scalebox{0.8}{\input{fig/neuron.tex}}
+	\caption{A model of an artificial neuron. \label{fig:artificial-neuron}}
+\end{figure}
+
+\acp{ANN} are being increasingly used as controllers in \acp{CPS} due to their ability to learn data relationships in ways that are difficult to replicate~\cite{ANNSafety2007}. 
+\acp{ANN} can deal with novel inputs to the system and are able to outperform other forms of \ac{AI} at computational efficiency, pattern recognition, function approximation and image identification~\cite{AIComp2016, AIComp2017}. 
+However, it can be very difficult to ensure the safety of a system involving \acp{ANN}~\cite{ANNSafety2007, ANNSafety2018}.
 
 \subsection{Safety of Artificial Neural Networks}
-Safety drawbacks of ANNs:
-Unpredictable
-Hard to verify
-Slow
-Etc
+In order for an \ac{ANN} to be used in any capacity within a \acp{SCS}, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that they it is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}. 
+
+While considerable research effort is starting in the direction of formal verification of \ac{AI}-based \ac{CPS}~\cite{seshia2016towards, russell2015}, the issue of timing verification has received scant attention. 
+Like the challenges involving functional verification, timing verification of AI-based  \ac{CPS} poses considerable challenges due to: (1) real-time \ac{AI} systems could involve many concurrent and interacting \ac{AI} modules, which need deterministic composition for safety; (2) \ac{AI} modules are usually developed as untimed systems and the reactive nature of AI algorithms used in CPS are not carefully studied; and (3) \acf{WCET} analysis~\cite{wilhelm2008worst} of \ac{AI}-based \ac{CPS} has received scant attention.
+
+Definitions for this safety vary, but Kurd et. al.~\cite{EstSafeCriteria2003} provide a generalisation: safe \acp{ANN} can be defined as those that:
+\begin{itemize}
+	\item tolerate faults and inconsistencies in their inputs,
+	\item do not create hazardous outputs,
+	\item behave in a predictable and repeatable manner,
+	\item and are trained on clean, reliable data. 
+\end{itemize}
+%These properties are essential for an \ac{ANN} to run in any \ac{SCS}. 
+
+To achieve these properties, there exist safety measures such as risk management systems that span the entire development process of the \ac{ANN}~\cite{ANNDevModel1999} and standards with which \acp{ANN} can be certified before they are used in \acp{SCS}~\cite{SCANNStandard}. 
+These techniques are primarily \textit{proactive} in nature, producing \acp{ANN} that are classified as \textit{safe enough} for their role. 
+
+However, as \acp{ANN} become larger and more full-featured, they  become harder to statically analyse.
+Problematic situations can arise when an \ac{ANN} exhibits unexpected behaviour that the system is unable to safely respond to, and in \acp{SCS} these situations can be life threatening.
+
+
+
+
+
+
+
+\section{Timing Analysis of Cyber-Physical Systems}
+\subsection{Worst Case Execution Time}
+Explain what WCET is in safety critical systems. Why is it important for deadlines to be met and how does this relate to WCET?
+
+\subsection{Worst Case Reaction Time}
+WCRT vs WCET. Throughput vs Time.
+
+\subsection{Timing Techniques}
+What timing techniques exist for synchronous and asynchronous systems? Which of these are relevant to our work?
+
+\subsection{Patmos Time Predictable Processor}
+Brief description of Patmos and why we use it.
+
+
+
+
+
+
+
+
+\section{Static Verification of Artificial Neural Networks}
+This section looks into ANN verification methods and why they are good/bad.
+
+\subsection{The Problem of Artificial Neural Network Verification}
+ANN verification is an issue. Why?
+
+\subsection{Existing Techniques for Verifying ANNs}
+Rundown of existing techniques of ANN verification.
+
+\subsection{Limitations of Artificial Neural Network Verification}
+Describe where verification is limited and why.
+Where can it do better?
+
+
+
 
 
 \section{Synchronous Languages}
@@ -34,35 +112,11 @@ Time predictability.
 Runtime Enforcement
 
 
-\section{Timing Analysis of Cyber-Physical Systems}
-\subsection{Worst Case Execution Time}
-Explain what WCET is in safety critical systems. Why is it important for deadlines to be met and how does this relate to WCET?
-
-\subsection{Worst Case Reaction Time}
-WCRT vs WCET. Throughput vs Time.
-
-\subsection{Timing Techniques}
-What timing techniques exist for synchronous and asynchronous systems? Which of these are relevant to our work?
-
-\subsection{Patmos Time Predictable Processor}
-Brief description of Patmos and why we use it.
 
 
-\section{Static Verification of Artificial Neural Networks}
-This section looks into ANN verification methods and why they are good/bad.
-
-\subsection{The Problem of Artificial Neural Network Verification}
-ANN verification is an issue. Why?
-
-\subsection{Existing Techniques for Verifying ANNs}
-Rundown of existing techniques of ANN verification.
-
-\subsection{Limitations of Artificial Neural Network Verification}
-Describe where verification is limited and why.
-Where can it do better?
 
 
-\section{Run-time Enforcement of Artificial Neural Networks}
+\section{Run-time Enforcement}
 \subsection{Run-time Assurance}
 What is RA and why is it useful? Formally defined.
 
@@ -74,6 +128,10 @@ Benefits? Synchronous vs asynchronous systems.
 
 \subsection{Safety (Timed) Automata}
 These are used in our run-time enforcement techniques. Discuss these and how they work.
+
+
+
+
 
 \section{Summary}
 Summary of above.
