@@ -3,17 +3,24 @@
 \acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio temporal patterns~\cite{rolston2007precisely}. 
 Similar timed activity of neurons in the cerebellum has been reported in~\cite{bullock1994neural, moore1989adaptively}. 
 A number of types of \ac{NN} which mimic their biological counterparts exist, varying in complexity and accuracy, including the \ac{SNN}~\cite{izhikevich2003spiking,maass1997spiking}, which was designed to model the brain and has been demonstrated to be periodic and run with discrete time intervals when implemented in software. 
+\acp{ANN} are also part of deep learning; \acfp{CNN}~\cite{schmidhuber2015deep} were introduced with many more layers than is possible on a \ac{MLP}. 
+\acp{CNN}, are widely used in \ac{CPS} applications such as autonomous vehicles, e.g. in \cite{EndToEndLearningForSelfDrivingCars}, where a \ac{CNN} is trained to map raw pixel data directly to vehicle steering commands.
 
 \subsection{Structure of an Artificial Neural Network}
 Most \acp{ANN} do not feature such complex models like those of spiking neural networks, as they are more difficult to use, implement, and train. 
 Instead, they rely on simpler networks, which can be considered as \emph{un-timed non-linear} functions, where the outputs change relative to the inputs, but the timing of the change is not precisely defined. 
 An example of such a network is provided in Figure~\ref{fig:mlp-ann}, which is using neurons defined in Figure~\ref{fig:artificial-neuron}. 
-This is a type of \ac{NN} known as an \acf{MLP}~\cite{yegnanarayana1994artificial}.
+This is a type of \ac{ANN} known as an \acf{MLP}~\cite{yegnanarayana1994artificial}.
+A \ac{MLP} consists of interconnected layers of artificial neurons, each neuron providing input to neurons in the next layer.
 
 Specialised neural networks, called \acfp{RNN}~\cite{medsker2001recurrent}, were introduced to classify temporal sequences. 
-These operate in a step by step manner, where the operation in the current time step relies on the context from some previous step. Thus, \acp{RNN} may be viewed as a periodic networks, whosemperiod is one. 
-However, the use of such networks in \ac{CPS} is yet to be thoroughly investigated. 
-Moreover, \acp{RNN} and their compositions are not formalised especially from the point of view of designing timed AI systems used in \ac{CPS}.  
+These operate in a step by step manner, where the operation in the current time step relies on the context from some previous step.
+
+\acp{CNN} were introduced to classify complex, 3-D inputs such as images.
+These are similar to \acp{ANN} such that they are composed of multiple layers, each providing inputs to the following layer. 
+However, \acp{CNN} have more complex neurons than \acp{MLP}, with varying types of layers such as convolutional layers, pooling layers and dense layers.
+A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
+
 
 \begin{figure}
 	\centering
@@ -24,6 +31,11 @@ Moreover, \acp{RNN} and their compositions are not formalised especially from th
 	\centering
 	\scalebox{0.8}{\input{Content/fig/neuron.tex}}
 	\caption{A model of an artificial neuron. \label{fig:artificial-neuron}}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{Content/fig/cnn-img.pdf}
+	\caption{Example \ac{CNN} \label{fig:cnn}}
 \end{figure}
 
 \acp{ANN} are being increasingly used as controllers in \acp{CPS} due to their ability to learn data relationships in ways that are difficult to replicate~\cite{ANNSafety2007}. 
@@ -70,9 +82,10 @@ This limits flexibility, as each \ac{ANN} must be designed around these restrict
 Manual testing is a simple method to check for the correctness of an \ac{ANN}-based system. 
 However, this is a time-consuming and error-prone process.
 It is very difficult to ensure that tests have acceptable coverage of all possible situations~\cite{ANN-test}.
-Test cases, validation and verification of \acp{ANN} in \acp{SCS} systems can only go so far; test data is not unlimited, time is a resource, verification is not 100\% accurate and humans make errors. 
 
 Finally, no matter the chosen methodology, as \acp{ANN} increase in size and complexity, verification and validation of these networks becomes increasingly more difficult to achieve~\cite{Gehr2018AI2SA}.
+
+
 
 
 \section{Synchronous Languages}
@@ -87,7 +100,7 @@ Easy to formalise
 Etc
 
 \subsection{Timing Correctness}
-Time predictability.
+\ac{WCRT}~\cite{roop2009tight}
 
 \subsection{Functional Correctness}
 Runtime Enforcement
@@ -98,7 +111,11 @@ Runtime Enforcement
 
 
 \section{\acf{RE} of Autonomous Systems}
-%% TALK ABOUT RA AND RE
+While static verification has its place, more dynamic approaches to verification and safety can be used to pick up anything that the static verification and testing may have missed.
+Take a standard image classification \ac{CNN} for example.
+The \ac{CNN} can be trained to 99.9\% accuracy according to the test cases used to train it.
+However, this means that the \ac{CNN} fails 0.1\% of the time, and that is only on the tested population, not even taking the entire population into consideration.
+Having a method to verify this \ac{CNN} while it is running and pick up any inevitable failures would allows for this \ac{CNN} to be used in systems where safety is critical.
 
 \subsection{Runtime Assurance}
 % Runtime assurance
