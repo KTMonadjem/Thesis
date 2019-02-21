@@ -102,23 +102,24 @@ Esterel uses a collection of concurrently running threads synchronised to a sing
 Pause statements are used to pause the thread execution, with each thread resuming from where it was paused at each clock tick.
 Communication between threads is done using globally broadcast signals.
 The communication between Esterel's threads is deterministic, i.e. a single signal cannot be read as both present and not present in any tick.
-Esterel can, additionally, use \textit{pre()} statements to 
+Esterel can, additionally, use \textit{pre()} (pre-emption) statements to check signals past presence, allowing for logical delays in the execution of an action.
+Due to the structure of Esterel's loops, unbounded loops are not allowed; it must be guaranteed that a loop will be paused at least once per iteration.
 
 Figure~\ref{fig:esterel-abro} shows the well known \textbf{ABRO} example by G. Berry.
 This module has 3 defined input signals \textit{A}, \textit{B} and \textit{R} and one defined output signal \textit{O}.
-Usually, a \textit{loop} denotes an iterative thread that repeats each clock tick and each loop must be bounded by a \textit{pause}. 
-However, execution of this loop only iterates when \textit{R} is detected, and the loop resets at the beginning of the next clock tick.
-When \textit{R} is not detected, the loop does not loop, but instead pauses until \textit{R} is detected.
-The \textit{loop ... each R} can be alternatively written as \textit{loop [abort [... pause;] when R] end loop}, i.e. take some action, pause at the end of the action, and then wait for \textit{R} to repeat next tick.
+Usually, a \textit{loop} denotes an iterative thread that repeats when the \textit{end loop} statement is reached, where each loop must include a \textit{pause}. 
+However, execution of this loop only iterates when \textit{R} is detected; the loop resets at the beginning of the next clock tick when \textit{R} is detected.
+When \textit{R} is not detected, the loop does not loop, but instead \textit{pauses} until \textit{R} is detected.
+The \textit{loop <action> each R} can be alternatively written as \textit{loop [abort [<action> pause;] when R] end loop}, i.e. take some <action>, pause at the end of the <action>, and then wait for \textit{R} to repeat the loop.
 
-The \textit{||} are used to show parallel actions, i.e. concurrency, in the code.
-This means that \textit{await A} and \textit{await B} are running concurrently, where \textit{await A} is synonymous with ``pause until A is present''.
+The \textbf{||} are used to show parallel actions, i.e. concurrency.
+This means that \textit{await A} and \textit{await B} are running concurrently, where \textit{await <signal>} is synonymous with ``pause until <signal> is present''.
 The statement \textit{emit O} sets the output signal \textit{O} to be present for one clock cycle.
 
 When combined, the statements in this example would combine to do the following, described in English for convenience:
 Wait for A and B. 
-When both A and B have been present, emit O.
-When/if R is present, start from the beginning.
+When both A and B have been present, present O once.
+As soon as R is present, start from the beginning.
 
 \begin{figure}
 	\begin{lstlisting}
