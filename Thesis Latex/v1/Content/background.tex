@@ -42,7 +42,7 @@ A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
 \acp{ANN} can deal with novel inputs to the system and are able to outperform other forms of \ac{AI} at computational efficiency, pattern recognition, function approximation and image identification~\cite{AIComp2016, AIComp2017}. 
 However, it can be very difficult to ensure the safety of a system involving \acp{ANN}~\cite{ANNSafety2007, ANNSafety2018}.
 
-\subsection{Safety of Artificial Neural Networks}
+\subsection{Artificial Neural Networks for \ac{CPS}}
 In order for an \ac{ANN} to be used in any capacity within a system where safety is critical, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that they it is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}. 
 
 While considerable research effort is starting in the direction of formal verification of \ac{AI}-based \ac{CPS}~\cite{seshia2016towards, russell2015}, the issue of timing verification has received scant attention. 
@@ -89,25 +89,53 @@ Finally, no matter the chosen methodology, as \acp{ANN} increase in size and com
 
 
 \section{Synchronous Languages}
-\subsection{Synchronous Semantics}
-Briefly explain synchronous semantics: what is synchronous programming and how does it work?
+Synchronous languages include a variety of different languages, some notable examples being Esterel, Lustre and Signal~\cite{benveniste2003synchronous}.
+When it comes to validating and implementing real-time, embedded software, synchronous languages are the most design friendly and formally sound.
 
-\subsection{Safety of Synchronous Languages}
-What guarantees does synchronous programming provide?
-Determinism
-Causality
-Easy to formalise
-Etc
+Synchronous languages abide to a set of semantics, that is that they support functional concurrency, have a simple formal model and support synchrony models.
+To support synchrony and concurrency, synchronous languages divide time into discrete instants according to a logical clock.
+Each logical tick, the system samples the inputs, takes some action and then emits the outputs.
 
-\subsection{Timing Correctness}
-\ac{WCRT}~\cite{roop2009tight}
+\subsection{Esterel}
+Esterel is one such synchronous language, created by Gérard Berry in 1991~\cite{berry1991}. 
+Esterel uses a collection of concurrently running threads synchronised to a single, global clock.
+Pause statements are used to pause the thread execution, with each thread resuming from where it was paused at each clock tick.
+Communication between threads is done using globally broadcast signals.
+The communication between Esterel's threads is deterministic, i.e. a single signal cannot be read as both present and not present in any tick.
+Esterel can, additionally, use \textit{pre()} statements to 
 
-\subsection{Functional Correctness}
-Runtime Enforcement
+Figure~\ref{fig:esterel-abro} shows the well known \textbf{ABRO} example by G. Berry.
+This module has 3 defined input signals \textit{A}, \textit{B} and \textit{R} and one defined output signal \textit{O}.
+Usually, a \textit{loop} denotes an iterative thread that repeats each clock tick and each loop must be bounded by a \textit{pause}. 
+However, execution of this loop only iterates when \textit{R} is detected, and the loop resets at the beginning of the next clock tick.
+When \textit{R} is not detected, the loop does not loop, but instead pauses until \textit{R} is detected.
+The \textit{loop ... each R} can be alternatively written as \textit{loop [abort [... pause;] when R] end loop}, i.e. take some action, pause at the end of the action, and then wait for \textit{R} to repeat next tick.
 
+The \textit{||} are used to show parallel actions, i.e. concurrency, in the code.
+This means that \textit{await A} and \textit{await B} are running concurrently, where \textit{await A} is synonymous with ``pause until A is present''.
+The statement \textit{emit O} sets the output signal \textit{O} to be present for one clock cycle.
 
+When combined, the statements in this example would combine to do the following, described in English for convenience:
+Wait for A and B. 
+When both A and B have been present, emit O.
+When/if R is present, start from the beginning.
 
-
+\begin{figure}
+	\begin{lstlisting}
+	module ABRO:
+	input A, B, R;
+	output O;
+	
+	loop
+	[ await A || await B ];
+	emit O
+	each R
+	
+	end module
+	\end{lstlisting}
+	\caption{Mono-periodic `layer by layer', $WCRT = l_i \odot l_h \odot l_o$}
+	\label{fig:esterel-abro}
+\end{figure}
 
 
 \section{\acf{RE} of Autonomous Systems}
@@ -132,9 +160,6 @@ Processes that are deemed unsafe can be monitored by an enforcer at runtime to e
 Edit automata are a type of \ac{SA} that can edit, suppress or insert events~\cite{editautomata}. 
 Safety Automata (or \ac{DTA}) have been proposed that can edit \textit{bi-directional} events at runtime~\cite{recps}. 
 They were designed for reactive \acp{CPS} demonstrated in a pacemaker environment~\cite{recps}. 
-
-\subsection{Safety (Timed) Automata}
-These are used in our run-time enforcement techniques. Discuss these and how they work.
 
 \subsection{Runtime Enforcement of \acp{ANN}}
 % Write about exisiting autonomous RE
