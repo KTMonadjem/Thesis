@@ -9,16 +9,16 @@ Additionally, perturbations to a \ac{CNN}'s input can greatly decrease the predi
 This, in turn, increases the chance of a misclassification by the system's controller and decreases the safety of the system.
 
 In this chapter, two techniques are implemented to increase the safety of \acfp{CNN} in \acf{AV} systems.
-There are two ways that a system that misclassifies data can be made safe: reduce the chance of misclassifications and act in a safe manner should a misclassification occur.
-An \ac{AV} simulation was created to simulate an \ac{AV} system as closely as was possible.
+I.e. two techniques are introduced that make a system that misclassifies data safer: (1) reduce the chance of misclassifications and/or (2) act in a safe manner should a misclassification occur.
 
-To address the first, a complex \acf{MNN} was implemented as the system's controller.
+To address the first, a complex \acf{MNN} was implemented as the system's controller, see Figure~\ref{fig:mnn}.
 This \ac{MNN} consisted of three different \ac{MNN} ensembles, each ensemble classifying a different aspect of the detected object.
 Each \ac{MNN} ensemble consisted of three different synchronous \acp{CNN}, with the outputs of each \ac{CNN} combined to increase the prediction accuracy of the system.
 The three ensembles' outputs were then combined synchronously during runtime to further increase the prediction accuracy of the system controller.
 This \ac{MNN} also served to increase the prediction accuracy of the system when perturbations were affecting the inputs to the \ac{MNN}.
 
-The simulated system also used sensor fusion, managed by a safety policy and enforced by a runtime enforcer.
+A system was created to simulate an \ac{AV} system as closely as was possible with the available resources.
+The simulated system used the above-mentioned \ac{MNN} and sensor fusion to address the safety of the system, managed by a safety policy and enforced by a runtime enforcer.
 The system combined \acf{LiDAR} input with the \ac{MNN}, thereby increasing the chance of detecting a misclassification.
 Additionally, a timed automaton was used as the safety policy; this allowed the system to check for consecutive misclassifications and enforce the control of the vehicle where necessary.
 

@@ -9,127 +9,110 @@ To test the \ac{MNN}'s ability to deal with perturbations, the input images (tak
 Table~\ref{tbl:sign-res} shows that without perturbations, the accuracy of the \ac{MNN} was increased from 87.07\% to 93.7\% when using an enforced policy.
 Table~\ref{tbl:sign-respert} shows that the accuracy of the \ac{MNN} hugely decreases when perturbations are present, from 87.07\% to 41.6\%.
 However, with sensor fusion and a relative safety policy, the accuracy is increased to 90.48\%.
- 
-\begin{table}[h]
-	\centering
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
-			\hline
-			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
-			Person & 17.01 & 17.01 & 0.00 & 0.00 \\ \hline
-			Vehicle & 15.85 & 15.85 & 0.00 & 0.00 \\ \hline
-			Sign & 54.46 & 54.46 & 4.84 & 4.84 \\ \hline
-			Nothing & 7.83 & 7.83 & 0.00 & 0.00 \\ \hline
-			All & 95.16 & 95.16 & 4.84 & 4.84 \\ \hline
-		\end{tabular}%
-	}
-	\caption{Table showing the worst results of the \ac{AV} prediction \ac{SNN} using the original images, trained for 0 epochs}
-	\label{tbl:sign-res1}
-\end{table}
 
 \begin{table}[h]
 	\centering
 	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
+		\begin{tabular}{|p{0.2\linewidth}||p{0.2\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|}
 			\hline
-			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
-			Person & 1.00 & 0.21 & 0.53 & 1.32 \\ \hline
-			Vehicle & 6.26 & 5.63 & 0.44 & 1.07 \\ \hline
-			Sign & 2.62 & 0.44 & 1.02 & 3.20 \\ \hline
-			Nothing & 2.50 & 2.27 & 0.12 & 0.35 \\ \hline
-			All & 12.38 & 8.55 & 2.11 & 5.93 \\ \hline
+			Epochs trained & No. of misclassifications (/100) & Caught misclassifications (/100) & Uncaught misclassifications (/100) \\ \hline
+			\multicolumn{4}{|l|}{Original Inputs} \\ \hline
+			0 & 95.16 & 95.16 & 0 \\ 
+			10 & 95.16 & 95.16 & 0 \\
+			100 & 82.67 & 61.09 & 21.58 \\
+			1000 & 29.36 & 21.39 & 7.97 \\
+			10000 & 12.38 & 8.55 & 3.83 \\ 
+			100000 & 11.98 & 7.79 & 4.19 \\
+			6000 (best) & 10.59 & 7.32 & 3.27 \\
+			100 (MNN2C) & 25.01 & 24.22 & 0.79 \\  \hline
+			\multicolumn{4}{|l|}{Perturbed Inputs} \\ \hline
+			0 & 95.16 & 95.16 & 0 \\
+			10 & 95.16 & 95.16 & 0 \\ 
+			100 & 93.63 & 71.89 & 21.74 \\
+			1000 & 76.69 & 63.71 & 12.98 \\
+			10000 & 57.89 & 45.89 & 12 \\ 
+			100000 & 58.03 & 45.72 & 12.31 \\
+			7000 (best) & 60.42 & 49.13 & 11.11 \\
+			100 (MNN2C) & 41.95 & 39.61 & 2.34 \\ \hline
 		\end{tabular}%
 	}
-	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using the original images, trained for 10000 epochs}
-	\label{tbl:sign-res10000}
-\end{table}
-
-\begin{table}[h]
-	\centering
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
-			\hline
-			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
-			Person & 1.11 & 0.70 & 0.65 & 1.07 \\ \hline
-			Vehicle & 3.92 & 3.34 & 0.65 & 1.23 \\ \hline
-			Sign & 2.64 & 0.60 & 0.51 & 2.55 \\ \hline
-			Nothing & 2.92 & 2.69 & 0.23 & 0.46 \\ \hline
-			All & 10.59 & 7.32 & 2.04 & 5.31 \\ \hline
-		\end{tabular}%
-	}
-	\caption{Table showing the best results of the \ac{AV} prediction \ac{SNN} using the original images, trained for 6000 epochs}
-	\label{tbl:sign-resbest}
-\end{table}
-
-\begin{table}[h]
-	\centering
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
-			\hline
-			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
-			Person & 17.01 & 17.01 & 0.00 & 0.00 \\ \hline
-			Vehicle & 15.85 & 15.85 & 0.00 & 0.00 \\ \hline
-			Sign & 54.46 & 54.46 & 4.84 & 4.84 \\ \hline
-			Nothing & 7.83 & 7.83 & 0.00 & 0.00 \\ \hline
-			All & 95.16 & 95.16 & 4.84 & 4.84 \\ \hline
-		\end{tabular}%
-	}
-	\caption{Table showing the worst results of the \ac{AV} prediction \ac{SNN} using perturbed images, trained for 0 epochs}
-	\label{tbl:sign-respert1}
-\end{table}
-
-\begin{table}[h]
-	\centering
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
-			\hline
-			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
-			Person & 3.43 & 0.60 & 0.56 & 3.38 \\ \hline
-			Vehicle & 10.78 & 8.57 & 0.23 & 2.43 \\ \hline
-			Sign & 38.08 & 31.91 & 1.39 & 7.56 \\ \hline
-			Nothing & 5.61 & 4.80 & 0.09 & 0.90 \\ \hline
-			All & 57.89 & 45.89 & 2.27 & 14.28 \\ \hline
-		\end{tabular}%
-	}
-	\caption{Table showing results of the \ac{AV} prediction \ac{SNN} using perturbed images, trained for 10000 epochs}
-	\label{tbl:sign-respert10000}
-\end{table}
-
-\begin{table}[h]
-	\centering
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
-			\hline
-			Object classified & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Total remaining misclassifications (\%) \\ \hline
-			Person & 3.22 & 1.02 & 0.79 & 2.99 \\ \hline
-			Vehicle & 9.20 & 7.25 & 0.53 & 2.48 \\ \hline
-			Sign & 33.30 & 27.65 & 2.71 & 8.37 \\ \hline
-			Nothing & 6.81 & 6.12 & 0.09 & 0.79 \\ \hline
-			All & 52.54 & 42.04 & 4.13 & 14.62 \\ \hline
-		\end{tabular}%
-	}
-	\caption{Table showing the best results of the \ac{AV} prediction \ac{SNN} using perturbed images, trained for 700 epochs}
-	\label{tbl:sign-respertbest}
+	\caption{Table showing the results of the \ac{AV} prediction \ac{SNN}}
+	\label{tbl:sign-resultsfull}
 \end{table}
 
 \begin{figure}[t]
 	\centering
-	\scalebox{1}{\input{Content/fig/sign-graph.tex}}
+	\scalebox{0.9}{\input{Content/fig/sign-graph-acc.tex}}
+	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{MNN} \label{fig:sign-graph_acc}}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+	\scalebox{0.9}{\input{Content/fig/sign-graph.tex}}
 	\caption{Line graph showing the performance of the system trained over an increasing amount of epochs using unperturbed inputs \label{fig:sign-graph}}
 \end{figure}
 
 \begin{figure}[t]
 	\centering
-	\scalebox{1}{\input{Content/fig/sign-graphpert.tex}}
+	\scalebox{0.9}{\input{Content/fig/sign-graphpert.tex}}
 	\caption{Line graph showing the number of misclassifications made by the system with perturbed inputs \label{fig:sign-graphpert}}
 \end{figure}
 
 \begin{figure}[t]
 	\centering
-	\scalebox{1}{\input{Content/fig/sign-graphboth.tex}}
+	\scalebox{0.9}{\input{Content/fig/sign-graphboth.tex}}
 	\caption{Line graph showing the number of misclassifications made by the system with all inputs \label{fig:sign-graphboth}}
 \end{figure}
 
-%\todo{Add results for multiple epochs}
 %\todo{Add table showing how \ac{MNN} affects the prediction accuracy}
-%\todo{Train ANN to run in place of the enforcer (i.e. decision making) and enforce it. Compare to original enforced system.}
+
+\subsection{An \ac{AV} System Using \acf{MNN2C}}
+\ac{MNN2C}, introduced in Section~\ref{sec:mnn2c}, creates time-predictable, modular \acfp{MNN} for C from existing Keras (with Tensorflow) trained \acp{ANN}. 
+This compiler makes implementing \acfp{SNN} in C easy and safe.
+For the purposes of testing and demonstration, the complex \ac{MNN} used in this chapter, shown in Figure~\ref{fig:mnn}, was trained in Python, using Keras and the exact same images used to train the original system.
+This \ac{MNN} was then described in the \ac{MNN2C} format, and modular C code was generated to initialise, run and incorporate the \ac{MNN}.
+To show the efficacy of \ac{MNN2C}, the generated \ac{MNN} was implemented in an identical system to the original, and run with the same tests. 
+It has already been shown that \ac{MNN2C} generates outputs identical to the Keras trained \acp{ANN} with a one hundred-thousandth tolerance, so the output of each individual \ac{ANN} is not being tested, rather that the system as a whole runs as the original does.
+Additionally, the time-predictable \ac{MNN} was run through the Patmos \ac{WCET} tool in order to get the \ac{WCET} and \ac{WCRT} of the \ac{MNN}.
+
+\subsubsection{Results of an \ac{MNN2C} Generated \ac{AV} System}
+\begin{table}[h]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|p{0.17\linewidth}||p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|}
+			\hline
+			Epochs trained & No. of misclassifications (\%) & Caught misclassifications (\%) & False negatives (\%) & Uncaught misclassifications (\%) \\ \hline
+			\multicolumn{5}{|l|}{Original Inputs} \\ \hline
+			100 & 25.01 & 24.22 & 17.50 & 18.29 \\ \hline
+			\multicolumn{5}{|l|}{Perturbed Inputs} \\ \hline
+			100 & 41.95 & 39.61 & 21.44 & 23.78 \\ \hline 
+		\end{tabular}%
+	}
+	\caption{Table showing the results of the \ac{AV} prediction \ac{SNN}}
+	\label{tbl:sign-resultsfullmnn2c}
+\end{table}
+
+Wcet: 0.02034 + 0.20536 + 2.89764 + 47254 ms
+WCET: 47 s
+Meas: 0.21 s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
