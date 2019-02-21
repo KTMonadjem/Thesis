@@ -4,11 +4,23 @@ Introduce the concept of safety critical, CPS. What makes a system safety critic
 \section{Artificial Neural Networks}
 Introduce AI, more specifically ANNs. What they can do?
 
-%\section{Synchronous Programming}
-%What are synchronous languages, why are they used, where are they used?
-
 \section{Contribution}
 Creating methods of implementing ANNs in safety critical systems using synchronous semantics.
 
 \section{Thesis Structure}
-...?
+Chapter 2 gives a basic understanding of the concepts required to understand this research towards safe \acp{ANN} for \ac{CPS}.
+
+Chapter 3 introduces the concept of \acfp{SANN} and their timing properties.
+Formal definitions of \acp{SANN} and their related components are provided in this chapter.
+Furthermore, the combinations of these \acp{SANN} and the usefulness of such in \ac{CPS} is discussed.
+A new compiler to create these \acp{SANN} from Python code is also introduced.
+
+Chapter 4 introduces the concept of \acf{RE} in combination with \acp{SANN}. 
+This chapter also provides formal definitions for the combination of \acp{SANN} and \ac{RE} by expanding the definitions introduced in Chapter 3.
+An \acf{AV} case study is made for this chapter.
+
+Chapter 5 provides two different methods, used in tandem, to increase the safety of systems with complex inputs, such as object detection for \acp{AV}.
+The first method is the use of \acp{MNN} to increase the classification accuracy of \acp{SANN}.
+The second expands on Chapter 5, and introduces the use of \acf{RV} to increase the safety of system where \ac{RE} is impossible.
+Results are presented using another \ac{AV} system case study.
+
