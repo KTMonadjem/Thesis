@@ -229,13 +229,6 @@
   Keywords                 = {IEC Standards;Security;Smart grids;Substations;Transient analysis;GOOSE;IEC 61850;IEC 62351;Implementation attack;SMV;distribution automation;power system communication;smart grid;substation automation}
 }
 
-@TechReport{RuntimeAssuranceForComplexCPS,
-  Title                    = {A study on run time assurance for complex cyber physical systems},
-  Author                   = {Clark, Matthew and Koutsoukos, Xenofon and Porter, Joseph and Kumar, Ratnesh and Pappas, George and Sokolsky, Oleg and Lee, Insup and Pike, Lee},
-  Institution              = {Air Force Research Laboratory, Vanderbilt University, Iowa State University, University of Pennsylvania, Galois Inc.},
-  Year                     = {2013}
-}
-
 @InProceedings{FIDEAnFMIIntegratedDevelopmentEnvironment,
   Title                    = {FIDE: An FMI Integrated Development Environment},
   Author                   = {Cremona, Fabio and Lohstroh, Marten and Tripakis, Stavros and Brooks, Christopher and Lee, Edward A.},
@@ -412,23 +405,6 @@
   Doi                      = {10.1109/TII.2011.2174248},
   ISSN                     = {1551-3203},
   Keywords                 = {computer aided engineering;control engineering computing;design engineering;formal verification;industrial control;production engineering computing;programmable controllers;MathML;PLCopen;complex automation application design;computer aided engineering exchange;domain languages;engineering tools;industrial control systems;model checking;model collaboration;model driven engineering;model-based validation;safe control systems;tool integration;trustworthy control systems;Automation;IEC standards;Mathematical model;Object oriented modeling;Semantics;Unified modeling language;XML;AutomationML;CAEX;IEC 61131-3;Industrial control systems;MathML;PLCopen;model driven engineering}
-}
-
-@InProceedings{AirplaneWcet,
-  Title                    = {Reliable and Precise {WCET} Determination for a Real-Life Processor},
-  Author                   = {Ferdinand, Christian
- and Heckmann, Reinhold
- and Langenbach, Marc
- and Martin, Florian
- and Schmidt, Michael
- and Theiling, Henrik and Thesing, Stephan
- and Wilhelm, Reinhard},
-  Booktitle                = {Embedded Software: First International Workshop, EMSOFT 2001 Tahoe City, CA, USA, October 8--10, 2001 Proceedings},
-  Year                     = {2001},
-  Pages                    = {469--485},
-
-  Doi                      = {10.1007/3-540-45449-7_32},
-  ISBN                     = {978-3-540-45449-6}
 }
 
 @InProceedings{IEC61499Approaches,
@@ -864,19 +840,6 @@ and Walker, David},
   Author                   = {Liu, Isaac Suyu},
   School                   = {University of California at Berkeley},
   Year                     = {2012}
-}
-
-@InProceedings{RTOSWCET,
-  Title                    = {A Survey of {WCET} Analysis of Real-Time Operating Systems},
-  Author                   = {M. Lv and N. Guan and Y. Zhang and Q. Deng and G. Yu and J. Zhang},
-  Booktitle                = {Embedded Software and Systems, 2009. ICESS '09. International Conference on},
-  Year                     = {2009},
-  Month                    = {May},
-  Pages                    = {65-72},
-
-  Abstract                 = {Timing correctness of hard real-time systems is guaranteed by schedulability analysis and worst-case execution time (WCET) analysis of programs. Traditional WCET analysis mainly deals with application programs and has achieved success in industry. Timing analysis of application programs along cannot guarantee correctness of complete systems consisting RTOS. WCET tools designed for application program analysis have been applied to analyze RTOS routines by several research groups, but poor WCET estimations have been reported. Timing analysis of real-time systems considering both applications and RTOS has not been fully studied. So we intend to give a survey of related work on WCET analysis of RTOS. By summarizing previous work, challenges of WCET analysis of complete real-time systems are presented, and some possible further research potentials are unleashed.},
-  Doi                      = {10.1109/ICESS.2009.24},
-  Keywords                 = {operating systems (computers);scheduling;systems analysis;WCET tools;program analysis;real-time operating systems;schedulability analysis;worst-case execution time analysis;Educational programs;Educational technology;Embedded software;Information analysis;Job shop scheduling;Operating systems;Real time systems;Research and development;Technological innovation;Timing;RTOS;WCET;static analysis;survey}
 }
 
 @InProceedings{SecurityChallengesCPSIoT,
@@ -3301,8 +3264,8 @@ and Walker, David},
 	and Kochenderfer, Mykel J.",
 	editor="Majumdar, Rupak
 	and Kun{\v{c}}ak, Viktor",
-	title={Reluplex: An Efficient SMT Solver for Verifying Deep Neural Networks",
-	booktitle="Computer Aided Verification},
+	title={Reluplex: An Efficient SMT Solver for Verifying Deep Neural Networks},
+	booktitle={Computer Aided Verification},
 	year="2017",
 	publisher="Springer International Publishing",
 	address="Cham",
@@ -3372,46 +3335,36 @@ and Walker, David},
 	month={Dec},
 }
 
-@Article{editautomata,
-	author="Ligatti, Jay
-	and Bauer, Lujo
-	and Walker, David",
-	title="Edit automata: enforcement mechanisms for run-time security policies",
-	journal="International Journal of Information Security",
-	year="2005",
-	month="Feb",
-	day="01",
-	volume="4",
-	number="1",
-	pages="2--16",
-	abstract="We analyze the space of security policies that can be enforced by monitoring and modifying programs at run time. Our program monitors, called edit automata, are abstract machines that examine the sequence of application program actions and transform the sequence when it deviates from a specified policy. Edit automata have a rich set of transformational powers: they may terminate an application, thereby truncating the program action stream; they may suppress undesired or dangerous actions without necessarily terminating the program; and they may also insert additional actions into the event stream.",
-	issn="1615-5270",
-	doi="10.1007/s10207-004-0046-8",
-	url="https://doi.org/10.1007/s10207-004-0046-8"
-}
-
 @article{recps,
-	author = {Pinisetty, Srinivas and Roop, Partha and Smyth, Steven and Allen, Nathan and Tripakis, Stavros and von Hanxleden, Reinhard},
-	year = {2017},
-	month = {09},
-	pages = {1-25},
+	author = {Pinisetty, Srinivas and Roop, Partha S. and Smyth, Steven and Allen, Nathan and Tripakis, Stavros and Hanxleden, Reinhard Von},
 	title = {Runtime Enforcement of Cyber-Physical Systems},
+	journal = {ACM Trans. Embed. Comput. Syst.},
+	issue_date = {October 2017},
 	volume = {16},
-	booktitle = {ACM Transactions on Embedded Computing Systems}
-}
+	number = {5s},
+	month = sep,
+	year = {2017},
+	issn = {1539-9087},
+	pages = {178:1--178:25},
+	articleno = {178},
+	numpages = {25},
+	url = {http://doi.acm.org/10.1145/3126500},
+	doi = {10.1145/3126500},
+	acmid = {3126500},
+	publisher = {ACM},
+	address = {New York, NY, USA},
+	keywords = {Automata, Cyber-Physical Systems, Runtime Enforcement, Runtime Monitoring, SCCharts, Synchronous Programming, Timed Properties},
+} 
 
-@proceeding{safe-enforce-auto,
-	author = { Dionisio  de Niz,Bjorn  Andersson,Gabriel  Moreno},
-	title = {Safety enforcement for the verification of autonomous systems},
-	journal = {Proc.SPIE},
-	volume = {10643},
-	number = {},
-	pages = {10643 - 10643 - 10},
-	abstract = {Verifying that the behavior of an autonomous systems is safe is fundamental for safety-critical properties like preventing crashes in autonomous vehicles. Unfortunately, exhaustive verification techniques fail to scale to the size of real-life systems. Moreover, these systems frequently use algorithms whose runtime behavior cannot be determined at design time (e.g., machine learning algorithms). This presents another problem given that these algorithms cannot be verified at design time. Fortunately, a technique known as runtime assurance can be used for these cases. The strategy that runtime assurance uses to verify a system is to add small components (known as enforcers) to the system that monitor its output and evaluate whether the output is safe or not. If the output is safe, then the enforcer lets it pass; if the output is unsafe, the enforcer replaces it with a safe output. For instance, in a drone system that must be restricted to fly within a constrained area (a.k.a. geo-fence) an enforcer can be used to monitor the movement commands to the drone. Then, if a movement command keeps the drone within the geo-fence, the enforcer lets it pass, but if the command takes the drone outside of this area, the enforcer replaces it with a safe command (e.g., hovering). Given that enforcers are small components fully specified at design time, it is possible to use exhaustive verification techniques to prove that they can keep the behavior of the whole system safe (e.g., the drone flying within the geo-fence) even if the system contains unverified code.},
+@inproceedings{safe-enforce-auto,
+	author = {de Niz, Dionisio and Andersson, Bjorn and Moreno, Gabriel},
 	year = {2018},
+	month = {05},
+	pages = {2},
+	title = {Safety enforcement for the verification of autonomous systems},
+	booktitle = {Proc. (SPIE) Vol. 10643: Autonomous Systems: Sensors, Vehicles, Security, and the Internet of Everything},
 	doi = {10.1117/12.2307575},
-	URL = {https://doi.org/10.1117/12.2307575},
-	eprint = {}
+	abstract = {Verifying that the behavior of an autonomous systems is safe is fundamental for safety-critical properties like preventing crashes in autonomous vehicles. Unfortunately, exhaustive verification techniques fail to scale to the size of real-life systems. Moreover, these systems frequently use algorithms whose runtime behavior cannot be determined at design time (e.g., machine learning algorithms). This presents another problem given that these algorithms cannot be verified at design time. Fortunately, a technique known as runtime assurance can be used for these cases. The strategy that runtime assurance uses to verify a system is to add small components (known as enforcers) to the system that monitor its output and evaluate whether the output is safe or not. If the output is safe, then the enforcer lets it pass; if the output is unsafe, the enforcer replaces it with a safe output. For instance, in a drone system that must be restricted to fly within a constrained area (a.k.a. geo-fence) an enforcer can be used to monitor the movement commands to the drone. Then, if a movement command keeps the drone within the geo-fence, the enforcer lets it pass, but if the command takes the drone outside of this area, the enforcer replaces it with a safe command (e.g., hovering). Given that enforcers are small components fully specified at design time, it is possible to use exhaustive verification techniques to prove that they can keep the behavior of the whole system safe (e.g., the drone flying within the geo-fence) even if the system contains unverified code.}
 }
 
 @inproceedings{runtime-monitor,
@@ -3638,18 +3591,4 @@ and Walker, David},
 	Author                   = {Clark, Matthew and Koutsoukos, Xenofon and Porter, Joseph and Kumar, Ratnesh and Pappas, George and Sokolsky, Oleg and Lee, Insup and Pike, Lee},
 	Institution              = {Air Force Research Laboratory, Vanderbilt University, Iowa State University, University of Pennsylvania, Galois Inc.},
 	Year                     = {2013}
-}
-
-@proceeding{safe-enforce-auto,
-	author = { Dionisio  de Niz,Bjorn  Andersson,Gabriel  Moreno},
-	title = {Safety enforcement for the verification of autonomous systems},
-	journal = {Proc.SPIE},
-	volume = {10643},
-	number = {},
-	pages = {10643 - 10643 - 10},
-	abstract = {Verifying that the behavior of an autonomous systems is safe is fundamental for safety-critical properties like preventing crashes in autonomous vehicles. Unfortunately, exhaustive verification techniques fail to scale to the size of real-life systems. Moreover, these systems frequently use algorithms whose runtime behavior cannot be determined at design time (e.g., machine learning algorithms). This presents another problem given that these algorithms cannot be verified at design time. Fortunately, a technique known as runtime assurance can be used for these cases. The strategy that runtime assurance uses to verify a system is to add small components (known as enforcers) to the system that monitor its output and evaluate whether the output is safe or not. If the output is safe, then the enforcer lets it pass; if the output is unsafe, the enforcer replaces it with a safe output. For instance, in a drone system that must be restricted to fly within a constrained area (a.k.a. geo-fence) an enforcer can be used to monitor the movement commands to the drone. Then, if a movement command keeps the drone within the geo-fence, the enforcer lets it pass, but if the command takes the drone outside of this area, the enforcer replaces it with a safe command (e.g., hovering). Given that enforcers are small components fully specified at design time, it is possible to use exhaustive verification techniques to prove that they can keep the behavior of the whole system safe (e.g., the drone flying within the geo-fence) even if the system contains unverified code.},
-	year = {2018},
-	doi = {10.1117/12.2307575},
-	URL = {https://doi.org/10.1117/12.2307575},
-	eprint = {}
 }

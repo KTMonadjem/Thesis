@@ -11,13 +11,10 @@
 %\input{glyphtounicode}
 %\pdfgentounicode=1
 
-\include{preamble}
-\include{macros}
-
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath}
-%\usepackage{amsfonts}
+\usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage[export]{adjustbox}
@@ -78,6 +75,9 @@
     hidelinks
 }
 \usepackage{bookmark}
+
+\include{preamble}
+\include{macros}
 
 \newbox\subfigbox
 \makeatletter
@@ -150,7 +150,7 @@
 \author{Keyan Themba Monadjem}
 \department{Electrical \& Computer Engineering}
 \submitdate{February 2019}
-\supervisor[Dr. Partha S. Roop]
+\supervisor[Dr. Partha S. Roop]{}
 
 %create the title page
 \maketitle
@@ -158,10 +158,12 @@
 %%%%%%%%%%%%% First section %%%%%%%%%%%%%%%
 \frontmatter
 \bookmark[page=3]{Abstract}
-\include{Content/abstract}
+\input{Content/abstract}
+
+\renewcommand{\abstractname}{Acknowledgements}
 
 \bookmark[page=5]{Acknowledgements}
-\include{Content/acknowledgements}
+\input{Content/acknowledgements}
 
 %create table of contents
 \bookmark[page=7]{Contents} % Sets a PDF bookmark for the contents page
