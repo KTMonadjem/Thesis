@@ -1,7 +1,7 @@
 \section{Results of the Runtime Verified AV System}
 
 This research provides a solution for two aspects of \acf{AV} systems: predicting accurately with perturbations to the system's inputs and safely dealing with misclassifications by the system.
-The issue of input perturbations was addressed using a \acf{SNN} of different convolutional \acfp{SCNN}, each \ac{SCNN} working in tandem to predict more accurately.
+The issue of input perturbations was addressed using a \acf{SNN} of different convolutional \acfp{SANN}, each \ac{SANN} working in tandem to predict more accurately.
 Misclassification by the system's controller was addressed by implementing sensor fusion between cameras and \ac{LiDAR}.
 This was done using a run-time enforcer that enforced a safety automaton.
 
@@ -15,7 +15,7 @@ This same table show that when the inputs are perturbed, the enforcer picks up m
 Where input perturbations are concerned, the enforcer responds even better and picks up the majority of the total misclassifications.
 Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, showing that the enforcer performs even better under more unpredictable circumstances.
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{|p{0.2\linewidth}||p{0.2\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|}

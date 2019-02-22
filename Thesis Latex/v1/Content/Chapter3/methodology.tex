@@ -7,16 +7,16 @@ The architecture of the system used can be seen in Figure~\ref{fig:ssnn}.
 
 \subsection{Architecture of a Traffic Sign Recognition AV System}
 Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{SNN}, containing three other \ac{SNN} ensembles, was created.
-A \ac{SNN} is structure containing at least one \acf{SSNN}~\cite{sann} synchronously combined with any number of other functional blocks~\cite{sann}.
+A \ac{SNN} is structure containing at least one \acf{SNN}~\cite{sann} synchronously combined with any number of other functional blocks~\cite{sann}.
 Each of the three \ac{SNN} ensembles were used to classify shape, colour and object type of each object being output by the camera.
-Each ensemble synchronously combined the outputs of three different convolutional \acp{SSNN}, providing increased prediction accuracy for shape, colour and object type. 
-Each \ac{SSNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
+Each ensemble synchronously combined the outputs of three different convolutional \acp{SNN}, providing increased prediction accuracy for shape, colour and object type. 
+Each \ac{SNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
 Synchronous programming guarantees code that is deterministic, causal and bounded.
 Additionally, the calculation of \acf{WCET} and \acf{WCRT} is enabled by using Esterel with C.
 These ensembles ran in synchronous concurrency with each other, forming a single, larger \ac{SNN}. 
 The outputs of each ensemble were then combined into a batch of outputs forming the \textit{predicted output}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/MNN.pdf}
 	\caption{Block diagram showing the \acf{SNN} ensemble} \label{fig:mnn}
@@ -46,7 +46,7 @@ A diagram of the enforced policy's safety automaton is shown in Figure~\ref{fig:
 		\item $V$: Misclassification of a vehicle.
 		\item $N$: Classification of an object when there is nothing.
 		\item $S$: Misclassification of a traffic sign.
-		\item $C$: Confidence rating of the \ac{SSNN} classification.
+		\item $C$: Confidence rating of the \ac{SNN} classification.
 		\item $t$: Timer for the unstable state.
 	\end{itemize}
 	

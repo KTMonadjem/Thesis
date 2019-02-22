@@ -1,18 +1,10 @@
-\section{Conclusions}
+\section{Discussion}
 \label{sec:conclusion}
 
 In this work, we have presented an approach for synchronous composition of \acf{RE} with \acfp{ANN} for \acp{CPS} by defining \acfp{SNN}.
 Our \acp{SNN} demonstrate that policies specifying safe I/O behaviours for \acp{ANN} can be enforced.
 These enforced policies are shown to increase the safety and efficiency of the systems within which they are placed, without adding a large overhead to the system and without decreasing the functionality of the system.
 In the three case studies presented, the \ac{RE} added an average overhead of just 6.035\%, but the efficiency and safety of each system was increased by an amount that rendered the overhead negligible.
-
-\subsection{Future Work}
-
-In this chapter, a single enforcer was used in each benchmark.
-While this was shown to be largely effective, this is not the limit to which \ac{RE} can be used in these \acp{SNN}.
-In this work, we did not fully examine the enforcement of multiple networks in a meta-neural network (i.e. each network with its own enforcer).
-Examining compositions of synchronous neural networks with their enforcers could lead to more capable systems that are still safe. 
-Approaches such as using \ac{RE} during the training of \acp{SANN} has yet to be explored, and \ac{RE} between layers of individual \acp{SANN} has also yet to be explored.
 
 
 
