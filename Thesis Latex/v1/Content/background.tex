@@ -1,3 +1,11 @@
+This chapter provides an overview of \acfp{ANN}, synchronous programming and \acf{RE}.
+This chapter starts with an introduction on \acp{ANN}, their structure and their value in \acp{CPS}.
+The aim is to provide a general understanding to the functionality of \acp{ANN} and their safety regarding \acp{CPS}.
+The next section briefly introduces synchronous programming, and highlights Esterel as the language of choice for this thesis. 
+And example of an Esterel program is given, with a quick run-down of how it functions and its syntax.
+Finally, \ac{RE} is introduced as a safety mechanism for \acp{CPS}.
+A brief background to \ac{RE} and its combination with \acp{ANN} is discussed.
+
 \section{Artificial Neural Networks}
 \subsection{Machine Learning}
 \acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio temporal patterns~\cite{rolston2007precisely}. 
@@ -20,7 +28,6 @@ These operate in a step by step manner, where the operation in the current time 
 These are similar to \acp{ANN} such that they are composed of multiple layers, each providing inputs to the following layer. 
 However, \acp{CNN} have more complex neurons than \acp{MLP}, with varying types of layers such as convolutional layers, pooling layers and dense layers.
 A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
-
 
 \begin{figure}
 	\centering
@@ -162,7 +169,7 @@ It will be able to detect unsafe inputs/outputs to/from the controller and allow
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/ESS-RE.pdf}
-	\caption{Example \ac{RE} \label{fig:re}}
+	\caption{Example of \ac{RE} \label{fig:re}}
 \end{figure}
 
 \subsection{Runtime Enforcement of \acp{ANN}}
@@ -182,10 +189,10 @@ Additionally, the case study involves a robot controlled by an automaton, not a 
 This chapter covers the basics of the concepts introduced in this thesis.
 
 A description of what \acp{ANN} are, their functionality and their safety properties is given.
+The structure of various \acp{ANN} is shown and briefly described.
 
 The basics of synchronous programming is given, while Esterel is described in more detail.
 A complete example of an Esterel program is given, with a description of how it works.
 
 Finally, dynamic verification is discussed as a technique to verify autonomous systems.
-
-\todo{MORE IMAGES PLEASE}
+\ac{RE} is introduced as a valid technique to dynamically verifying the properties of \ac{CPS}.

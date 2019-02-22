@@ -1,13 +1,52 @@
-\section{Cyber-Physical Systems}
-\acp{CPS} use a set of controllers that are distributed across a network for the 
-control of physical processes~\cite{alur2015principles}. \ac{CPS} applications encompass real-time systems, where 
-the system needs to satisfy a set of timing requirements to ensure correct operation. Examples include autonomous vehicles and
-smart power grids. Here, a missed deadline may result in catastrophic consequences, making these \acp{CPS} highly 
-\textit{safety-critical}. 
+\section{\acfp{CPS}}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{Content/fig/1234.png}
+	\caption{Examples of \acp{CPS} \label{fig:cps}}
+\end{figure}
+
+A \acfp{CPS} is a system controlled by software, where the software and hardware of the system are tightly integrated~\cite{cps-design}.
+\acp{CPS} use a set of controllers that are distributed across a network for the control of physical processes~\cite{alur2015principles}. 
+\ac{CPS} encompass a wide variety of disciplines, from mechatronics to civil infrastructure, some of these illustrated in Figure~\ref{fig:cps}.
+\ac{CPS} operate in the physical world, where environments can be unpredictable and uncontrolled.
+This introduces safety concerns for the \ac{CPS}; the hardware must be predictable and reliable and the software must be predictable and reliable.
+This thesis focuses on the software requirements for \ac{CPS}.
+
+\ac{CPS} applications encompass real-time systems, where the system needs to satisfy a set of timing requirements to ensure correct operation. 
+Here, a missed deadline may result in catastrophic consequences, making these \acp{CPS} highly \textit{safety-critical}. 
 These have strict timing and functionality requirements --- any errors in control can result in physical damage, injuries, and/or fatalities~\cite{ANNDevModel1999}. 
 
-\section{Artificial Neural Networks}
 
+\section{\acf{AI} and \acf{ML}}
+\acf{ML} is a field of data science where \acf{AI} are taught to learn large and/or complex data relationships~\cite{ai}.
+\ac{AI} come in many shapes and forms, from decision trees to \acfp{ANN}~\cite{ai-types}.
+\ac{AI} were invented to fill a gap that humans cannot, where they can store a huge number of data relationships and learn new relationships where a person would struggle.
+\ac{AI} are used all over industry, from industrial systems, so cybernetics and robotics (such as Figure~\ref{fig:ai-girl}).
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.5\textwidth]{Content/fig/ai-girl.png}
+	\caption{Robotics are a common source of \ac{AI} \label{fig:ai-girl}}
+\end{figure}
+
+\ac{AI} are increasingly used in \ac{CPS}, where safety is critical.
+However, the nature of \ac{AI} is non-linear, leaving many \ac{AI} hard to verify and validate.
+Additionally, as \ac{AI} adapt to learn larger data sets and more complex relationships, the size and complex of the \acp{AI} increase.
+Some of these \ac{AI} are susceptible to verification and validation techniques, however, as they grow in size, these techniques take longer and more resources to implement.
+In \ac{CPS}, it is essential for all components to be verified and validated, and thus the issue with \ac{AI} in \acp{CPS} is made clear.
+
+\subsection{\acfp{ANN}}
+\acp{ANN} are a type of \ac{AI} designed to model the human brain~\cite{kohonen1988introduction}.
+The resulting \ac{AI} are generally large and complex.
+They are composed of interconnected artificial neurons, each passing messages along to the next, and can be represented mathematically by a long, non-linear equation.
+They are able to store large and complex data relationships, like their biological counterpart.
+The result of this is that \acp{ANN} are extremely difficult to verify or validate.
+
+\acp{ANN} are often used in big data, but also show up in \ac{CPS} such as \acfp{AV}.
+Their use in \ac{CPS} is highly contended, as \acp{ANN} are not 100\% reliable and accidents happen~\cite{coldewey_2018}.
+Thus, it is of utmost importance that any \ac{ANN} used in any \ac{CPS} is able to verified to be safe for that system in \textit{any} environment.
+Without that guarantee of safety, the use of \ac{AI} in such systems is risky.
+There exists a large body of research towards the safety of \acp{ANN}, but there are still opportunities for new approaches to safe \acp{ANN} to emerge.
 
 \section{Contribution}
 This thesis provides novel techniques to the verification and validation of \acfp{ANN} in \acfp{CPS}.
