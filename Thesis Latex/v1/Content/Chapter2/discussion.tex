@@ -1,10 +1,38 @@
 \section{Discussion}
 \label{sec:conclusion}
 
-In this work, we have presented an approach for synchronous composition of \acf{RE} with \acfp{ANN} for \acp{CPS} by defining \acfp{SNN}.
-Our \acp{SNN} demonstrate that policies specifying safe I/O behaviours for \acp{ANN} can be enforced.
+In this work, we have presented an approach for synchronous composition of \acf{RE} with \acfp{SNN} for \acp{CPS}.
+Our case study and benchmarks demonstrate that policies specifying safe I/O behaviours for \acp{ANN} can be enforced.
 These enforced policies are shown to increase the safety and efficiency of the systems within which they are placed, without adding a large overhead to the system and without decreasing the functionality of the system.
 In the three case studies presented, the \ac{RE} added an average overhead of just 6.035\%, but the efficiency and safety of each system was increased by an amount that rendered the overhead negligible.
+
+The \ac{AV} system, when using \ac{RE} to enforce some safety policies, showed a large increase in safety.
+Without the enforcer, at best the system was able to run for 73 ticks before an accident occurred, according to Table~\ref{table:avenf}.
+At lower epochs of training, the system was able to run for at most 3 ticks before an accident occurred.
+However, when the enforcer was implemented, the system was able to run for up to 97 ticks before an accident occurred.
+At it's worst trained epoch, the system was still able to run for 58 ticks.
+
+Table~\ref{table:avenf} also shows that the number of the accidents over all runs in the system decreased as the system was trained, even with the enforcer in place.
+An untrained \ac{SNN} would have an accident on 75\% of the runs, while the same \ac{SNN} trained for 100,000 epochs would only have an accident 57\% of the time.
+This shows that the enforcer, while increasing the safety of the system, does so proportionally to the level of training of the \ac{SNN} it is monitoring.
+
+As the \ac{SNN} was trained, it exhibited more careful behaviour; the vehicles average speed decreased at and the vehicle performed more braking actions than necessary.
+Even with the enforcer in place, the speed decreased in proportion with the number of epochs trained, while the vehicle still braked unnecessarily.
+
+While the enforcer allowed the vehicle to drive safely for longer periods of time, it did not decrease the number of incidents in the system proportionally to the time the vehicle stayed safe.
+Likewise, the enforcer did not result in the vehicle driving at a reasonable speed.
+With or without the enforcer, the vehicle braked more often and drove more slowly.
+We can conclude that the enforcer did efficiently increase the safety of the system by our given measurement, however other safety aspects of the system were not addressed to the same level.
+This shows that the amount of training the \ac{SNN} has is relevant, enforcer or no.
+
+The \ac{ESS} (Table~\ref{table:essres}) showed that the enforcer increased safety by preventing dangerously low \acf{SoC}.
+However, with RABBIT game (Table~\ref{table:rabbitres}) the enforcer increased the efficiency of the players in the game, as the game had no safety requirements.
+
+
+
+
+
+
 
 
 

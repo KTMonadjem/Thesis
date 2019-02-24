@@ -1,36 +1,61 @@
-\section{Defining Runtime Enforced Synchronous Neural Networks}
+\section{Defining Safety Specifications for Synchronous Neural Networks}
 \label{sec:definitions}
 
-\subsection{\ac{VDTA}: Defining Safety Policies for \ac{CPS}}
+We propose the use of bi-directional run-time enforcers~\cite{recps} to enforce the I/O events of \acp{SNN} at run-time.
+In order to specify the safety policies Pinisetty et al define \acf{DTA}~\cite{recps}.
+These \ac{DTA} can enforce binary events at run-time using \textit{edit functions}~\cite{recps}.
+To enforce the policy $\varphi$, the run-time enforce must satisfy some constraints: soundness, monotonicity, instantaneity, transparency and causality.
+The enforcers by \cite{recps} were proved to satisfy all above constraints.
 
-\ignore{
-We consider our industrial \ac{CPS} systems to have finite ordered sets of input values ${I} = \{{i_1}, {i_2}, \ldots {i_n}\}$ and output values ${O} = \{{o_1}, {o_2}, \ldots {o_n}\}$, where input and output values ${i_n}$ and ${o_n}$ are typed finite binary values.
-However, for the purpose of the \ac{AV} case study used in this chapter, the input and output values ${i_n}$ and ${o_n}$ are fixed-point values, taking the form of 32-bit signed integer values.
-The input alphabet is ${\Sigma_I} = 32^{{I}}$, i.e. the set made of all possible input value sets; and the output alphabet ${\Sigma_O} = 32^{{O}}$ is likewise the set made of all possible output value sets.
-Finally, the input-output alphabet ${\Sigma} = {\Sigma_I} \times {\Sigma_O}$. 
-Each input and output event is denoted as a complete set of values, and an input-output event or reaction is of the form $({x_i}, {y_i})$, where ${x_i} \in {\Sigma_I}$ and ${y_i} \in {\Sigma_O}$. 
+However, with the complex I/O of \acp{SNN}, an enforcer that edits only binary events is not sufficient.
+Additionally, the edit functions introduced by \cite{recps} are not sufficient with more complex \ac{DTA}.
 
-\begin{example}
-	\label{ex:io}
-	Within our \ac{AV} braking example, using the \ac{VDTA} defined by the $\mathcal{V}_{ped}$ safety policy represented by Figure~\ref{fig:avpedrte}, let ${I} = \{{O_2}, {O_5}, {O_{2_v}}, {O_{5_v}}, {S}\}$ which are 32-bit signed integers representing objects 2 and 5 in the system, their velocities and the speed of the vehicle respectively.
-	Then, let the output ${O} = \{{D}\} = \{{\langle A, B_S, B_H \rangle}\}$, where ${D}$ is a vector of signed 32-bit integers, representing the \textit{decision} (action) taken by the vehicle this tick (\textit{Accelerate}, \textit{Soft Brake} and \textit{Hard Brake}).
-	
-	Then the input-output event ${O_2}=65536$, ${O_5}=0$, ${O_{2_v}} = 655360$, ${O_{5_v}} = 0$,  ${S} = 4063232$, ${D} = \langle 0, 0, 65536 \rangle$ is denoted as:\\$(\{65536, 0, 655360, 0, 4063232\}, \{\langle 0, 0, 65536 \rangle\})$ where each value is a fixed-point (32-bit signed integer) representation of a floating point value, i.e. Object 2 is a pedestrian, Object 5 is nothing, Object 2 is travelling at 10 km/h, Object 5 is not moving, and the vehicle's speed is 62 km/h, while the decided action for this tick is hard braking ($B_H$).
-\end{example}
-}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{Content/Fig/RE.pdf}
+	\caption{Run-time enforcer between a \ac{SNN} and the \acf{AV} \label{fig:re}}
+\end{figure}
 
+Consider Figure~\ref{fig:re}, we wish to enforce the inputs and outputs events of the \ac{SNN}, defined by some safety policy $\varphi$.
+However, the outputs from the \ac{SNN} are 32-bit integer values, i.e. we cannot use a \ac{DTA} to to specify the safety policies for this \acp{SNN}.
+We propose the use of \acfp{VDTA} to enforce valued I/O events of \acp{SNN}. 
 
+\subsection{\acf{VDTA}: Defining Safety Policies for \ac{CPS}}
 
 We consider our industrial \ac{CPS} systems to have finite ordered sets of valued input channels ${I} = \{{i_1}, {i_2}, \ldots {i_n}\}$ and valued output channels ${O} = \{{o_1}, {o_2}, \ldots {o_n}\}$.
 
-
-
-A VDTA can be seen as a DTA with finite set of locations, and a finite set of discrete clocks used to represent time evolution, extended with internal variables and external input (resp. output channels) called as external variables used for representing system data.
+A VDTA can be seen as a DTA with a finite set of locations, a finite set of discrete clocks used to represent time evolution, and external input (resp. output channels) called ``external variables'' which are used for representing system data.
+They also have internal variables which are used for internal computation, compared to the external variables which model the data carried by the actions from the monitored system (resp. environment). 
 In a VDTA, a transition consists of an action carrying values of external variables, a guard on internal variables, external variables and clocks, and an assignment of internal variables, and reset of clocks.
-In a VDTA, internal variables are used for internal computation, and
-external variables model the data carried by the actions from the monitored system (resp. environment). 
 %Thus, each input (resp. output channel) is considered as an external variable. 
 
+Before we look into the formal definition of VDTA, let us consider an example.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{avpedrte.tikz}
+	\caption{Safety Automaton for Policy $\mathcal{V}_{ped}$\label{fig:avpedrte}}
+\end{figure}
+
+\begin{example}
+	The case study can be presented by four, different \acp{VDTA}; $\mathcal{V}_{ped}$, $\mathcal{V}_{car}$, $\mathcal{V}_{drive}$ and $\mathcal{V}_{cnn}$, as depicted in Figures~\ref{fig:avpedrte}, \ref{fig:avcarrte}, \ref{fig:avdriverte} and \ref{fig:avcnnrte} respectively. 
+	For the purposes of these examples, the \ac{VDTA} for the pedestrian safety policy, $\mathcal{V}_{ped}$, is used.
+	This \ac{VDTA} specifies that driving towards a pedestrian in-front of the vehicle and not braking is a violation, and approaching a pedestrian from a distance and not starting to slow down is also violation.
+	I.e. taking any action which may endanger surrounding pedestrians is in violation to the safety policy.
+	
+	This is encoded as a \ac{VDTA} with a set of locations $L = \{l_{drive}, l_{brake}, l_v\}$ and accepting locations $F = \{l_{drive}\}$, with the initial state being $l_{drive}$.
+	The set of external variables $C = \{O_2, O_5, O_{2_v}, O_{5_v}, S, A, B_S, B_H\}$ are all 32-bit signed integers, where $O_2$, $O_5$, $O_{2_v}$, $O_{5_v}$ and $S$ are input channels and $A$, $B_S$ and $B_H$ are output channels.
+	The set of actions $\Sigma = \{tk(O_2, O_5, O_{2_v}, O_{5_v}, S, A, B_S, B_H)\}$, and the set of internal variables $V = \{T_{lim}\}$, where $T_{lim}$ is a 32-bit signed integer.
+	In the example, $\tau$ is a function with $O_2$, $O_5$, $O_{2_v}$, $O_{5_v}$ and $S$ as input parameters. 
+	
+	In this \ac{VDTA} there are two violation transitions, labelled \textcircled{a} and \textcircled{b} in Figure~\ref{fig:avpedrte}.
+	\textcircled{a} occurs when the vehicle does anything else other than braking when there is a pedestrian in-front or not braking when there is no pedestrian ahead of the vehicle.
+	\textcircled{b} can also occur when the vehicle has not braked enough within a certain period of time $T_{lim}$, or when the vehicle remains braking longer than is safe or necessary.
+	This represents the vehicle taking further unsafe actions when already in an unsafe state.
+\end{example}
+
+
+Let us now consider in more detail the formal syntax and semantics of VDTAs.
 %
 For a variable (resp. channel) $v$, ${\cal D}_v$ denotes its domain,
 and for a tuple of variables $V= (v_1, \ldots, v_n)$,
@@ -39,20 +64,16 @@ ${\cal D}_V$ is the product domain ${\cal D}_{v_1} \times \cdots \times {\cal D}
 A valuation of the variables in $V$
 is a mapping $\nu$ which maps every variable $v \in V$ to a value $\nu(v)$ in ${\cal D}_v$.
 %
-Let $X=\{x_1,\ldots, x_k\}$ be a finite set of integer variables (i.e., discrete clocks).
+Let $X=\{x_1,\ldots, x_k\}$ be a finite set of integer variables representing discrete clocks.
 %
 A {\em valuation} for $x$ is an element of $\bbn$, that is a function from $x$ to $\bbn$.
 The set of valuations for the set of clocks $X$ is denoted by $\chi$.
 %
-For $\chi\in\bbn^V$, $\chi+1$ is the valuation assigning $\chi(x)+1$ to each clock variable $x$ of $X$.
+For $\chi\in\bbn^X$, $\chi+1$ (which captures the ticking of the digital clock) is the valuation assigning $\chi(x)+1$ to each clock variable $x$ of $X$.
 Given a set of clock variables $X' \subseteq X$, $\chi[X' \leftarrow 0]$ is the valuation of clock variables $\chi$ where all the clock variables in $X'$ are assigned to $0$.
 
-Monitors input and output words. A word is a sequence $\sigma = e_1\cdot e_2 \cdots e_n$ where $\forall i \in [1,n]: e_i = a_i(\eta_i)$ where $a_i \in \Sigma$ is an action and $\eta_i \in {\cal D}_V$ is a vector of values of a tuple of variables $V$. 
-
-
-%
 \begin{definition}[Syntax of {VDTA}s]
-	\label{def:vdta}
+	\label{def:ptav}
 	A {VDTA} is a tuple \\
 	$\calA = \left(\Sigma, L, {l_0}, X, V, C, \Theta, F,  \Delta \right)$ where:
 	\squishlist
@@ -60,8 +81,9 @@ Monitors input and output words. A word is a sequence $\sigma = e_1\cdot e_2 \cd
 	and an action $a \in \Sigma$ has a signature $sig(a) = ( t_0, t_1, \ldots, t_k )$ which is a tuple of types of the external variables,
 	\item $L$ is a finite non-empty set of locations, with $l_0 \in L$ the initial location, and $F \subseteq L$ the set of accepting locations;
 	\item $X$ is a finite set of discrete clocks;
-	\item $V$ is a tuple of typed internal variables \item $C$ is a tuple of external variables, where $C = I \cup O$, where $I$ is the set of input channels, and $O$ is the set of output channels; 
-	\item $\Theta\subseteq {\cal D}_{V }$ the initial condition, is a computable predicate over $V$;
+	\item $V$ is a tuple of typed internal variables; 
+	\item $C$ is a tuple of external variables, where $C = I \cup O$, where $I$ is the set of input channels, and $O$ is the set of output channels; 
+	\item $\Theta\subseteq {\cal D}_{V }$ is an initial condition which is a computable predicate over $V$;
 	\item $\Delta$ is a finite set of transitions, and each transition $t \in \Delta$ is a tuple $( l, a, c, G, A, l' )$
 	also written\\
 	$l \xrightarrow{a(c), G(V,c), V':=A(V,c)} l'$
@@ -84,22 +106,7 @@ Monitors input and output words. A word is a sequence $\sigma = e_1\cdot e_2 \cd
 	\squishend
 \end{definition}
 %
-
-\begin{example}
-	The case study can be presented by four, different \acp{VDTA}; $\mathcal{V}_{ped}$, $\mathcal{V}_{car}$, $\mathcal{V}_{drive}$ and $\mathcal{V}_{cnn}$, as depicted in Figures~\ref{fig:avpedrte}, \ref{fig:avcarrte}, \ref{fig:avdriverte} and \ref{fig:avcnnrte} respectively. 
-	For the purposes of these examples, the \ac{VDTA} for the pedestrian safety policy, $\mathcal{V}_{ped}$, is used.
-	This \ac{VDTA} specifies that driving into a pedestrian in-front (if any) and not braking hard is a violation, and approaching a pedestrian from a distance (if any) and not starting to slow down (braking softly) is a violation.
-	
-	This is encoded as a \ac{VDTA} with a set of locations $L = \{l_{drive}, l_{brake}, l_v\}$ and accepting locations $F = \{l_{drive}\}$, with the initial state being $l_{drive}$.
-	The set of external variables $C = \{O_2, O_5, O_{2_v}, O_{5_v}, S, A, B_S, B_H\}$ are all 32-bit signed integers, where $O_2$, $O_5$, $O_{2_v}$, $O_{5_v}$ and $S$ are input channels and $A$, $B_S$ and $B_H$ are output channels.
-	The set of actions $\Sigma = \{tk(O_2, O_5, O_{2_v}, O_{5_v}, S, A, B_S, B_H)\}$, and the set of internal variables $V = \{T_{lim}\}$, where $T_{lim}$ is a 32-bit signed integer.
-	In the example, $\tau$ is a function with $O_2$, $O_5$, $O_{2_v}$, $O_{5_v}$ and $S$ as input parameters. 
-	
-	In this \ac{VDTA} there are two violation transitions, labelled \textcircled{a} and \textcircled{b} in Figure~\ref{fig:avpedrte}.
-	\textcircled{a} occurs when the vehicle does anything else other than braking when there is a pedestrian in-front or not braking when there is no pedestrian ahead of the vehicle.
-	\textcircled{b} can also occur when the vehicle has not braked enough within a certain period of time $T_{lim}$, or when the vehicle remains braking longer than is safe or necessary.
-	This represents the vehicle taking further unsafe actions when already in an unsafe state.
-\end{example}
+A word is a sequence $\sigma = e_1\cdot e_2 \cdots e_n$ where $\forall i \in [1,n]: e_i = a_i(\eta_i)$ where $a_i \in \Sigma$ is an action and $\eta_i \in {\cal D}_V$ is a vector of values of a tuple of variables $V$. 
 
 Policy \ac{VDTA} are required to be \textit{deterministic}, i.e. for any given state, the conjunction of any guards of any other outgoing transitions may not be satisfiable; and \textit{complete}, i.e. for any given state at any given time and any given event, at least one transition guard is satisfied.
 
@@ -113,12 +120,12 @@ where a state consists of a location, and valuations of internal variables $V$ a
 	\label{def:vdta:semantics}
 	The semantics of $\calA$ is a timed transition system $\sem{\calA}=( Q, q_0, Q_F, \Gamma, \to )$, defined as follows:
 	\squishlist
-	\item $Q = L \times {\cal D}_V \times \bbn^V$, is the set of states of the form $q= ( l,\nu ,\chi )$ where
+	\item $Q = L \times {\cal D}_V \times \bbn^X$, is the set of states of the form $q= ( l,\nu ,\chi )$ where
 	$l \in L$ is a location,
 	$\nu \in {\cal D}_V$ is a valuation of internal variables,
 	$\chi$ is a valuation of clocks;
 	\item $Q_0 = \{ ( l_0,\nu, \chi_{[X \leftarrow 0]} )  \mid \Theta(\nu)=\true \}$ is the set of initial states;
-	\item $Q_F = F \times {\cal D}_V \times \bbn^V$ is the set of accepting states;
+	\item $Q_F = F \times {\cal D}_V \times \bbn^X$ is the set of accepting states;
 	\item $\Gamma = \{ a(\eta) \mid
 	a \in \Sigma \wedge \eta \in {\cal D}_{sig(a)}  \}$ is the set of transition labels;
 	\item $\to\subseteq Q\times \Gamma\times Q$  the transition relation
@@ -142,24 +149,27 @@ The set of runs from the initial state $q_0\in Q$,  is denoted $\Run(\calA)$ and
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ignore{
 \begin{example}[Run of a VDTA]
-	Let us consider the VDTA discussed in Example\ref{eg:vdta} presented in Figure\ref{fig:vsa-overcurrent}. 
-	An example run of the VDTA presented in Figure~\ref{fig:vsa-overcurrent} is presented here.
+	Let us consider the VDTA discussed in Example\ref{eg:vdta} presented in Figure~\ref{fig:vsa-overcurrent}. 
+	An example run of the VDTA depicted in Figure~\ref{fig:vsa-overcurrent} is elaborated here.
 	Let the internal variable $i_{max}$ be initialized with 10000.
 	A run of this VDTA starting from the initial state $(l_{safe}, i_{max}=10000, x = 0)$ for the word $\sigma = tk(4000, 5000,1)\cdot tk(8000, 5000,1)\cdot tk(7000, 5000,1)\cdot tk(8000, 5000,1)\cdot tk(8000, 5000,1)\cdot tk(8000, 5000,1)$ is given below:\\
-	
-	$(l_{safe}, i_{max}=10000, x = 0)\xrightarrow {tk(4000, 5000,1)} (l_{safe}, i_{max}=10000, x = 1)
-	\xrightarrow {tk(8000, 5000,1)}
-	(l_{unsafe}, i_{max}=10000, x = 0)
-	\xrightarrow { tk(7000, 5000,1)}
-	(l_{unsafe}, i_{max}=10000, x = 1)
-	\xrightarrow { tk(8000, 5000,1)}
-	(l_{unsafe}, i_{max}=10000, x = 2)
-	\xrightarrow { tk(8000, 5000,1)}
-	(l_{unsafe}, i_{max}=10000, x = 3)
-	\xrightarrow { tk(8000, 5000,1)}
-	(l_{vio}, i_{max}=10000, x = 4)
 	$
-\end{example}
+	(l_{safe}, i_{max}=10000, x = 0)
+	\xrightarrow {tk(4000, 5000,1)} \\
+	(l_{safe}, i_{max}=10000, x = 1)
+	\xrightarrow {tk(8000, 5000,1)} \\
+	(l_{unsafe}, i_{max}=10000, x = 0)
+	\xrightarrow { tk(7000, 5000,1)} \\
+	(l_{unsafe}, i_{max}=10000, x = 1)
+	\xrightarrow { tk(8000, 5000,1)} \\
+	(l_{unsafe}, i_{max}=10000, x = 2)
+	\xrightarrow { tk(8000, 5000,1)} \\
+	(l_{unsafe}, i_{max}=10000, x = 3)
+	\xrightarrow { tk(8000, 5000,1)} \\
+	(l_{vio}, i_{max}=10000, x = 4).
+	$
+	
+	The run started in the initial state and ended in a non-accepting state. It is thus a non-accepting run and represents a violation scenario.
 }
 
 
@@ -200,11 +210,6 @@ Finally, a complete policy framework can be established by simply ANDing the com
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{avpedrte.tikz}
-	\caption{Safety Automaton for Policy $\mathcal{V}_{ped}$\label{fig:avpedrte}}
-\end{figure}
-\begin{figure}[H]
-	\centering
 	\includegraphics[width=0.5\linewidth]{avcarrte.tikz}
 	\caption{Safety Automaton for Policy $\mathcal{V}_{car}$\label{fig:avcarrte}}
 \end{figure}
@@ -218,6 +223,18 @@ Finally, a complete policy framework can be established by simply ANDing the com
 	\includegraphics[width=0.5\linewidth]{avcnnrte.tikz}
 	\caption{Safety Automaton for Policy $\mathcal{V}_{cnn}$\label{fig:avcnnrte}}
 \end{figure}
+
+%The first policy, $\mathcal{V}_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
+%If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.
+%The second policy, $\mathcal{V}_{drive}$, ensures that the vehicle maintains reasonable driving practices on the road, e.g. not staying stationary in the middle of the road and not speeding.
+%If the \ac{AV} controller outputs that the \ac{AV} should \textbf{accelerate} while the \ac{AV} is at the speed limit, the \textbf{accelerate} command would be changed to a  \textbf{cruise} command.
+%Likewise, if the \ac{AV} controller decides that the \ac{AV} should remain stationary in an empty road, the \textbf{brake} (or \textbf{cruise}) command would be modified to an \textbf{accelerate} command.
+%The third policy, $\mathcal{V}_{car}$, checks the environment for other vehicles and ensures that the \ac{AV} does not drive into other vehicles, or cause accidents with other vehicles in any way.
+%If the \ac{AV} would \textbf{accelerate} into a vehicle in front, the \textbf{accelerate} would be changed to a \textbf{cruise}, if the \ac{AV} was driving much faster than the vehicle in front and the \ac{AV} is not braking, the current action would be modified to be a \textbf{brake} action.
+%The fourth, and highest priority, policy ($\mathcal{V}_{ped}$) monitors the environment for pedestrians and ensures that the car does not exhibit unsafe behaviour with regards to the pedestrians. 
+%If the \ac{AV} were to \textbf{accelerate}, or \textbf{cruise}, into a pedestrian that is in front of the vehicle, or approaching the road from the sides, the \textbf{accelerate}, or \textbf{cruise}, action would be changed to a \textbf{brake} action.
+%If the \ac{AV} does not brake fast enough with a pedestrian in front of the \ac{AV}, or approaching from the sides, a \textbf{hard brake} action would be initiated instead of the \ac{ANN} proposed action.
+%This policy ensures that the vehicle always drives slowly and cautiously around pedestrians.
 
 
 \subsection{Enforcing Non-accepting I/O Events}
@@ -240,138 +257,8 @@ In general, then, the designer of any given policy should also select their pref
 	The recovery for this violation transition changes the vehicle to not accelerate, but rather brake hard.
 	This instead changes the transition to $l_{drive} \rightarrow l_{brake}$, which is a safe transition that slows the vehicle down before it hits the pedestrian.
 \end{example}
-%The first policy, $\mathcal{V}_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
-%If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.
-%The second policy, $\mathcal{V}_{drive}$, ensures that the vehicle maintains reasonable driving practices on the road, e.g. not staying stationary in the middle of the road and not speeding.
-%If the \ac{AV} controller outputs that the \ac{AV} should \textbf{accelerate} while the \ac{AV} is at the speed limit, the \textbf{accelerate} command would be changed to a  \textbf{cruise} command.
-%Likewise, if the \ac{AV} controller decides that the \ac{AV} should remain stationary in an empty road, the \textbf{brake} (or \textbf{cruise}) command would be modified to an \textbf{accelerate} command.
-%The third policy, $\mathcal{V}_{car}$, checks the environment for other vehicles and ensures that the \ac{AV} does not drive into other vehicles, or cause accidents with other vehicles in any way.
-%If the \ac{AV} would \textbf{accelerate} into a vehicle in front, the \textbf{accelerate} would be changed to a \textbf{cruise}, if the \ac{AV} was driving much faster than the vehicle in front and the \ac{AV} is not braking, the current action would be modified to be a \textbf{brake} action.
-%The fourth, and highest priority, policy ($\mathcal{V}_{ped}$) monitors the environment for pedestrians and ensures that the car does not exhibit unsafe behaviour with regards to the pedestrians. 
-%If the \ac{AV} were to \textbf{accelerate}, or \textbf{cruise}, into a pedestrian that is in front of the vehicle, or approaching the road from the sides, the \textbf{accelerate}, or \textbf{cruise}, action would be changed to a \textbf{brake} action.
-%If the \ac{AV} does not brake fast enough with a pedestrian in front of the \ac{AV}, or approaching from the sides, a \textbf{hard brake} action would be initiated instead of the \ac{ANN} proposed action.
-%This policy ensures that the vehicle always drives slowly and cautiously around pedestrians.
 
 
-\subsection{\ac{SANN}: Defining Artificial Neural Networks for \acp{CPS}}
-\begin{definition}[Layer of a \ac{SANN}]
-	\label{def:layer}We define the \emph{\ac{SANN} Layers} as a tuple $\mathcal{L} = (\mathcal{I}, \mathcal{O}, \mathcal{W}, \mathcal{T}, \tau)$:
-	\begin{itemize}
-		\item $\mathcal{I} = \{i_0, i_1, ..., i_k \}$ are the $k$ inputs to the layer, represented by a vector of 32-bit signed integers.
-		\item $\mathcal{O} = \{o_0, o_1, ..., o_k \}$ are the $k$ outputs from the layer, represented by a vector of 32-bit signed integers.
-		\item $\mathcal{W} = \{w_0, w_1, ..., w_k\}$ are the $k$ weights associated with the layer, represented by a vector of 32-bit signed integers.
-		\item $\mathcal{T}$ is the layer type and determines the operations applied to the weights and inputs, where $\mathcal{T}~\in~\{Dense, Convolutional, Maximum~pool, Average~pool\}$.
-		\item $\tau(\mathcal{I}, \mathcal{W}, \mathcal{T}) = \mathcal{O}$ is the non-linear function that produces an output set $\mathcal{O}$ given inputs $\mathcal{I}$, weights $\mathcal{W}$ and layer type $\mathcal{T}$. 
-	\end{itemize}
-\end{definition}
-
-\begin{definition}[\ac{SANN}]
-	\label{def:cnn}
-	A \ac{SANN} is an extension of Definition~\ref{def:bb-mlp}. 
-	It should be noted that the definition of a \ac{SANN} can be used to implement and run a \acf{MLP}.
-	We define a \emph{\ac{SANN}} as a tuple $\mathcal{C} = (\mathcal{I}, \mathcal{O}, \mathcal{A}, \eta)$ where
-	\begin{itemize}
-		\item $\mathcal{I}$ is a finite collection of 32-bit signed integer input variables with the domain \textbf{I}$ = 32^n$, where $n$ is the number of inputs.
-		\item $\mathcal{O}$ is a finite collection of 32-bit signed integer output variables with the domain \textbf{O}$ = 32^m$, where $m$ is the number of outputs.
-		\item $\mathcal{A}$ denotes the finite set of instantiated, connected layers in the \ac{CNN}, with any assortment of layers defined by $\mathcal{L}$ in Definition~\ref{def:layer}.
-		\item $\eta$: \textbf{I} $\rightarrow$ \textbf{O} is the non-linear function, termed the network function, that provides the behaviour of a given network, i.e. when provided $\mathcal{I}$ inputs produces $\mathcal{O}$ outputs. 
-	\end{itemize}
-\end{definition}
-
-\begin{example}
-	\label{ex:cnn}
-	An example of one of the fifteen the object detection \acp{CNN} used in the the \ac{AV} case study is presented here.
-	Any of the fifteen \acp{CNN} have $28 \times 28 \times 3 = 2352$, therefore \textbf{I}$~= \langle I_0, I_1 ..., I_2351 \rangle$.
-	Likewise, each CNN has seven outputs resulting in \textbf{O}$~= \langle O_0, O_1 O_2 ..., O_7 \rangle$.
-	Each \ac{CNN} has a set of twelve layers: $\mathcal{A} = \langle\mathcal{L}_0, \mathcal{L}_1, ..., \mathcal{L}_{11}\rangle$ defined in Definition \ref{def:layer}.
-	The arrangement of layers the following: $\mathcal{A} = \langle\mathcal{L}_{Dense}, ~\mathcal{L}_{Convolutional},\\~\mathcal{L}_{Maximum~pool}, ~\mathcal{L}_{Convolutional},~\mathcal{L}_{Convolutional}, ~\mathcal{L}_{Maximum~pool},~\mathcal{L}_{Convolutional},~\mathcal{L}_{Convolutional},\\~\mathcal{L}_{Convolutional},~\mathcal{L}_{Convolutional},~\mathcal{L}_{Average~pool},~\mathcal{L}_{Dense}\rangle$.
-	The network function $\eta$ runs the \ac{SANN} such that an input image of size $28 \times 28 \times 3$ produces an output vector of size $7$.
-\end{example}
-
-\subsubsection{Running a \ac{SANN}}
-A \ac{SANN} can be run two different ways depending on the synchronous tick assignment of the \ac{SANN}, see Section~\ref{sec:esterel-mapping} for more on tick analysis of \ac{SNN}. 
-If the entire CNN is run each tick, the \ac{SANN} is run using the function $\eta(\mathcal{I}_k) = \mathcal{O}_k$, where $\mathcal{I}_k$ are the inputs for tick $k$ and $\mathcal{O}_k$ are the outputs for tick $k$.
-If only a single layer of the \ac{SANN} is run each tick, the layer at $\mathcal{A}_k$ is run as a function, where $k$ is the position of the layer in $\mathcal{A}$ of the current tick.
-
-\begin{example}
-	\label{ex:runcnn}
-	An example run of one of the fifteen the object detection \ac{SANN} used in Example \ref{ex:cnn} is presented here.
-	An input image of a car, $28 \times 28$ pixels in colour is given to the \ac{SANN} network function $\eta$ as the input \textbf{I}.
-	These pixels are flattened into a single layer of 2352 32-bit signed integers inputs and passed to the input layer $\mathcal{L}_0$.
-	These inputs are then passed to the next layer of the \ac{SANN} $\mathcal{L}_1$, in this case a convolutional layer.
-	This convolutional layer has 32 filters and thus, after the 32 sets of matrix convolution, produces 32 sets of 2352 32-bit signed integer values.
-	These $32 \times 2352$ values are then passed on to the next layer $\mathcal{L}_2$; a $2 \times 2$ maximum pooling layer.
-	This layer takes each set of 2352 values and trims them down to $2353 / (2 \times 2) = 588$ values.
-	These 32 sets of 588 values are then passed on to the next convolutional layer $\mathcal{L}_3$ with 16 filters.
-	And so on.
-	Until the values reach the output layer $\mathcal{L}_11$, a dense layer, where they are condensed into 7 distinct output values, making up the output matrix \textbf{O} which classifies the image with the values $\langle 0.02, 0.91, 0.03, 0.04, 0.00, 0.00, 0.00 \rangle$.
-	This means that the \ac{SANN} is 91 \% confident that the input image is a vehicle, and only 2 \% confident that it is a person.
-	Therefore $\eta(2352_{car}) = \langle 0.02, 0.91, 0.03, 0.04, 0.00, 0.00, 0.00 \rangle$
-\end{example}
-
-\subsection{\ac{SNN}: Defining \acp{SNN} for \acp{CPS}}
-A \acf{SNN} is generally composed of, but not limited to \acp{ANN}.
-A \ac{SNN} may include modules of any type, given that they are (1) synchronous and (2) fit the following definition (Definition~\ref{def:comp}):
-\begin{definition}[Defining Synchronous Neural Network Components]
-	\label{def:comp}
-	We define a \ac{SNN} Component, 'meta component', as a tuple $\mathcal{K} = (\mathcal{I}, \mathcal{O}, \Sigma)$ where
-	\begin{itemize}
-		\item $\mathcal{I} = \{i_0, i_1, ..., i_k \}$ are the $k$ inputs to the meta component, represented by a vector of 32-bit signed integers.
-		\item $\mathcal{O} = \{o_0, o_1, ..., o_k \}$ are the $k$ outputs from the meta component, represented by a vector of 32-bit signed integers.
-		\item $\Sigma: \mathcal{I} \rightarrow \mathcal{O}$ is the non-linear function that produces outputs $\mathcal{O}$ given inputs $\mathcal{I}$. 
-	\end{itemize}
-\end{definition}
-
-\begin{definition}[Defining \acp{SNN}]
-	\label{def:snn}
-	We define a \ac{SNN}, as an extension of the previously defined \ac{MNN} from Definition~\ref{def:nsanns}. 
-	We define a \emph{\ac{SNN}} as a tuple $\mathcal{S} = (\mathcal{I}, \mathcal{O}, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta)$ where
-	\begin{itemize}
-		\item We term the first meta-layer as the input meta-layer and the last one as the output meta-layer.
-		\item  $\mathcal{I}=I_1 \cup .. \cup I_k$, where $I_1..I_k$ are the inputs of the meta components in the input meta layer. If $K=|\mathcal{I}|$ then the domain is $\mathbf{I} = \mathbb{R}^K$.
-		\item $\mathcal{O}=O_1 \cup .. \cup O_j$, where $O_1..O_j$ are the outputs of the meta components in the output meta layer. If $J=|\mathcal{O}|$ then the domain is $\mathbf{O} = \mathbb{R}^J$.
-		\item $\mathcal{M}$ is the set $M \in \mathcal{M}$ of Synchronous \acp{CNN} $\mathcal{C}$, according to Definition~\ref{def:cnn}, and \ac{MNN} Components $\mathcal{K}$ defined in Definition~\ref{def:comp}, such any two connected meta components are IO-compatible.
-		\item $\mathcal{L}$ is the set of meta-layers of various \acp{CNN} and meta components.
-		\item $\mathcal{A}: \mathcal{M} \rightarrow \mathcal{L}$ is the network mapping function that maps a given \ac{CNN} or meta component to a layer.
-		\item $\Delta \subset \mathcal{M} \times \mathcal{M}$ provides the mapping of IO connectivity information between \acp{CNN} and meta components of different meta-layers.
-	\end{itemize}
-\end{definition}
-
-\subsubsection{Running a \ac{SNN}}
-A \ac{SNN} can be run differently, depending on the tick frequency for the \ac{SNN}, similar to the running of a \ac{SANN}.
-A \ac{SNN} can be run as a black box, where the inputs to the \ac{SNN} are given and, one tick later, the outputs are produced.
-In this case the \ac{SNN} is run as the cumulative function of all meta components, be it \acp{SANN}, synchronous \acp{RE} or any other synchronous component, where the outputs of each component are passed to the next component, depending on the $\Delta$ function for that \ac{SNN}.
-
-A \ac{SNN} can also be run so that each meta component is run in one logical tick, i.e. concurrent components are run at the same time and consecutive components are run in order.
-Each meta component is run as a single black box function, with inputs provided at the beginning of the tick and outputs provided at the end.
-At the start of each tick, each component receives its input according to the \ac{SNN} specific $\Delta$ function describing its I/O mapping.
-
-Alternatively, a \ac{SNN} can be run tick-by-tick, such that each meta component is also run tick-by-tick.
-In this case, each meta component of the \ac{SNN} can run over multiple ticks, e.g. running one layer of a \ac{SANN} every tick.
-
-\ignore{Care has to be taken when running the \ac{SNN} like this to ensure that outputs reach the appropriate input of the next component in a synchronous manner so that deadlines are not missed and each component runs on the correct set of inputs, i.e. a \ac{SANN} component should not run until all its inputs are present.}
-
-\begin{example}
-	\label{ex:runsnn}
-	An example run of the fifteen the object detection \acp{SANN}, with a single \ac{SANN}'s run described in Example \ref{ex:cnn} and the definition of each \ac{SANN} given in Definition \ref{def:cnn}, and their respective ensembles and enforcers (as shown in Figure \ref{fig:avmnn}) is presented here.
-	
-	The \ac{RE} used in this system has been defined in~\cite{recps}, and is enforcing the safety policy $\mathcal{V}_{cnn}$ specified by Figure \ref{fig:avcnnrte}.
-	This \ac{RE} is represented as a meta component $\mathcal{K}$, where $\mathcal{I}$ is a finite vector of 32-bit signed integer \ac{SANN} inputs and $\mathcal{O}$ is a finite vector of 32-bit signed integer outputs.
-	The \ac{RE} is run with the $\Sigma$ function, which applies a logical tick to the enforced \ac{VDTA} (Definition~\ref{def:vdta}) and, where necessary, \textit{edits} the meta components inputs $\mathcal{I}$ providing edited outputs $\mathcal{O}$.
-	
-	The ensembles shown in Figure \ref{fig:avmnn} are each defined as meta components $\mathcal{K}$, where $\mathcal{I}$ is a finite vector of 32-bit signed integer \ac{SANN} classifications and $\mathcal{O}$ is a single 32-bit signed integer classification.
-	Each ensemble is run with its $\Sigma$ function, which combines its inputs $\mathcal{I}$ to produce a single, more accurate output.
-	
-	For the purposes of this example, the \ac{SNN} will be run such that each meta component of the \ac{SNN} is executed in one tick.
-	
-	Assuming the system has not been run yet, at the start of tick 1, the five input images from the five camera positions, shown in Figure \ref{fig:av}, are given to their respective \ac{SANN} ensembles.
-	Each \ac{SANN} ensemble receives one image, and that image is fed to each \ac{SANN} in that ensemble such that the image is the input $\mathcal{I}$ for that \ac{SANN}.
-	Over tick 1, each \ac{SANN} is run concurrently using the network function $\eta$ so that each \ac{CNN} produces one output set $\eta(\mathcal{I_{i_j}}) = \mathcal{O_{i_j}}$ at the end of tick 1, where $i$ is the ensemble number and $j$ is the number of the \ac{SANN} in that ensemble.
-	At the start of tick 2, each ensemble receives its inputs $\mathcal{I}$ from each of the three connected \acp{CNN}' outputs.
-	The functions $\Sigma$ of each ensemble are run concurrently over tick 2, producing an output $\mathcal{O}_i$ at the end of tick 2 for each ensemble $i$, which is the cumulative prediction of the three \ac{SANN} in that ensemble.
-	At the start of tick 3, the \ac{RE} receives input from each of the five ensembles, and produces enforced outputs at the end of tick 3.
-	At the start of tick 4, this process repeats.
-\end{example}
 
 
 
