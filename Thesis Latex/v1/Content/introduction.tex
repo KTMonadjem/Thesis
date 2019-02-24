@@ -1,6 +1,6 @@
 \section{\acf{CPS}}
 A \acf{CPS} is a network of distributed controllers that manage the physical processes of the system~\cite{cps-design}~\cite{alur2015principles}. 
-\ac{CPS} encompass a wide variety of disciplines, from mechatronics to civil infrastructure, illustrated in Figure~\ref{fig:cps}.
+\ac{CPS} encompass a wide variety of disciplines, from mechatronics to civil infrastructure (Figure~\ref{fig:cps}).
 \ac{CPS} operate in the physical world, where environments can be unpredictable and uncontrolled.
 This introduces safety concerns for the \ac{CPS}; the hardware must be predictable and reliable and the software must be predictable and reliable.
 This thesis focuses on the software requirements for \ac{CPS}.
@@ -19,7 +19,6 @@ These have strict timing and functionality requirements --- any errors in contro
 \section{\acf{AI} and \acf{ML}}
 \acf{ML} is a field of data science where \acf{AI} are taught to learn large and/or complex data relationships~\cite{ai}.
 \ac{AI} come in many shapes and forms, from decision trees to \acfp{ANN}~\cite{ai-types}.
-\ac{AI} were invented to fill a gap that humans cannot, where they can store a huge number of data relationships and learn new relationships where a person would struggle.
 \ac{AI} are used all over industry, from industrial systems, so cybernetics and robotics (such as Figure~\ref{fig:ai-girl}).
 
 \begin{figure}[H]
@@ -32,7 +31,7 @@ These have strict timing and functionality requirements --- any errors in contro
 However, the nature of \ac{AI} is non-linear, leaving many \ac{AI} hard to verify and validate.
 Additionally, as \ac{AI} adapt to learn larger data sets and more complex relationships, the size and complex of the \acp{AI} increase.
 Some of these \ac{AI} are susceptible to verification and validation techniques, however, as they grow in size, these techniques take longer and more resources to implement.
-In \ac{CPS}, it is essential for all components to be verified and validated, and thus the issue with \ac{AI} in \ac{CPS} is made clear.
+In \ac{CPS}, it is essential for all components to be verified and validated, and thus the issue with \ac{AI} in \ac{CPS} is made clear: \ac{AI} don't have the necessary verification and validation techniques to be used in \ac{CPS}.
 
 \subsection{\acfp{ANN}}
 \acp{ANN} are a type of \ac{AI} designed to model the human brain~\cite{kohonen1988introduction}.
@@ -56,15 +55,16 @@ There is a large body of work regarding the safety of \acp{ANN}, ranging across 
 However, no work has been done regarding the synchronous implementation of \acp{ANN} and the verification available to synchronous \acp{ANN}.  
 This thesis addresses the issue of safe \acp{ANN} using synchronous semantics.
 
-In this thesis, a new \ac{ANN} library was created to look at the benefits of synchronous \acp{ANN}.
+In this thesis, a new \ac{ANN} library was created to prove the benefits of synchronous \acp{ANN}.
 In some of the benchmarks, an existing library called Darknet~\cite{darknet13} was used to implement some of the more complex \acp{ANN}.
-However, a tool chain was created to replace Darknet that compiles Keras~\cite{chollet2015keras} \acp{ANN} to the created \ac{ANN} library.
+However, a tool chain was created to replace Darknet that compiles Keras~\cite{chollet2015keras} trained \acp{ANN} to the created \ac{ANN} library.
 
 The major contributions of this thesis are as follows:
 \begin{itemize}
 	\item A time predictable approach to \acp{ANN} is developed using the synchronous language Esterel~\cite{berry2000foundations}. These predictable \acp{ANN} are termed \acfp{SNN} and are defined using formal methods. Using T-CREST as a platform, timing of these \acp{SNN} was done. These \acp{SNN} provide a safe approach to implementing \acp{ANN} in \ac{CPS}. The results of the \acp{SNN} are presented using a set of benchmarks. 
 	\item \acfp{MNN} are proposed as a framework for the composition of multiple \acp{SNN}. The thesis provides formal definitions for the \acp{MNN} and benchmarks are presented that show their efficacy. 
-	\item The thesis proposes the \acf{RV} of \acp{MNN} as an approach to dealing with input perturbation of \acp{ANN} that have complex inputs, such as image classification \acfp{CNN}. An \acf{AV} case study is created for this work, with an \ac{AV} object detection simulation created to prove the benefits of this proposition. 
+	\item The functional safety of \acp{ANN} is next tackled. The combination of \acf{RE} and \acp{SNN} is investigated, with the intent to modify unsafe events. An \acf{AV} case study is introduced for the purposes of this work.
+	\item \acf{RV} of \acp{MNN} as an approach to dealing with input perturbation of \acp{ANN} is introduced. This aims to assist \acp{ANN} that have complex inputs, such as image classification \acfp{CNN}. An \ac{AV} case study is also created for this work, with an \ac{AV} object detection simulation created to prove the benefits of this proposition. 
 \end{itemize}
 
 \section{Thesis Structure}
