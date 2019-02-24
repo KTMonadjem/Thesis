@@ -52,8 +52,7 @@
 \DeclareOption{singlespace}{\Ua@singlesptrue}
 \DeclareOption{twoside}{\PassOptionsToPackage{twoside}{geometry}}
 \DeclareOption{examcopy}{\Ua@examcptrue}
-\DeclareOption{PhD}{\newcommand{\degreetitle}{Doctor of Philosophy in
-    Engineering}}
+\DeclareOption{PhD}{\newcommand{\degreetitle}{Master of Engineering}}
 \DeclareOption{ME}{\renewcommand{\degreetitle}{Master of Engineering}}
 \DeclareOption{picture}{\Ua@picturetrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
