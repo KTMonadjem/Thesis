@@ -18,7 +18,7 @@ We start by formalising the input-output compatibility requirements.
 
 \begin{definition}
 	\label{def:io-compatibility}
-	Let $\mathcal{M}$ be a set of \acp{SANN} according to Definition~\ref{def:bb-mlp}.
+	Let $\mathcal{M}$ be a set of \acp{SNN} according to Definition~\ref{def:bb-mlp}.
 	We term $M_1 = \langle I_1, O_1, N_1, L_1, \alpha_1, \eta_1 \rangle$, $M_2=\langle I_2, O_2, N_2, L_2, \alpha_2, \eta_2  \rangle$ 
 	$\in \mathcal{M}$ input-output compatible,
 	IO-compatible for short, when the following hold:
@@ -32,33 +32,33 @@ We start by formalising the input-output compatibility requirements.
 Hence, just as we are able to break execution of \acp{ANN} over
 multiple ticks by calling them 
 ``layer by layer'', we can also structure the synchronous program such
-that it runs a set of concurrent \acp{SANN} ``network by network''.  We term such an arrangement of 
-multiple \acp{SANN} as \emph{meta-layers} of \acp{SANN}.
+that it runs a set of concurrent \acp{SNN} ``network by network''.  We term such an arrangement of 
+multiple \acp{SNN} as \emph{meta-layers} of \acp{SNN}.
 
 \begin{definition}
 	\label{def:nsanns}
-	A network of \acp{SANN} organised into meta-layers is a tuple $H = \langle \mathcal{I}, \mathcal{O}, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta \rangle$ where:
+	A network of \acp{SNN} organised into meta-layers is a tuple $H = \langle \mathcal{I}, \mathcal{O}, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta \rangle$ where:
 	\begin{itemize}
 		\item We term the first meta-layer as the input
 		meta-layer and the last one as the output
 		meta-layer.
 		\item  $\mathcal{I}=I_1 \cup .. \cup I_k$,
-		where $I_1..I_k$ are the inputs of the \acp{SANN} in
+		where $I_1..I_k$ are the inputs of the \acp{SNN} in
 		the input meta layer. If $K=|\mathcal{I}|$ then the
 		domain is $\mathbf{I} = \mathbb{R}^K$
 		\item $\mathcal{O}=O_1 \cup .. \cup O_j$,
-		where $O_1..O_j$ are the outputs of the \acp{SANN} in
+		where $O_1..O_j$ are the outputs of the \acp{SNN} in
 		the output meta layer. If $J=|\mathcal{O}|$ then the domain is $\mathbf{O} = \mathbb{R}^J$
 		\item $\mathcal{M}$ is the set $M \in \mathcal{M}$ of
-		\acp{SANN} according to Definition~\ref{def:bb-mlp}
-		such any two connected \acp{SANN} are IO-compatible.
-		\item $\mathcal{L}$ is the set of meta-layers of \acp{SANN}
-		\item $\mathcal{A}: \mathcal{M} \rightarrow \mathcal{L}$ is the network mapping function that maps a given \ac{SANN} to a layer.
-		\item $\Delta \subset \mathcal{M} \times \mathcal{M}$ provides the mapping of IO connectivity information between \acp{SANN} of different meta-layers. %@Partha: I am pretty sure we need a place to store the connections between SANNs - no?
+		\acp{SNN} according to Definition~\ref{def:bb-mlp}
+		such any two connected \acp{SNN} are IO-compatible.
+		\item $\mathcal{L}$ is the set of meta-layers of \acp{SNN}
+		\item $\mathcal{A}: \mathcal{M} \rightarrow \mathcal{L}$ is the network mapping function that maps a given \ac{SNN} to a layer.
+		\item $\Delta \subset \mathcal{M} \times \mathcal{M}$ provides the mapping of IO connectivity information between \acp{SNN} of different meta-layers. %@Partha: I am pretty sure we need a place to store the connections between SNNs - no?
 	\end{itemize}
 \end{definition}
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\begin{subfigure}[t]{0.5\textwidth}
 		\centering
 		\scalebox{0.8}{\input{Content/fig/tca-nn-pipeline.tex}}
@@ -90,7 +90,7 @@ Depending on the application several options may be explored when
 considering the design space for the concurrent arrangement of
 multiple networks. Some of these are presented in Figure~\ref{fig:tca-nn}.
 The first approach, in Figure~\ref{fig:tca-nn-pipeline}, creates a pipeline of networks, where they are simply executed in sequence.
-Alternatively, \acp{SANN} could be arranged in parallel, as in Figure~\ref{fig:tca-nn-grid}. 
+Alternatively, \acp{SNN} could be arranged in parallel, as in Figure~\ref{fig:tca-nn-grid}. 
 Finally, an arrangement might be more arbitrary, as in Figure~\ref{fig:tca-nn-someparallel}. 
 Due to the synchronous approach, as long as the \emph{size and type
 	compatibility} of Definition~\ref{def:io-compatibility} is
@@ -101,13 +101,13 @@ shown in Figure~\ref{fig:tca-nn}.
 
 \begin{definition}
 	\label{def:timing-compatibility}
-	Timing compatibility between \acp{SANN} in Figure~\ref{fig:tca-nn} may
+	Timing compatibility between \acp{SNN} in Figure~\ref{fig:tca-nn} may
 	be achieved using the following:
 	\begin{itemize}
-		\item When a \ac{SANN} $M_1$'s output is connected to $M_2$ and the
+		\item When a \ac{SNN} $M_1$'s output is connected to $M_2$ and the
 		period of $M_1$ is $n$-ticks, then for timing compatibility, $M_2$
 		has $n$-\texttt{pause} statements at the start.
-		\item When a \ac{SANN} $M_1$ and $M_2$'s output is connected to $M_3$ and the
+		\item When a \ac{SNN} $M_1$ and $M_2$'s output is connected to $M_3$ and the
 		period of $M_1$ is $n_1$-ticks and that of $M_2$ is $n_2$-ticks,
 		then $M_3$ has $(n_1 \oplus n_2)$-\texttt{pause} statements at the start.
 		\item When a connectivity self-loop is provided in $\Delta$, we break it explicitly.
@@ -116,21 +116,21 @@ shown in Figure~\ref{fig:tca-nn}.
 
 %Contrast this with an asynchronous approach, which could require extensive usage of mutexes and locking mechanisms!
 
-%\subsection{Interfaces of concurrent \acp{SANN}}
+%\subsection{Interfaces of concurrent \acp{SNN}}
 
 \ignore{
-	When considering the interconnection of different \ac{SANN} in a network of \ac{SANN} $H$, the connections can only be considered valid iff the source and destination types match, and if the source of an interface is located `earlier' (i.e. on an earlier layer $l \in \mathcal{L}$ or in the global inputs $I$) than the destination interface. 
+	When considering the interconnection of different \ac{SNN} in a network of \ac{SNN} $H$, the connections can only be considered valid iff the source and destination types match, and if the source of an interface is located `earlier' (i.e. on an earlier layer $l \in \mathcal{L}$ or in the global inputs $I$) than the destination interface. 
 	More formally, this can be expressed as Definition~\ref{def:sann-conns}.
 	
 	\begin{definition}
 		\label{def:sann-conns}
-		A network of \acp{SANN} $H = \langle I, O, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta \rangle$ is correctly interconnected iff $\forall \delta \in \Delta, \forall i_d \in I \in n_d \in \delta, \exists i_d \in \left(\mathcal{I} \cup \left(M_s \in \mathcal{M}|\mathcal{A}\left(M_s\right) < \mathcal{A}\left(M_d\right)\right)\right)$, where $i_d$ is the source of connection $\delta$, $M_s$ is the possible source network for the connection, and $M_d$ is the destination network.
+		A network of \acp{SNN} $H = \langle I, O, \mathcal{M}, \mathcal{L}, \mathcal{A}, \Delta \rangle$ is correctly interconnected iff $\forall \delta \in \Delta, \forall i_d \in I \in n_d \in \delta, \exists i_d \in \left(\mathcal{I} \cup \left(M_s \in \mathcal{M}|\mathcal{A}\left(M_s\right) < \mathcal{A}\left(M_d\right)\right)\right)$, where $i_d$ is the source of connection $\delta$, $M_s$ is the possible source network for the connection, and $M_d$ is the destination network.
 		% this should read as:
 		% for all connections in H, for all sources of those connections, the source exists in either (an output on a network in an earlier layer that the destination of the connection) or (the inputs I) 
 	\end{definition}
 }
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
 	\scalebox{0.8}{\input{Content/fig/tca-nn-simpleparallel.tex}}
 	\caption{Simple three-network XOR system}
@@ -160,7 +160,7 @@ shown in Figure~\ref{fig:tca-nn}.
 
 The Example in~\ref{ex:timing} discusses the issue of timing compatibility.
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\scalebox{0.8}{\input{Content/fig/tca-xor-complexparallel.tex}}
 	\caption{Two-network XOR system}

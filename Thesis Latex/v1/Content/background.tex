@@ -112,32 +112,48 @@ The communication between Esterel's threads is deterministic, i.e. a single sign
 Esterel can, additionally, use \textit{pre()} (pre-emption) statements to check signals past presence, allowing for logical delays in the execution of an action.
 Due to the structure of Esterel's loops, unbounded loops are not allowed; it must be guaranteed that a loop will be paused at least once per iteration.
 
-Figure~\ref{fig:esterel-abro} shows the well known \textbf{ABRO} example by G. Berry.
-This module has 3 defined input signals \textit{A}, \textit{B} and \textit{R} and one defined output signal \textit{O}.
-Usually, a \textit{loop} denotes an iterative thread that repeats when the \textit{end loop} statement is reached, where each loop must include a \textit{pause}. 
-However, execution of this loop only iterates when \textit{R} is detected; the loop resets at the beginning of the next clock tick when \textit{R} is detected.
-When \textit{R} is not detected, the loop does not loop, but instead \textit{pauses} until \textit{R} is detected.
-The \textit{loop <action> each R} can be alternatively written as \textit{loop [abort [<action> pause;] when R] end loop}, i.e. take some <action>, pause at the end of the <action>, and then wait for \textit{R} to repeat the loop.
-
+Figure~\ref{fig:esterel-abro} shows an \ac{ANN} run example.
+This module has 2 defined input signals \textit{A} and \textit{B} and one defined output signal \textit{O}.
+These signals are declared as \textit{integer} signals, meaning they have an attached integer value in addition to the presence (or absence) of the signal.
+A \textit{loop} denotes an iterative thread that repeats when the \textit{end loop} statement is reached.
+Each loop must include a \textit{pause}, making the loop bounded. 
 The \textbf{||} are used to show parallel actions, i.e. concurrency.
 This means that \textit{await A} and \textit{await B} are running concurrently, where \textit{await <signal>} is synonymous with ``pause until <signal> is present''.
-The statement \textit{emit O} sets the output signal \textit{O} to be present for one clock cycle.
+
+External functions can be called in Esterel, included from a C file.
+A \textit{procedure} refers to a C function that does not return any value, while \textit{function} refers a C function that does.
+The \textit{procedure runANN()(integer, integer)} takes two integers as input, and does not return any output.
+The \textit{function getOutput()} takes no input, and but returns an integer as output.
+The \textit{call} statement can be used to run a procedure, and just like in C the parameters are passed in brackets.
+However, since \textit{A} and \textit{B} are signals, the \textbf{?} is used to fetch the value at that signal, rather than the presence (or absence) of the signal.
+In Esterel a \textit{function} returns some value, this value can be stored in a variable using the operator \textbf{:=}, or it can be passed straight to the next function or, as with this example, be emitted by passing is as the parameter to the \textit{emit} statement.
+The statement \textit{emit O} sets the output signal \textit{O} to be present for one clock cycle, and sets its value according to its parameters.
 
 When combined, the statements in this example would combine to do the following, described in English for convenience:
 Wait for A and B. 
-When both A and B have been present, present O once.
-As soon as R is present, start from the beginning.
+When both A and B have been present, run the function \textit{runANN} with the integer values of A and B as its parameters.
+Pause execution until the next tick.
+Emit O with the returned value of \textit{getOutput} as its integer value.
+Repeat.
 
 \begin{figure}
 	\begin{lstlisting}
-	module ABRO:
-	input A, B, R;
-	output O;
+	module ANN:
+	
+	procedure runANN()(integer, integer);
+	function getOutput(): integer;
+	
+	input A: integer, B: integer;
+	output O: integer;
 	
 	loop
-	[ await A || await B ];
-	emit O
-	each R
+	[
+		[await A || await B] 
+		call runANN()(?A, ?B);
+		pause;
+		emit O(getOutput());
+	]
+	end
 	
 	end module
 	\end{lstlisting}
@@ -166,11 +182,11 @@ They were designed for reactive \acp{CPS} demonstrated in a pacemaker environmen
 An example of the placement of an enforcer, in this case a \ac{DTA}, in a \ac{CPS} is shown in Figure~\ref{fig:re} for an \acf{ESS}.
 It shows that the enforcer sits between the plant and the controller, monitoring the inputs and outputs of the controller.
 It will be able to detect unsafe inputs/outputs to/from the controller and allow the system to act in a safe manner.
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{Content/fig/ESS-RE.pdf}
-	\caption{Example of \ac{RE} \label{fig:re}}
-\end{figure}
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=\textwidth]{Content/fig/ESS-RE.pdf}
+%	\caption{Example of \ac{RE} \label{fig:re}}
+%\end{figure}
 
 \subsection{Runtime Enforcement of \acp{ANN}}
 % Write about exisiting autonomous RE

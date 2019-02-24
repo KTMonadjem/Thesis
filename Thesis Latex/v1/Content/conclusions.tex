@@ -1,20 +1,20 @@
 In this thesis, we proposed the use of synchronous programming towards the safe use of \acfp{ANN} in \acfp{CPS}, which are safety-critical systems.
-Using the synchronous programming language Esterel, \acfp{SANN}, were developed to create \acp{ANN} that maintained synchronous semantics.
+Using the synchronous programming language Esterel, \acfp{SNN}, were developed to create \acp{ANN} that maintained synchronous semantics.
 We were able to create fully synchronous, predictable \acp{ANN} that were able to be used as the controllers in all our benchmarks.
 The synchronous approach to \acp{ANN}, which includes formal definitions of the \acp{ANN}, simulations and implementations of \acp{CPS}, was demonstrated throughout this thesis.
 The results and concerns of this approach are discussed.
 
-Two different structure types were defined: \acp{SANN} and \acp{MNN}.
-\acp{SANN} are \acp{ANN} that run in a synchronous manner and maintain synchronous semantics, while \acp{MNN} are compositions of multiple \acp{SANN}, also retaining synchronous semantics.
-Using the time predictable T-CREST platform, a set of benchmarks were developed using Esterel and C to prove the efficacy of \acp{SANN} and \acp{MNN}. 
+Two different structure types were defined: \acp{SNN} and \acp{MNN}.
+\acp{SNN} are \acp{ANN} that run in a synchronous manner and maintain synchronous semantics, while \acp{MNN} are compositions of multiple \acp{SNN}, also retaining synchronous semantics.
+Using the time predictable T-CREST platform, a set of benchmarks were developed using Esterel and C to prove the efficacy of \acp{SNN} and \acp{MNN}. 
 These benchmarks ranged from basic, \acfp{MLP} to larger, more complex \acfp{MNN}.
-Static timing analysis was done on these benchmarks, proving that the implemented \acp{SANN} and \acp{MNN} were not only time predictable, but also that the system were able to meet real-time deadlines.
+Static timing analysis was done on these benchmarks, proving that the implemented \acp{SNN} and \acp{MNN} were not only time predictable, but also that the system were able to meet real-time deadlines.
 Additionally, a Python tool chain, termed \acf{MNN2C} was introduced.
 This compiler was able to produce time-predictable, \acp{MNN} from existing Keras trained \acp{ANN}.
 This tool chain produced more accurate, lower \acf{WCRT} measurements compared to the original \acp{MNN}.
 
 The next body of work introduced the concept of combining \acf{RE} with \acp{MNN}.
-To this end, the definition of a \ac{MNN} was expanded to include arbitrary synchronous components, such as run-time enforcer, and not \acp{SANN}.
+To this end, the definition of a \ac{MNN} was expanded to include arbitrary synchronous components, such as run-time enforcer, and not \acp{SNN}.
 These new \acp{MNN} were termed \acfp{SNN}.
 An \ac{AV} case study was used to demonstrate the efficacy of run-time enforced \acp{SNN} by enforcing a set of safety policies to ensure the safe behaviour of an \ac{AV} when presented with dangerous situations.
 This approach was shown to vastly increase the safety of an \ac{AV}, allowing the \ac{AV} to run autonomously for long periods of time.
@@ -41,7 +41,7 @@ This thesis suggested \ac{RE} as an approach to creating safe \acp{ANN}, however
 While this was shown to be largely effective, this is not the limit to which \ac{RE} can be used in these \acp{SNN}.
 In this thesis, we did not fully examine the enforcement of multiple networks in a \ac{SNN}, nor did we fully investigate all the possible compositions and combinations of \ac{RE} and \acp{MNN}.
 Examining more compositions of \acp{SNN} with their run-time enforcers could lead to more capable systems that are still safe, or safer. 
-Approaches such as using \ac{RE} during the training of \acp{SNN} has yet to be explored, and \ac{RE} between layers of individual \acp{SANN} has also yet to be explored.
+Approaches such as using \ac{RE} during the training of \acp{SNN} has yet to be explored, and \ac{RE} between layers of individual \acp{SNN} has also yet to be explored.
 
 Only the basics of \ac{RV} was discussed in this thesis.
 \ac{RV} has a lot more value than just being used for \acp{CNN} in \ac{AV} systems.
@@ -50,8 +50,8 @@ More benchmarks should be developed that expand on a lot more \acp{CPS} that cou
 
 Lastly, the composition of \acp{SNN} was not fully researched in this thesis.
 The training phase of \acp{SNN} was skipped, instead each \ac{ANN} was trained individually.
-\acp{SNN} are a unique composition of \acp{SANN} and other synchronous components, and the training of such systems needs further investigation.
-Additionally, the only structure of \ac{SNN} used in this thesis was a \ac{SANN} ensemble, where each \ac{SANN} in the ensemble works with the others in the ensemble to provide more accurate output.
+\acp{SNN} are a unique composition of \acp{SNN} and other synchronous components, and the training of such systems needs further investigation.
+Additionally, the only structure of \ac{SNN} used in this thesis was a \ac{SNN} ensemble, where each \ac{SNN} in the ensemble works with the others in the ensemble to provide more accurate output.
 There exist endless ways that \acp{SNN} can be combined, and more of these ways should be implemented and tested.
 
 

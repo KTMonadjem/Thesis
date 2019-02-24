@@ -1,6 +1,6 @@
 \section{Synchronous Neural Networks}
 \label{sec:motivating-example}
-\begin{figure}[b]
+\begin{figure}[H]
 	\centering
 	\begin{subfigure}[t]{0.4\textwidth}
 		\includegraphics[width = \textwidth]{Content/fig/reactive-AI.pdf}
@@ -30,19 +30,19 @@ and each "see" two positions on each side of the vehicle.
 
 \acp{ANN} used in \ac{CPS} applications, such as lane changing, are used for decision making tasks 
 needed by the controller. Such tasks operate periodically, being reactive in nature,
-as shown in Figure~\ref{fig:reactive-ai}. We start by formalising \acp{SANN} using Definition~\ref{def:sann},
+as shown in Figure~\ref{fig:reactive-ai}. We start by formalising \acp{SNN} using Definition~\ref{def:sann},
 which are introduced by us. 
 
 \begin{definition}
 	\label{def:sann}
-	A \acf{SANN} operates periodically, where the length of each period is 
+	A \acf{SNN} operates periodically, where the length of each period is 
 	an integral multiple of the \emph{tick length} of a ``logical clock'' that \emph{tick}s. Tick length
 	is a constant $\in \, \mathbb{R}^{>0}$.
 \end{definition}
 
-The periodic behaviour \acp{SANN}, as defined in Definition~\ref{def:sann}, are ideally implemented using the synchronous 
+The periodic behaviour \acp{SNN}, as defined in Definition~\ref{def:sann}, are ideally implemented using the synchronous 
 paradigm~\cite{benveniste2003synchronous} and we will use the Esterel programming language~\cite{berry2000foundations} 
-to motivate the design of \acp{SANN}. Synchronous programs execute tick-by-tick and during a tick (also known as reaction) the
+to motivate the design of \acp{SNN}. Synchronous programs execute tick-by-tick and during a tick (also known as reaction) the
 environment inputs are sampled, the overall system reaction is performed and finally emission of outputs are made. Thus, a tick encapsulates 
 the atomicity of reactions, where inputs can happen only at the start of a tick, preventing race conditions arising due to environment 
 non-determinism, which is widely prevalent in event triggered paradigms. A synchronous reaction is often represented as a composition of 
@@ -51,7 +51,7 @@ These are usually \emph{compiled-away} to produce sequential code
 that avoid conventional race conditions widely prevalent in the asynchronous setting. Distributed compilation of threads, which is a much harder problem, over
 multicore platforms is also well developed, though less widely used~\cite{yuan2011compiling}. The synchronous approach guarantees
 key properties such as \emph{determinism} and \emph{reactivity}, which is ideal for AI-based CPS. This motivates 
-our adoption of the this paradigm while designing \acp{SANN}.
+our adoption of the this paradigm while designing \acp{SNN}.
 
 
 %% add AI-BRO code here
@@ -95,7 +95,7 @@ our adoption of the this paradigm while designing \acp{SANN}.
 \end{figure}
 
 We have adapted Berry's well known ABRO example in Esterel~\cite{berry2000foundations} to develop our first example of 
-\acp{SANN}. Being an adaptation of ABRO, we term our example, the AI-inspired ABRO, as \texttt{AI-BRO}, and present it in Listing~\ref{lst:ai-bro}.
+\acp{SNN}. Being an adaptation of ABRO, we term our example, the AI-inspired ABRO, as \texttt{AI-BRO}, and present it in Listing~\ref{lst:ai-bro}.
 The original ABRO example performs \emph{the emission of \texttt{O} when both inputs \texttt{A} and \texttt{B} 
 	have happened. It resets and restarts this behaviour when the input \texttt{R} happens}. In our setting, the input 
 \texttt{A} is used to control the processing of the frontal sensor, and the input \texttt{B} is used for the side sensors.
@@ -127,14 +127,14 @@ Finally, the main logic is enclosed in a \texttt{loop..each R} construct. This i
 loop on every \texttt{R} input, maintaining reactive behaviour with every reset.
 This will happen after each lane changing decision.
 
-\ignore{The first \ac{SANN} takes input from the frontal sensor, i.e. it receives three integer inputs (either 1 or -1). 
-	This \ac{SANN} the outputs the suggested course of action based off of these inputs: stop, turn left/right or continue.  
-	The second \ac{SANN} takes input from both side sensors, i.e. it receives four integer inputs (either 1 or -1). 
-	This \ac{SANN} returns a simplified version of whether or not is it safe for the vehicle to move in either direction.
-	The last \ac{SANN} takes in the outputs of the first and second \acp{SANN} and decides on the best course of action
+\ignore{The first \ac{SNN} takes input from the frontal sensor, i.e. it receives three integer inputs (either 1 or -1). 
+	This \ac{SNN} the outputs the suggested course of action based off of these inputs: stop, turn left/right or continue.  
+	The second \ac{SNN} takes input from both side sensors, i.e. it receives four integer inputs (either 1 or -1). 
+	This \ac{SNN} returns a simplified version of whether or not is it safe for the vehicle to move in either direction.
+	The last \ac{SNN} takes in the outputs of the first and second \acp{SNN} and decides on the best course of action
 	for the vehicle based on those inputs: stop, turn left/right or continue.}
 
-The \texttt{AI-BRO} example illustrates several features of \acp{SANN}. (1) We are able to create \acp{ANN} that trigger periodically (analogous
+The \texttt{AI-BRO} example illustrates several features of \acp{SNN}. (1) We are able to create \acp{ANN} that trigger periodically (analogous
 to \acp{RNN}) and we can control the timing of these invocations, and (2) Within each period, we can precisely synchronise the 
 execution of different \acp{ANN} i.e. the sensor processing \acp{ANN} are synchronised with the external inputs 
 \texttt{A, B} while the decision making \ac{ANN} is executed immediately after the first two \acp{ANN} have finished. 
@@ -143,19 +143,19 @@ More importantly, a side effect of the Esterel implementation is that the result
 either rejected by the compiler as \emph{non-causal} or compiled into a \emph{causal} implementation that is guaranteed to be
 \emph{deterministic} and \emph{reactive}~\cite{benveniste2003synchronous}.
 
-\ignore{the running of \acp{SANN} concurrently and consecutively. If signals A and B are high on the same tick, then both sensor \acp{SANN} will run at the same time. The decision \ac{SANN} will always run after both of the sensor \acp{SANN}. Since these are implemented in Esterel, the system remains causal, deterministic, bounded and, most importantly, time predictable. WCET analysis can be run on AIBRO, with results that are well within the acceptable prediction range.}
+\ignore{the running of \acp{SNN} concurrently and consecutively. If signals A and B are high on the same tick, then both sensor \acp{SNN} will run at the same time. The decision \ac{SNN} will always run after both of the sensor \acp{SNN}. Since these are implemented in Esterel, the system remains causal, deterministic, bounded and, most importantly, time predictable. WCET analysis can be run on AIBRO, with results that are well within the acceptable prediction range.}
 
 
 \ignore{
 	\begin{lemma}
 		\label{lemma1}
-		The AI-ABRO implementation in Listing~\ref{lst:ai-bro} is an instance of \ac{SANN} defined using Definition~\ref{def:sann}.
+		The AI-ABRO implementation in Listing~\ref{lst:ai-bro} is an instance of \ac{SNN} defined using Definition~\ref{def:sann}.
 	\end{lemma}
 }
 
 \begin{prop}
 	\label{lemma1}
-	The AI-ABRO implementation in Listing~\ref{lst:ai-bro} is an instance of \ac{SANN} defined using Definition~\ref{def:sann}.
+	The AI-ABRO implementation in Listing~\ref{lst:ai-bro} is an instance of \ac{SNN} defined using Definition~\ref{def:sann}.
 \end{prop}
 
 \begin{proof}

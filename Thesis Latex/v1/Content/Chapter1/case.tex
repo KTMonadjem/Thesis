@@ -1,7 +1,7 @@
-\section{Multi-Periodic \acp{SANN} in Esterel}
+\section{Multi-Periodic \acp{SNN} in Esterel}
 \label{sec:esterel-mapping}
 
-The mono-periodic implementation of \ac{SANN} using the methodology in Listing~\ref{lst:ai-bro}, while being time predictable, has limitations.
+The mono-periodic implementation of \ac{SNN} using the methodology in Listing~\ref{lst:ai-bro}, while being time predictable, has limitations.
 This is because each \ac{NN} must run to completion before any reaction can complete. 
 For large networks with many hidden layers, this is not ideal --- as
 the overall \ac{WCRT} of the system could become quite large, causing
@@ -13,7 +13,7 @@ There are other approaches for arranging the internals of each network while sti
 This network is depicted in Figure~\ref{fig:xor-ann}, and as can be seen, it features five neurons in three layers. While we use this simple illustration, the 
 methodology is applicable for any \ac{NN}.
 
-\begin{figure}[t]
+\begin{figure}[H]
 	\centering
 	\scalebox{0.8}{\input{Content/fig/xor-ann.tex}}
 	\caption{Example XOR \ac{MLP} \ac{ANN}.	\label{fig:xor-ann}}
@@ -74,7 +74,7 @@ The \ac{WCRT} is the time taken to execute the network function
 $\eta$, i.e. $WCRT\left(M\right) = WCRT\left( \eta\right)$. 
 In the following, we use $WCRT(\eta)$ and $\eta$ interchangeably.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\begin{subfigure}[]{0.15\textwidth}
 		\centering
 		\input{Content/fig/tca-simple-n.tex}
@@ -92,12 +92,12 @@ In the following, we use $WCRT(\eta)$ and $\eta$ interchangeably.
 	\label{fig:tca-bb-n}
 \end{figure}
 
-It can be noted that by Proposition~\ref{lemma1}, any \ac{ANN} implemented using the approach in Figure~\ref{fig:tca-bb-n} is also an instance of \ac{SANN} defined using Definition~\ref{def:sann}.
+It can be noted that by Proposition~\ref{lemma1}, any \ac{ANN} implemented using the approach in Figure~\ref{fig:tca-bb-n} is also an instance of \ac{SNN} defined using Definition~\ref{def:sann}.
 %\pr{This is same as the lemma in section 2. Do we need this?}
 
 \begin{theorem}
 	\label{thm:bb-soundness}
-	(Soundness) A mono-periodic \ac{SANN} given an input vector $\mathbf{i}$
+	(Soundness) A mono-periodic \ac{SNN} given an input vector $\mathbf{i}$
 	produces an output vector $\mathbf{o}$ in a given tick \miff the corresponding \ac{MLP} 
 	given the same input vector $\mathbf{i}$ produces the identical output vector $\mathbf{o}$ during any execution.
 	
@@ -210,7 +210,7 @@ $3 \times T_2$, where $T_2$ is the \ac{WCRT} of the multi-periodic
 version. In contrast, the response time as well as the reaction time
 of the mono-periodic version is always its \ac{WCRT} $T_1$. However, it is
 expected that $T_2 << T_1$.
-%It is important to note that a multi-tick execution of an \ac{SANN} will not speed up the generation of outputs of the overall network --- as now, multiple ticks must be completed before a given output will be ready. 
+%It is important to note that a multi-tick execution of an \ac{SNN} will not speed up the generation of outputs of the overall network --- as now, multiple ticks must be completed before a given output will be ready. 
 %However, the length of each individual tick is reduced, which means that overall the system interactivity can be increased.
 
 Like the breaking up of the function $\eta$ into its component
@@ -223,9 +223,9 @@ implementations such as in \cite{yuan2011compiling}.
 
 A summary of these approaches is presented in Table~\ref{tbl:sann-approaches}.
 %we separated each neuron call with \texttt{pause} statements --- i.e. called each neuron in its own tick. 
-\begin{table}[h]
+\begin{table}[H]
 	\centering
-	\caption{Summary of \ac{SANN} approaches}
+	\caption{Summary of \ac{SNN} approaches}
 	\label{tbl:sann-approaches}
 	\begin{tabular}{|l|l|l|l|l|}
 		\hline
@@ -243,7 +243,7 @@ A summary of these approaches is presented in Table~\ref{tbl:sann-approaches}.
 		$m$ ticks while the second network executed for $k\ times m$ ticks and produced the same output starting from the same input. Proof: to show that this holds for $m+1$ executions.}
 }
 
-%\subsection{Implementing `Black-Box' \ac{SANN} in Esterel}
+%\subsection{Implementing `Black-Box' \ac{SNN} in Esterel}
 
 %The basic programming unit in Esterel is a \textit{module}. 
 %Each module contains an interface declaration, followed by a body of executable statements.
@@ -255,7 +255,7 @@ A summary of these approaches is presented in Table~\ref{tbl:sann-approaches}.
 %Presented in Listing~\ref{lst:blackbox} and Listing~\ref{lst:blackbox-composition} are the simplest way of implementing neural networks in Esterel, already seen in the AI-BRO example.
 %As can be seen, entire \acp{ANN} can be composed together and are simply called as external function calls, and will run each tick. 
 %Networks can be composed together
-%This can be considered the `bare minimum' to qualify as a \ac{SANN}, as the network is now running synchronously with its environment.
+%This can be considered the `bare minimum' to qualify as a \ac{SNN}, as the network is now running synchronously with its environment.
 
 %Even though this implementation is quite trivial, it can still gives a strong advantage over a general-purpose implementation: when considering the methodology for composing multiple \acp{ANN}. 
 %For example, consider a system that needs three \acp{ANN}, each performing a different task (as is the case in our AI-BRO example, in Section~\ref{sec:motivating-example}). 

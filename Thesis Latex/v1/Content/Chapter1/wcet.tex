@@ -1,4 +1,4 @@
-\section{Timing Analysis of \acp{SANN}}
+\section{Timing Analysis of \acfp{SNN}}
 \label{sec:wcrt}
 
 Time in a synchronous program progresses in logical discrete instants called \emph{ticks}. 
@@ -55,10 +55,10 @@ Here, caches have simple replacement policies, and it also has a time-predictabl
 It relies on an adaptation of the LLVM compiler that targets the Patmos instruction set.
 This simplifies the annotation of the nodes of the \ac{CFG} with
 timing costs, thus allowing for a straightforward static analysis of any
-\ac{SANN}. Consequently, this work is restricted to the single-core
-Patmos architecture and does not examine execution of \acp{SANN} on
+\ac{SNN}. Consequently, this work is restricted to the single-core
+Patmos architecture and does not examine execution of \acp{SNN} on
 other platform types, such as Intel processors and GPUs.
-%\changed{Consequently, this work is restricted to the single-core Patmos architecture and does not examine execution of \acp{SANN} on other platform types, such as Intel processors or GPUs}.
+%\changed{Consequently, this work is restricted to the single-core Patmos architecture and does not examine execution of \acp{SNN} on other platform types, such as Intel processors or GPUs}.
 
 %The expense of this is program size, and designers can expect slightly increased program memory usage as a result. 
 
@@ -90,7 +90,7 @@ other platform types, such as Intel processors and GPUs.
 %Then, as long as the external C function calls that it will call are also predictable, and if the code is run on a time-predictable architecture such as Patmos~\cite{patmos:ppes2011}, the code can be %converted into an equivalent \ac{TCFG}.
 
 
-%This section discusses the WCRT analysis of SANNs.
+%This section discusses the WCRT analysis of SNNs.
 %Introduce the WCET problem and then introduce WCRT.
 %Intermediate format, timing model, the PATMOS core.
 %Coding guidelines for time analysable code. Steps to improve the 
@@ -110,7 +110,7 @@ Though Esterel is amenable to timing analysis, it still suffers from state space
 Analysing large sequential code generated from Esterel compilers that ignore \emph{infeasible state space} 
 produce large overestimates. \ac{WCRT} algebra, presented in \cite{wang2017timing}, presents a solution to this problem: large synchronous programs can be expressed as 
 networks of simpler \ac{TCA}, which have equivalent timing properties to their \ac{TCFG} counterparts. Considering this, we
-seek to use this framework to develop a compositional timing semantics of \acp{SANN} and their compositions.
+seek to use this framework to develop a compositional timing semantics of \acp{SNN} and their compositions.
 
 We consider a discrete max-plus structure over
 natural numbers $(\Nat_{\infty}, \oplus, \odot, \zero, \one)$ where:
@@ -131,7 +131,7 @@ while $\left(9 \oplus 5\right) \odot \left(9 \oplus 7\right) = \maxd\left(9, 5\r
 This induces on $\Nat_{\infty}$ a (commutative, idempotent) semi-ring.
 We denote $\mathcal{W}$ as the set of formulae in this algebra.
 
-We use an automaton called \ac{TCA} to capture the timing behaviour of any \ac{SANN}.
+We use an automaton called \ac{TCA} to capture the timing behaviour of any \ac{SNN}.
 These are mono-cyclic automata, where every state of the automaton is labelled by a
 WCRT formula that associates the state with its worst case timing cost.
 We start by defining \ac{TCA} using Definition~\ref{def:tca}
@@ -158,7 +158,7 @@ We start by defining \ac{TCA} using Definition~\ref{def:tca}
 		\item The \emph{reaction time} of a \ac{TCA} is its tick-length, which is
 		always fixed to its \ac{WCRT}. 
 		\item The \emph{response time} of a \ac{TCA} is the time taken for the
-		corresponding \ac{SANN} to produce the outputs given inputs. 
+		corresponding \ac{SNN} to produce the outputs given inputs. 
 		The response time of a TCA is given by the formula $n \times WCRT$,
 		where $n$ is the cycle length.
 		%\item The above conditions ensure that a \ac{TCA} is a mono-cyclic automaton.

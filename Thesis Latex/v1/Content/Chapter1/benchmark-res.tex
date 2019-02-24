@@ -1,4 +1,4 @@
-\begin{table*}[h]
+\begin{table*}[H]
 	\centering
 	\caption{Benchmarks and descriptions}
 	\label{table:benchmarks}
@@ -35,7 +35,7 @@ The benchmarks include an Energy
 Storage System (\texttt{ESS}) inspired by~\cite{chaudhari2017hybrid},
 the \texttt{AI-BRO} example from Section~\ref{sec:motivating-example}, the \texttt{XOR} network from Section~\ref{sec:esterel-mapping}, and an \texttt{ADDER} developed for
 pedagogy. These examples all use \ac{MLP}-based
-\acp{SANN}. We have also developed an example involving a \ac{RNN}
+\acp{SNN}. We have also developed an example involving a \ac{RNN}
 called \texttt{HELLO}. 
 These first benchmarks are all statically analysed to
 compute their \ac{WCRT} and hence could be used in hard real-time
@@ -77,7 +77,7 @@ Usually, it is made up of a connection to the grid, a connection to
 the load, one or more electrical storage devices (such as batteries), and a controller to manage the system, as 
 depicted in Figure~\ref{fig:ess-components}.
 
-\begin{figure}[b]
+\begin{figure}[H]
 	\vspace{-3mm}
 	\centering
 	\includegraphics[scale=0.68]{Content/fig/ess_components}
@@ -100,21 +100,8 @@ breaker, which must take effect within this deadline.
 However, the response time of the overall \texttt{ESS} controller is much less strict, as it has a soft-real time \textit{quality of service} deadline of one second.
 This is primarily because the demand input of the \texttt{ESS} does not need to be sampled faster than every second for suitable behaviour.
 In addition, the price of electricity changes only once every 10 minutes.
-%  \pr{You may also
-%  add the response time requirement upfront, which is from input to
-%  the corresponding output of a given \ac{SANN}.}
 
-\ignore{Deciding when to charge and discharge an \ac{ESS} battery is non-trivial. 
-	There are many factors to consider, including the current \ac{SoC} of the battery, historical data on pricing and load demand current.
-	A variety of approaches have been used, including statistical modelling in \cite{TOUESS}.
-	%In addition, a system that is in charge of a battery must include
-	%safety features, i.e. an electrical over-current detector, to ensure
-	%that the users of the \ac{ESS} remain safe at all times: In the event
-	%of an over-current, the industry standard requires that this unsafe
-	%situation should be evaded within 30ms. 
-}
-
-We propose a meta neural network, involving three 3-layer \ac{MLP} \acp{SANN}, to decide when to charge and discharge the battery in our \texttt{ESS}.
+We propose a meta neural network, involving three 3-layer \ac{MLP} \acp{SNN}, to decide when to charge and discharge the battery in our \texttt{ESS}.
 These networks operate synchronously with a over-current detector
 that preempts the system by activating a circuit breaker.
 The architecture of this meta neural network is presented in Figure~\ref{fig:ess-sanns}. 
@@ -122,10 +109,10 @@ The architecture of this meta neural network is presented in Figure~\ref{fig:ess
 %Using the ``layer by layer'' approach, we can guarantee a low \ac{WCRT} to ensure safety in the face of an electrical over-current, 
 %as the \textit{Safety Cutoff} heuristic will be evaluated in each synchronous tick.
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\scalebox{0.7}{\input{Content/fig/tca-ess-sanns.tex}}
-	\caption{ESS \ac{SANN} / Safety Cutoff arrangement}
+	\caption{ESS \ac{SNN} / Safety Cutoff arrangement}
 	\label{fig:ess-sanns}
 \end{figure}
 
@@ -133,26 +120,15 @@ Training this system complex, as it is not
 feasible to provide all possible correct commands for every possible
 input. Hence, back-propagation could not be used.
 Instead, Q-learning~\cite{qlearning2010}, a type of reinforcement learning, was used for training the network.
-\ignore{ Reinforcement learning trains an \ac{ANN} without knowledge of the
-	correct output. 
-	
-	It trains based on the reinforcement of the reward of any given action $A$, with regard to the current state $S$. 
-	An action that is \emph{good} will be given a high reward, and the \ac{SANN} will get its weights updated in an attempt to preserve the behaviour.
-	A \emph{bad} action, however, will result in the  weights being modified so that it will have a reduced chance of choosing that action in that state again. 
-	Using this system, Q-learning attempts to train an \ac{SANN} to follow the path of highest reward.}
+Reinforcement learning trains an \ac{ANN} without knowledge of the correct output. 
+It trains based on the reinforcement of the reward of any given action $A$, with regard to the current state $S$. 
+An action that is \emph{good} will be given a high reward, and the \ac{SNN} will get its weights updated in an attempt to preserve the behaviour.
+A \emph{bad} action, however, will result in the  weights being modified so that it will have a reduced chance of choosing that action in that state again. 
+Using this system, Q-learning attempts to train an \ac{SNN} to follow the path of highest reward.
 
-
-%In our case, demand and price were modelled as sine functions, and the networks were trained with the goal of reducing the overall ``real-world'' cost \pr{I don't understand what you mean here?}
-%of outputting energy from the \ac{ESS} system. 
-%The \ac{ESS} was rewarded for buying energy when it was cheap, and supplying it when it was expensive.
 
 In order to validate this design, we performed \ac{WCRT} analysis of
 both the mono-periodic and multi-periodic implementations. 
-%\pr{What
-%  was the length of the multi period? For all these benchmarks, we
-%  have to state the length of the period and the how many cycles are
-%  needed. In particular, we have to state from input to output how
-%  long it takes for all approaches.}
 These results are presented in Table~\ref{tbl:res-ess}.
 
 \begin{table}[H]
@@ -182,21 +158,21 @@ come close to the deadline of the \ac{ESS} battery command, which has a one seco
 
 \paragraph{\texttt{AI-BRO}}
 %\subsection{AI-BRO} 
-Introduced in Section~\ref{sec:motivating-example}, and as depicted in Figure~\ref{fig:av}, \texttt{AI-BRO} uses three different \acp{SANN} working together to guide an automatic vehicle. 
-For this case study, the \acp{SANN} were simple \acp{MLP}.
+Introduced in Section~\ref{sec:motivating-example}, and as depicted in Figure~\ref{fig:av}, \texttt{AI-BRO} uses three different \acp{SNN} working together to guide an automatic vehicle. 
+For this case study, the \acp{SNN} were simple \acp{MLP}.
 Each was trained using back-propagation with a gradient descent approach~\cite{yegnanarayana1994artificial}, as the correct outputs for each of the inputs could be exactly specified.
 For instance, \texttt{AI-BRO}, a front sensor reading of $(010)_2$ implies an obstacle directly in front of the vehicle.
 Therefore, the vehicle must either turn left, turn right, or stop.
-%\changed{\sout{The front \ac{SANN} is responsible for passing this information to the driver \ac{SANN}.}}
+%\changed{\sout{The front \ac{SNN} is responsible for passing this information to the driver \ac{SNN}.}}
 Consequently, it should output $(101)_2$.
 %The first network takes input from the frontal sensors. These consist of 3 boolean values.
 %Then, it outputs an initial suggestion for the car to travel, as an enumerated value across 3 bits for 6 different actions \textit{\{stop, stop/turn left, stop/turn right, turn left, turn right, continue straight\}}.
 
-%Like the first network, the second \ac{SANN} also processes sensor data. 
+%Like the first network, the second \ac{SNN} also processes sensor data. 
 %This time, the inputs are boolean values coming from the side sensors.
 %A single boolean output for each side indicates whether or not a given direction is obstructed.
 
-%The third and final \ac{SANN} takes in the outputs from the two sensor-processing networks. 
+%The third and final \ac{SNN} takes in the outputs from the two sensor-processing networks. 
 %Using the information they provide, it makes the actual decision for the car to follow.
 
 
@@ -306,9 +282,9 @@ strongly correlated. %}
 		here. What is an impossible score and why? Are you referring to
 		typical race conditions?}
 	
-	%Unfortunately this system is not currently time analysable using Platin. The system was originally implemented without regard to the timing analysis guidelines of \acp{SANN} as listed in Section~\ref{sec:wcrt}. As a result, this system contains some code that prevents WCET analysis at this time.
+	%Unfortunately this system is not currently time analysable using Platin. The system was originally implemented without regard to the timing analysis guidelines of \acp{SNN} as listed in Section~\ref{sec:wcrt}. As a result, this system contains some code that prevents WCET analysis at this time.
 	
-	Due to the large number of neurons in the \acp{ANN} of this system, one of the wolf \ac{ANN} was used to calculate the correlation coefficient between an Esterel implementation of an \ac{ANN}, i.e. \ac{SANN}, and an asynchronous \ac{ANN} using the exact same weights.
+	Due to the large number of neurons in the \acp{ANN} of this system, one of the wolf \ac{ANN} was used to calculate the correlation coefficient between an Esterel implementation of an \ac{ANN}, i.e. \ac{SNN}, and an asynchronous \ac{ANN} using the exact same weights.
 	
 	The results of these calculations are presented in Table~\ref{tbl:res-game}.
 	\begin{table}[H]

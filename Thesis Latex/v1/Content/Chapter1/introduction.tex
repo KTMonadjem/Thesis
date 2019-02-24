@@ -6,7 +6,7 @@
 intensive. Most of the AI tasks are based on neural networks.
 Briefly discussed the current status of neural networks and motivate
 the need for formal methods. Discussed related work and then
-the problem statement. Proposed solution \acp{SANN}.}
+the problem statement. Proposed solution \acp{SNN}.}
 
 \acp{CPS} use a set of controllers that are distributed across a network for the 
 control of physical processes~\cite{alur2015principles}. \ac{CPS} applications encompass real-time systems, where 
@@ -69,7 +69,7 @@ time step relies on the context from some previous step. Thus, \acp{RNN} may be 
  period is one. However, the 
 use of such networks in \ac{CPS} is yet to be thoroughly investigated. Moreover, 
 \acp{RNN} and their compositions are not formalised especially from the point of view of designing timed AI 
-systems used in \ac{CPS}. This motivates our proposal for a new class of \acp{ANN}, we term \acfp{SANN}, introduced in the next section.
+systems used in \ac{CPS}. This motivates our proposal for a new class of \acp{ANN}, we term \acfp{SNN}, introduced in the next section.
 In particular, with current design methodologies, a deep neural network like a \ac{CNN} may take long time 
 to produce its output given a new set of inputs i.e. due to the intensive computation, the response time may be slow. 
 
@@ -79,26 +79,26 @@ of examples how \ac{CPS} can be designed using \ac{ANN} while still remaining re
 % and illustrated through the \acf{ESS} case study in 
 %Section~\ref{sec:results}. This approach is developed so that the \ac{CPS} remains responsive to critical events 
 % while a \ac{CNN} may be performing a lengthy computation.
-%\todo{We also show that a \ac{RNN} is a special instance of a \ac{SANN}.}
+%\todo{We also show that a \ac{RNN} is a special instance of a \ac{SNN}.}
 
 %Even where time has been included, such as in  \acfp{RNN}~\cite{medsker2001recurrent}, which are 
 %designed to classify temporal sequences, they are simple, and operate in a step by step manner, where the operation in the current 
 %time step relies on the context from the previous step. However, to be effective in \ac{CPS} they lack two key ingredients: they 
 %need to operate in a reactive manner to capture the reactive nature of \ac{CPS} and they need to operate concurrently to 
 %capture many concurrently interacting neural networks. This motivates our proposal for a new class of \ac{ANN} we
-%term \acp{SANN} introduced in the next section.
+%term \acp{SNN} introduced in the next section.
 
-The key contributions of the chapter are: (1) We propose \acfp{SANN} as a model for designing periodic 
+The key contributions of the chapter are: (1) We propose \acfp{SNN} as a model for designing periodic 
 AI modules, where the length of the period is fixed and the number of cycles are application dependent.
-We show that existing neural networks, such as \ac{MLP}, are special instances of \ac{SANN};
-(2) we provide synchronous execution semantics of \acp{SANN} by providing a mapping to the 
+We show that existing neural networks, such as \ac{MLP}, are special instances of \ac{SNN};
+(2) we provide synchronous execution semantics of \acp{SNN} by providing a mapping to the 
 Esterel synchronous programming language. This provides operators for sound and causal composition~\cite{benveniste2003synchronous} to 
 create seamless compositions of interacting neural networks for the first time; (3) we develop a 
 timed semantics of such compositions using \ac{WCRT}-algebra~\cite{wang2017timing}, (4) we
- develop an approach for designing machine learning applications using \acp{SANN}, which are amenable to
+ develop an approach for designing machine learning applications using \acp{SNN}, which are amenable to
   static \acf{WCRT} analysis~\cite{roop2009tight}, for the first time, and (5) we propose a ``layer-by-layer'' approach of 
- designing \acp{SANN} so as to minimise the \ac{WCRT}, in order to meet the desired response to 
-critical events, while meeting the overall response time requirement of a given \ac{SANN}. 
+ designing \acp{SNN} so as to minimise the \ac{WCRT}, in order to meet the desired response to 
+critical events, while meeting the overall response time requirement of a given \ac{SNN}. 
 
 
 

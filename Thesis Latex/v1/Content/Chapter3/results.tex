@@ -1,14 +1,14 @@
 \section{Results of the Runtime Verified AV System}
 
 This research provides a solution for two aspects of \acf{AV} systems: predicting accurately with perturbations to the system's inputs and safely dealing with misclassifications by the system.
-The issue of input perturbations was addressed using a \acf{SNN} of different convolutional \acfp{SANN}, each \ac{SANN} working in tandem to predict more accurately.
+The issue of input perturbations was addressed using a \acf{MNN} of different convolutional \acfp{SNN}, each \ac{SNN} working in tandem to predict more accurately.
 Misclassification by the system's controller was addressed by implementing sensor fusion between cameras and \ac{LiDAR}.
 This was done using a run-time enforcer that enforced a safety automaton.
 
-To test the \ac{SNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2012 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
+To test the \ac{MNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2012 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
 Figure~\ref{fig:sign-graph-acc} shows that the input perturbations decreased the accuracy of the classifiers by as much as 50\%, a huge amount.
-However, the aim of this approach is not only to increase the classification accuracy of the \acp{SNN} but rather catch misclassifications made by the \acp{SANN}, i.e. verify that the classifications made by the \acp{SANN} are valid.
-As such the results displayed don't show an increase in accuracy, but rather that the enforcer is fully capable of catching misclassifications made by the \acp{SNN}.
+However, the aim of this approach is not only to increase the classification accuracy of the \acp{SNN} but rather catch misclassifications made by the \acp{SNN}, i.e. verify that the classifications made by the \acp{MNN} are valid.
+As such the results displayed don't show an increase in accuracy, but rather that the enforcer is fully capable of catching misclassifications made by the \acp{MNN}.
 Table~\ref{tbl:sign-resultsfull} shows that without input perturbations, the enforcer caught about 70\% of all misclassifications. 
 This is a huge amount, more than half of all the misclassifications made were detected by the enforcer, and the safety of the system turned over to the driver.
 This same table show that when the inputs are perturbed, the enforcer picks up more misclassifications than with the original images, averaging at around 80\% of all misclassifications.
@@ -39,14 +39,14 @@ Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, sh
 			7000 (best) & 60.42 & 49.13 & 81.31 \\ \hline
 		\end{tabular}%
 	}
-	\caption{Table showing the results of the \ac{AV} prediction \ac{SNN}}
+	\caption{Table showing the results of the \ac{AV} prediction \ac{MNN}}
 	\label{tbl:sign-resultsfull}
 \end{table}
 
 \begin{figure}[t]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graph-acc.tex}}
-	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{SNN} \label{fig:sign-graph-acc}}
+	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{MNN} \label{fig:sign-graph-acc}}
 \end{figure}
 
 %\begin{figure}[t]
@@ -67,24 +67,22 @@ Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, sh
 	\caption{Line graph showing the number of misclassifications caught by the enforcer \label{fig:sign-graphboth}}
 \end{figure}
 
-%\todo{Add table showing how \ac{SNN} affects the prediction accuracy}
-
 \subsection{An \ac{AV} System Using \acf{MNN2C}}
-\ac{MNN2C}, introduced in Section~\ref{sec:mnn2c}, creates time-predictable, modular \acfp{SNN} for C from existing Keras (with Tensorflow) trained \acp{ANN}. 
-This compiler makes implementing \acfp{SNN} in C easy and safe.
-For the purposes of testing and demonstration, the complex \ac{SNN} used in this chapter, shown in Figure~\ref{fig:mnn}, was trained in Python, using Keras and the exact same images used to train the original system.
-This \ac{SNN} was then described in the \ac{MNN2C} format, and modular C code was generated to initialise, run and incorporate the \ac{SNN}.
-To show the efficacy of \ac{MNN2C}, the generated \ac{SNN} was implemented in an identical system to the original, and run with the same tests. 
-It has already been shown that \ac{MNN2C} generates outputs identical to the Keras trained \acp{ANN} with a one hundred-thousandth tolerance, so the output of each individual \ac{ANN} is not being tested, rather that the system as a whole runs as the original does.
+\ac{MNN2C}, introduced in Section~\ref{sec:mnn2c}, creates time-predictable, modular \acfp{MNN} for C from existing Keras (with Tensorflow) trained \acp{ANN}. 
+This compiler makes implementing \acfp{MNN} in C easy and safe.
+For the purposes of testing and demonstration, the complex \ac{MNN} used in this chapter, shown in Figure~\ref{fig:mnn}, was trained in Python, using Keras and the exact same images used to train the original system.
+This \ac{MNN} was then described in the \ac{MNN2C} format, and modular C code was generated to initialise, run and incorporate the \ac{MNN}.
+To show the efficacy of \ac{MNN2C}, the generated \ac{MNN} was implemented in an identical system to the original, and run with the same tests. 
+It has already been shown that \ac{MNN2C} generates outputs identical to the Keras trained \acp{ANN} with a one hundred-thousandth tolerance, so the output of each individual \ac{SNN} is not being tested, rather that the system as a whole runs as the original does.
 
 \subsubsection{Results of an \ac{MNN2C} Generated \ac{AV} System}
-Figure~\ref{fig:sign-graphboth-mnn2c} shows that the enforcer stills runs perfectly fine with Keras trained \acp{SNN} compiled to C code.
-The enforcer picked up more than 70\% of all misclassifications, catching more misclassifications as the training of the \acp{SNN} was increased. 
-As the training increased, the \acp{SNN} become more confident with their predictions, and thus the enforcer is able to more accurately determine misclassifications.
+Figure~\ref{fig:sign-graphboth-mnn2c} shows that the enforcer stills runs perfectly fine with Keras trained \acp{MNN} compiled to C code.
+The enforcer picked up more than 70\% of all misclassifications, catching more misclassifications as the training of the \acp{MNN} was increased. 
+As the training increased, the \acp{MNN} become more confident with their predictions, and thus the enforcer is able to more accurately determine misclassifications.
 
-Since these \acp{SNN} were trained in Keras, they did not need to go through extensive training to get to a reasonable classification accuracy, only needing 100 epochs to get to level as the Darknet \acp{SNN}.
-The enforcer works very similarly for perturbed and unperturbed images, unlike the Darknet \acp{SNN}.
-This is due to the effective training methods used by Keras, allowing for better trained \acp{SNN} even with input perturbations.
+Since these \acp{MNN} were trained in Keras, they did not need to go through extensive training to get to a reasonable classification accuracy, only needing 100 epochs to get to level as the Darknet \acp{MNN}.
+The enforcer works very similarly for perturbed and unperturbed images, unlike the Darknet \acp{MNN}.
+This is due to the effective training methods used by Keras, allowing for better trained \acp{MNN} even with input perturbations.
 
 %\begin{figure}[t]
 %	\centering
@@ -95,7 +93,7 @@ This is due to the effective training methods used by Keras, allowing for better
 \begin{figure}[t]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graphboth-mnn2c.tex}}
-	\caption{Line graph showing the number of misclassifications caught by the enforcer with \ac{MNN2C} generated \acp{SNN} \label{fig:sign-graphboth-mnn2c}}
+	\caption{Line graph showing the number of misclassifications caught by the enforcer with \ac{MNN2C} generated \acp{MNN} \label{fig:sign-graphboth-mnn2c}}
 \end{figure}
 
 
