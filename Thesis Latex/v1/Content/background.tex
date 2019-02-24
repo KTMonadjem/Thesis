@@ -2,12 +2,12 @@ This chapter provides an overview of \acfp{ANN}, synchronous programming and \ac
 This chapter starts with an introduction on \acp{ANN}, their structure and their value in \ac{CPS}.
 The aim is to provide a general understanding to the functionality of \acp{ANN} and their safety regarding \ac{CPS}.
 The next section briefly introduces synchronous programming, and highlights Esterel as the language of choice for this thesis. 
-And example of an Esterel program is given, with a quick run-down of how it functions and its syntax.
+An example of an Esterel program is given, with a quick run-down of how it functions and its syntax.
 Finally, \ac{RE} is introduced as a safety mechanism for \ac{CPS}.
 A brief background to \ac{RE} and its combination with \acp{ANN} is discussed.
 
 \section{\acfp{ANN}}
-\acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio temporal patterns~\cite{rolston2007precisely}. 
+\acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio-temporal patterns~\cite{rolston2007precisely}. 
 Similar timed activity of neurons in the cerebellum has been reported in~\cite{bullock1994neural, moore1989adaptively}. 
 A number of types of \ac{NN} which mimic their biological counterparts exist, varying in complexity and accuracy, including the \ac{SNN}~\cite{izhikevich2003spiking,maass1997spiking}, which was designed to model the brain and has been demonstrated to be periodic and run with discrete time intervals when implemented in software. 
 \acp{ANN} are also part of deep learning; \acfp{CNN}~\cite{schmidhuber2015deep} were introduced with many more layers than is possible on a \ac{MLP}. 
@@ -23,12 +23,12 @@ A \ac{MLP} consists of interconnected layers of artificial neurons, each neuron 
 \begin{figure}
 	\centering
 	\scalebox{0.8}{\input{Content/fig/mlp-ann.tex}}
-	\caption{Example \ac{MLP} \ac{ANN}.	\label{fig:mlp-ann}}
+	\caption{Example \ac{MLP} \ac{ANN}, showing the layers of artificial neuron and their connections.	\label{fig:mlp-ann}}
 \end{figure}
 \begin{figure}
 	\centering
 	\scalebox{0.8}{\input{Content/fig/neuron.tex}}
-	\caption{A model of an artificial neuron. \label{fig:artificial-neuron}}
+	\caption{A model of an artificial neuron with the inputs, summation function and activation function. \label{fig:artificial-neuron}}
 \end{figure}
 
 Specialised neural networks, called \acfp{RNN}~\cite{medsker2001recurrent}, were introduced to classify temporal sequences. 
@@ -42,7 +42,7 @@ A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/cnn-img.pdf}
-	\caption{Example \ac{CNN} \label{fig:cnn}}
+	\caption{An example of a \ac{CNN}, abstracting some of the different layer types and connections. \label{fig:cnn}}
 \end{figure}
 
 \acp{ANN} are being increasingly used as controllers in \ac{CPS} due to their ability to learn data relationships in ways that are difficult to replicate~\cite{ANNSafety2007}. 
@@ -53,7 +53,7 @@ However, it can be very difficult to ensure the safety of a system involving \ac
 In order for an \ac{ANN} to be used in any capacity within a system where safety is critical, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that they it is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}. 
 
 While considerable research effort is starting in the direction of formal verification of \ac{AI}-based \ac{CPS}~\cite{seshia2016towards, russell2015}, the issue of timing verification has received scant attention. 
-Like the challenges involving functional verification, timing verification of AI-based  \ac{CPS} poses considerable challenges due to: (1) real-time \ac{AI} systems could involve many concurrent and interacting \ac{AI} modules, which need deterministic composition for safety; (2) \ac{AI} modules are usually developed as untimed systems and the reactive nature of AI algorithms used in CPS are not carefully studied; and (3) \acf{WCET} analysis~\cite{wilhelm2008worst} of \ac{AI}-based \ac{CPS} has received scant attention.
+Like the challenges involving functional verification, timing verification of AI-based  \ac{CPS} poses considerable challenges due to the fact that: (1) real-time \ac{AI} systems could involve many concurrent and interacting \ac{AI} modules, which need deterministic composition for safety; (2) \ac{AI} modules are usually developed as untimed systems and the reactive nature of AI algorithms used in CPS are not carefully studied; and (3) \acf{WCET} analysis~\cite{wilhelm2008worst} of \ac{AI}-based \ac{CPS} has received scant attention.
 
 Definitions for this safety vary, but Kurd et. al.~\cite{EstSafeCriteria2003} provide a generalisation: safe \acp{ANN} can be defined as those that:
 \begin{itemize}
@@ -74,16 +74,16 @@ There are a variety of pre-existing methods for statically checking the correctn
 For instance, model checking on systems that use timed automata~\cite{timed-enf-autonomous}.
 Okano et. al. explore the concept of model checking of autonomous systems that use timed automata~\cite{timed-enf-autonomous}. 
 This technique is a static technique and cannot be applied to autonomous \ac{ANN} systems, where the behaviour of the \ac{ANN} controller cannot be defined by an automaton.
-For an autonomous system that includes at least one \ac{ANN} in its controller, novel techniques are required to guarantee the safety properties of the \acp{ANN}
+For an autonomous system that includes at least one \ac{ANN} in its controller, novel techniques are required to guarantee the safety properties of the \acp{ANN}.
 However, \acp{ANN} are not usually able to be simplified to simple automata.
 
 Verification of \ac{ANN}, specifically, Deep Neural Networks, can be performed for certain properties (such as robustness) using \ac{SMT}~\cite{Gehr2018AI2SA,reluplex,DeepANNverify}.
-This is useful, because the robustness of a deep \ac{ANN} is critical property to its safety.
+This is useful, because the robustness of a deep \ac{ANN} is a critical property of its safety.
 A robust \ac{ANN} is one that will provide consistently accurate outputs even when the input to the \ac{ANN} is noisy, incorrectly coloured or otherwise distorted. 
 However, this approach is not flawless. 
 \ac{SMT} has issues with scale: as the \acp{ANN} to analyse become larger, analysis time grows exponentially~\cite{Gehr2018AI2SA}.
-Ergo, they are less efficient on larger deep \acp{ANN}.
-In addition, they require the deep \acp{ANN} to fulfil some specific properties, such as specific activation functions and specific \ac{ANN} variants, i.e. \cite{Gehr2018AI2SA} only allows \acp{CNN} and \acp{MLP} with \ac{ReLU} activation functions.
+Ergo, they are less efficient on larger, more complex \acp{ANN}.
+In addition, they require the \acp{ANN} to fulfil some specific properties, such as specific activation functions and specific \ac{ANN} variants, i.e. \cite{Gehr2018AI2SA} only allows \acp{CNN} and \acp{MLP} with \ac{ReLU} activation functions.
 This limits flexibility, as each \ac{ANN} must be designed around these restrictions, thus limiting properties of the \ac{ANN}, such as its activation function and size, could result in an \ac{ANN} that is inefficient, not robust, slow, etc.
 
 Manual testing is a simple method to check for the correctness of an \ac{ANN}-based system. 
@@ -91,9 +91,6 @@ However, this is a time-consuming and error-prone process.
 It is very difficult to ensure that tests have acceptable coverage of all possible situations~\cite{ANN-test}.
 
 Finally, no matter the chosen methodology, as \acp{ANN} increase in size and complexity, verification and validation of these networks becomes increasingly more difficult to achieve~\cite{Gehr2018AI2SA}.
-
-
-
 
 \section{Synchronous Languages}
 Synchronous languages include a variety of different languages, some notable examples being Esterel, Lustre and Signal~\cite{benveniste2003synchronous}.
@@ -109,7 +106,7 @@ Esterel uses a collection of concurrently running threads synchronised to a sing
 Pause statements are used to pause the thread execution, with each thread resuming from where it was paused at each clock tick.
 Communication between threads is done using globally broadcast signals.
 The communication between Esterel's threads is deterministic, i.e. a single signal cannot be read as both present and not present in any tick.
-Esterel can, additionally, use \textit{pre()} (pre-emption) statements to check signals past presence, allowing for logical delays in the execution of an action.
+Esterel can, additionally, use \textit{pre()} (pre-emption) statements to check the past presence, or absence, of signals, allowing for logical delays in the execution of an action.
 Due to the structure of Esterel's loops, unbounded loops are not allowed; it must be guaranteed that a loop will be paused at least once per iteration.
 
 Figure~\ref{fig:esterel-abro} shows an \ac{ANN} run example.
@@ -117,7 +114,7 @@ This module has 2 defined input signals \textit{A} and \textit{B} and one define
 These signals are declared as \textit{integer} signals, meaning they have an attached integer value in addition to the presence (or absence) of the signal.
 A \textit{loop} denotes an iterative thread that repeats when the \textit{end loop} statement is reached.
 Each loop must include a \textit{pause}, making the loop bounded. 
-The \textbf{||} are used to show parallel actions, i.e. concurrency.
+The \textbf{\emph{``||''}} are used to show parallel actions, i.e. concurrency.
 This means that \textit{await A} and \textit{await B} are running concurrently, where \textit{await <signal>} is synonymous with ``pause until <signal> is present''.
 
 External functions can be called in Esterel, included from a C file.
@@ -125,16 +122,18 @@ A \textit{procedure} refers to a C function that does not return any value, whil
 The \textit{procedure runANN()(integer, integer)} takes two integers as input, and does not return any output.
 The \textit{function getOutput()} takes no input, and but returns an integer as output.
 The \textit{call} statement can be used to run a procedure, and just like in C the parameters are passed in brackets.
-However, since \textit{A} and \textit{B} are signals, the \textbf{?} is used to fetch the value at that signal, rather than the presence (or absence) of the signal.
-In Esterel a \textit{function} returns some value, this value can be stored in a variable using the operator \textbf{:=}, or it can be passed straight to the next function or, as with this example, be emitted by passing is as the parameter to the \textit{emit} statement.
+However, since \textit{A} and \textit{B} are signals, the \textbf{\emph{``?''}} is used to fetch the value at that signal, rather than the presence (or absence) of the signal.
+In Esterel a \textit{function} returns some value, this value can be stored in a variable using the operator \textbf{\emph{``:=''}}, or it can be passed straight to the next function or, as with this example, be emitted by passing the parameter to the \textit{emit} statement.
 The statement \textit{emit O} sets the output signal \textit{O} to be present for one clock cycle, and sets its value according to its parameters.
 
 When combined, the statements in this example would combine to do the following, described in English for convenience:
-Wait for A and B. 
-When both A and B have been present, run the function \textit{runANN} with the integer values of A and B as its parameters.
-Pause execution until the next tick.
-Emit O with the returned value of \textit{getOutput} as its integer value.
-Repeat.
+\begin{enumerate}
+	\item Wait for A and B. 
+	\item When both A and B have been present, run the function \textit{runANN} with the integer values of A and B as its parameters.
+	\item Pause execution until the next tick.
+	\item Emit O with the returned value of \textit{getOutput} as its integer value.
+	\item Repeat from \textbf{#1}.
+\end{enumerate}
 
 \begin{figure}
 	\begin{lstlisting}
@@ -157,7 +156,7 @@ Repeat.
 	
 	end module
 	\end{lstlisting}
-	\caption{Mono-periodic `layer by layer', $WCRT = l_i \odot l_h \odot l_o$}
+	\caption{An Esterel module to run a basic \ac{ANN} using C function calls.}
 	\label{fig:esterel-abro}
 \end{figure}
 
@@ -167,7 +166,7 @@ While static verification has its place, more dynamic approaches to verification
 Take a standard image classification \ac{CNN} for example.
 The \ac{CNN} can be trained to 99.9\% accuracy according to the test cases used to train it.
 However, this means that the \ac{CNN} fails 0.1\% of the time, and that is only on the tested population, not even taking the entire population into consideration.
-Having a method to verify this \ac{CNN} while it is running and pick up any inevitable failures would allows for this \ac{CNN} to be used in systems where safety is critical.
+Having a method to verify this \ac{CNN} while it is running and pick up any inevitable failures would allow for this \ac{CNN} to be used in systems where safety is critical.
 
 \subsection{\acf{RE}}
 % Runtime enforcement
@@ -190,7 +189,7 @@ It will be able to detect unsafe inputs/outputs to/from the controller and allow
 
 \subsection{\acf{RE} of \acfp{ANN}}
 % Write about exisiting autonomous RE
-The idea of \ac{RE} of autonomous systems is a researched topic. 
+The idea of \ac{RE} of autonomous systems has received some research attention. 
 De Niz et. al. propose a type of \ac{RE} they term temporal enforcement, which ensures that the system controller meets timing deadlines where outputs are concerned~\cite{safe-enforce-auto}. 
 While this shares similarities with the work in this paper, their work does not expand to cover \acp{ANN}, and does not propose the use of \ac{RE} for anything other than meeting timing deadlines.
 Aniculaesei et. al. propose static formal verification and runtime monitoring of autonomous, robotic systems to prevent physical collisions during system execution~\cite{runtime-monitor}.
@@ -207,8 +206,8 @@ This chapter covers the basics of the concepts introduced in this thesis.
 A description of what \acp{ANN} are, their functionality and their safety properties is given.
 The structure of various \acp{ANN} is shown and briefly described.
 
-The basics of synchronous programming is given, while Esterel is described in more detail.
-A complete example of an Esterel program is given, with a description of how it works.
+The basics of synchronous programming is given, in which Esterel is described in more detail.
+A complete example of an Esterel program is given, which runs an \ac{ANN}, with a description of the syntax and how it runs.
 
 Finally, dynamic verification is discussed as a technique to verify autonomous systems.
-\ac{RE} is introduced as a valid technique to dynamically verifying the properties of \ac{CPS}.
+\ac{RE} is introduced as a valid technique to dynamically verifying the properties of \ac{CPS}, and proposed as a technique to functionally verify \acp{ANN} in \ac{CPS}.
