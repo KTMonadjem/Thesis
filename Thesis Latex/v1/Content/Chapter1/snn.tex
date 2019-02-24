@@ -14,7 +14,7 @@
 		\label{fig:avimg}
 	\end{subfigure}
 	
-	\caption{Reactive \texttt{AI-BRO}}
+	\caption{Reactive systems (left) and the sensor system for \texttt{AI-BRO} (right)}
 	\label{fig:reactive-aibro}
 \end{figure}
 
@@ -135,7 +135,7 @@ This will happen after each lane changing decision.
 	for the vehicle based on those inputs: stop, turn left/right or continue.}
 
 The \texttt{AI-BRO} example illustrates several features of \acp{SNN}. (1) We are able to create \acp{ANN} that trigger periodically (analogous
-to \acp{RNN}) and we can control the timing of these invocations, and (2) Within each period, we can precisely synchronise the 
+to \acp{RNN}) and we can control the timing of these invocations, and (2) within each period, we can precisely synchronise the 
 execution of different \acp{ANN} i.e. the sensor processing \acp{ANN} are synchronised with the external inputs 
 \texttt{A, B} while the decision making \ac{ANN} is executed immediately after the first two \acp{ANN} have finished. 
 To the best of our knowledge, such precise synchronisation mechanisms are lacking in existing literature on \acp{ANN}.

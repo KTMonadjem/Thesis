@@ -6,14 +6,13 @@ In each tick, the environment is first sampled, then computation takes places, a
 In order for safety-critical \ac{CPS}, such as our \texttt{AI-BRO}, to be verified, we need to ensure that the time taken for the execution of any given tick is less than their environmental deadlines.
 This necessitates the computation of the worst-case tick length via static timing analysis --- also known as \acf{WCRT} analysis~\cite{roop2009tight}.
 
-\ac{WCRT} analysis needs two things, (1) an architectural model of the
-underlying processor architecture and (2) a \acf{CFG}~\cite{wilhelm2008worst}  representation of
+\ac{WCRT} analysis needs two things: (1) an architectural model of the
+underlying processor architecture; and (2) a \acf{CFG}~\cite{wilhelm2008worst}  representation of
 binary program execution over the architectural model. The analysis
 process then computes the longest path through the \ac{CFG}.
 %For any program, static timing analysis involves first the derivation of a \acf{CFG}~\cite{wilhelm2008worst} which captures the possible execution traces.
 %Then, the \ac{CFG} must be annotated with the time taken to execute each node, so that a worst-case path can be derived.
-While general purpose programs can feature complications which make this process difficult, Esterel is ideally suited to derivation of \acp{CFG} due to inherent features:  (1)
-all loops in Esterel are bounded, as there is a need for at least one \texttt{pause} statement
+While general purpose programs can feature complications which make this process difficult, Esterel is ideally suited to derivation of \acp{CFG} due to inherent features:  (1) all loops in Esterel are bounded, as there is a need for at least one \texttt{pause} statement
 within every loop; and (2) compilers ``compile-away'' the logical
 concurrency to produce sequential code. However, as can be seen in
 Listing~\ref{lst:ai-bro}, 
@@ -30,10 +29,10 @@ tool~\cite{compiler:platin:kps15} for \ac{WCRT}
 analysis. Consequently, we have to consider some tool-specific
 restrictions to avoid the use of generic features in C that are not
 suitable for static analysis, such as system calls, function pointers, interrupt-driven flow, or unbounded loops~\cite{RTOSWCET}.
-Hence, the restrictions considered in this paper are: (1) All neural
-network functions are coded as bounded \texttt{for} loops, (2) all
-memory is statically allocated, (3) variable-length array iterator
-functions are coded using preprocessor macros, and (4) the final binary is executed `bare-metal', requiring no
+Hence, the restrictions considered in this paper are: (1) all neural
+network functions are coded as bounded \texttt{for} loops; (2) all
+memory is statically allocated; (3) variable-length array iterator
+functions are coded using preprocessor macros; and (4) the final binary is executed `bare-metal', requiring no
 RTOS or OS support, thus avoiding scheduling dependencies
 that may be difficult to statically analyse.
 \ignore{

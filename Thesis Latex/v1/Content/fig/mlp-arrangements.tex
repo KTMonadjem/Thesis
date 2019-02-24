@@ -17,7 +17,7 @@ loop
 end
 		\end{lstlisting}
 	\end{subfigure}
-	\caption{Mono-periodic `layer by layer', $WCRT = l_i \odot l_h \odot l_o$}
+	\caption{Mono-periodic `layer by layer' execution, $WCRT = l_i \odot l_h \odot l_o$}
 	\label{fig:tca-bb}
 \end{subfigure}
 
@@ -40,7 +40,7 @@ loop
 end
 	\end{lstlisting}
 	\end{subfigure}
-	\caption{Multi-periodic `layer by layer', $WCRT = l_i \oplus l_h \oplus l_o$}
+	\caption{Multi-periodic `layer by layer' execution, $WCRT = l_i \oplus l_h \oplus l_o$}
 	\label{fig:tca-layers}
 \end{subfigure}
 \end{figure}
@@ -76,7 +76,7 @@ loop
 end
 		\end{lstlisting}
 	\end{subfigure}
-	\caption{Multi-periodic neurons, $WCRT = \left(i_1 \odot i_2\right) \oplus \left(h_1 \odot h_2 \odot h_3\right) \oplus o_1$}
+	\caption{Multi-periodic, neuron-by-neuron execution, $WCRT = \left(i_1 \odot i_2\right) \oplus \left(h_1 \odot h_2 \odot h_3\right) \oplus o_1$}
 	\label{fig:tca-neurons}
 \end{subfigure}
 \caption{Different arrangements for XOR \ac{MLP}}

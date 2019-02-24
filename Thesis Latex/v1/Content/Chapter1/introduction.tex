@@ -36,7 +36,7 @@ well in key image and video processing tasks, which are at the core of process a
 While considerable research effort is starting in the direction of formal verification of \ac{AI}-based \ac{CPS}~\cite{seshia2016towards, russell2015},
  the issue of timing verification has received scant attention. 
 Like the challenges involving functional verification, timing verification of AI-based  \ac{CPS} poses considerable 
-challenges due to: (1) real-time \ac{AI} systems could involve many concurrent and interacting \ac{AI} modules, which need 
+challenges due to the fact that: (1) real-time \ac{AI} systems could involve many concurrent and interacting \ac{AI} modules, which need 
 deterministic composition for safety; (2) \ac{AI} modules are usually developed as untimed systems and the reactive nature of 
 AI algorithms used in CPS are not carefully studied; and (3) \acf{WCET} analysis~\cite{wilhelm2008worst} of \ac{AI}-based \ac{CPS} has received scant attention.
  In the following section we 
@@ -46,7 +46,7 @@ AI algorithms used in CPS are not carefully studied; and (3) \acf{WCET} analysis
 \subsection{ Modelling of time in \acp{ANN}}
 \label{ANN-review}
 
-\acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio temporal patterns~\cite{rolston2007precisely}. 
+\acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio-temporal patterns~\cite{rolston2007precisely}. 
 Similar timed activity of neurons in the cerebellum has been reported in~\cite{bullock1994neural, moore1989adaptively}. 
 A number of types of \ac{NN} which mimic their biological counterparts exist, varying in complexity and accuracy, including the \ac{SNN}~\cite{izhikevich2003spiking,maass1997spiking}, which was designed to model the brain. %and has been demonstrated to be periodic and run with discrete time intervals when implemented in software. 
 
@@ -54,7 +54,7 @@ Most \acp{ANN} do not feature such complex models like those of \acp{SNN}, as th
 Instead, they rely on simpler networks, which can be considered as \emph{un-timed non-linear} functions, 
 where the outputs change relative to the inputs, but the timing of the change is not precisely defined. 
 An example of such a network is provided in Figure~\ref{fig:mlp-ann}, which is using neurons defined in Figure~\ref{fig:artificial-neuron}. 
-This is a type of \ac{NN} known as an \acf{MLP}~\cite{yegnanarayana1994artificial}.
+This is a type of \ac{NN} known as a \acf{MLP}~\cite{yegnanarayana1994artificial}.
 
 
 %, it does not see as much use as an \acp{ANN} as it is much more difficult to use, implement and train. 
@@ -88,15 +88,15 @@ of examples how \ac{CPS} can be designed using \ac{ANN} while still remaining re
 %capture many concurrently interacting neural networks. This motivates our proposal for a new class of \ac{ANN} we
 %term \acp{SNN} introduced in the next section.
 
-The key contributions of the chapter are: (1) We propose \acfp{SNN} as a model for designing periodic 
+The key contributions of the chapter are: (1) \acfp{SNN} as a model for designing periodic 
 AI modules, where the length of the period is fixed and the number of cycles are application dependent.
 We show that existing neural networks, such as \ac{MLP}, are special instances of \ac{SNN};
 (2) we provide synchronous execution semantics of \acp{SNN} by providing a mapping to the 
 Esterel synchronous programming language. This provides operators for sound and causal composition~\cite{benveniste2003synchronous} to 
 create seamless compositions of interacting neural networks for the first time; (3) we develop a 
-timed semantics of such compositions using \ac{WCRT}-algebra~\cite{wang2017timing}, (4) we
+timed semantics of such compositions using \ac{WCRT}-algebra~\cite{wang2017timing}; (4) we
  develop an approach for designing machine learning applications using \acp{SNN}, which are amenable to
-  static \acf{WCRT} analysis~\cite{roop2009tight}, for the first time, and (5) we propose a ``layer-by-layer'' approach of 
+  static \acf{WCRT} analysis~\cite{roop2009tight}, for the first time; and (5) we propose a ``layer-by-layer'' approach of 
  designing \acp{SNN} so as to minimise the \ac{WCRT}, in order to meet the desired response to 
 critical events, while meeting the overall response time requirement of a given \ac{SNN}. 
 

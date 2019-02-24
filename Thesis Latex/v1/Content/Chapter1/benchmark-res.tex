@@ -1,7 +1,7 @@
 \begin{table*}[H]
 	\centering
 	\caption{Benchmarks and descriptions}
-	\label{table:benchmarks}
+	\label{tbl:benchmarks}
 	\begin{tabular}{|p{0.1\textwidth}|p{0.06\textwidth}|p{0.16\textwidth}|p{0.4\textwidth}|p{0.08\textwidth}|p{0.11\textwidth}|}
 		\toprule
 		Name & \ac{ANN} Type                 & Real-time Classification                             & Description                                                   & \#\acp{ANN} & \#Neurons \\ \midrule
@@ -23,8 +23,8 @@
 %  evaluate the results.}
 
 We have developed a set of benchmark applications, written in Esterel,
-to evaluate the efficacy of the developed approach. These benchmarks are presented in Table~\ref{table:benchmarks}, and are also
-publicly available at \textit{https://github.com/PRETgroup/sann}. All benchmarks in this paper were developed in Esterel, C, and where appropriate, Python. 
+to evaluate the efficacy of the developed approach. These benchmarks are presented in Table~\ref{tbl:benchmarks}, and are also publicly available at \textit{https://github.com/PRETgroup/sann}. 
+All benchmarks in this chapter were developed in Esterel, C, and where appropriate, Python. 
 Hard-real time benchmarks were analysed using the timing analysis tool
 Platin~\cite{compiler:platin:kps15}, 
 and executed on a Patmos soft-core processor~\cite{patmos:ppes2011} 
@@ -70,7 +70,7 @@ were able to implement both the ``black box'' and the ``layer by layer'' approac
 %\subsection{An \acf{ESS} System}
 \paragraph{An Energy Storage System \texttt{ESS}}
 \label{sec:ess}
-\acf{ESS} are used to lower the costs of
+\acfp{ESS} are used to lower the costs of
 charging an electric vehicle (EV)~\cite{chaudhari2017hybrid}. %\pr{Please cite the TII journal version.}
 Simply put, an \ac{ESS} serves as an intermediary between the electrical grid and a large electrical load i.e. an EV.
 Usually, it is made up of a connection to the grid, a connection to
@@ -81,7 +81,7 @@ depicted in Figure~\ref{fig:ess-components}.
 	\vspace{-3mm}
 	\centering
 	\includegraphics[scale=0.68]{Content/fig/ess_components}
-	\caption{Example \ac{ESS} Components\label{fig:ess-components}}
+	\caption{Example \ac{ESS} components, showing IO and connections\label{fig:ess-components}}
 \end{figure}
 
 \acp{ESS} work by shifting the burden of their electrical load to the
@@ -91,7 +91,7 @@ in price, the \ac{ESS} starts to supply its load from its battery instead.
 This results in a lower average cost for providing the load current. 
 This system must be functionally correct while also meeting timing
 deadlines i.e.
-the system must respond to safety situations within a time bound. 
+the system must respond to safety situations within a specified time bound. 
 
 Our \texttt{ESS} has an associated
 over-current detector.  When this triggers, the system must evade this
@@ -116,11 +116,9 @@ The architecture of this meta neural network is presented in Figure~\ref{fig:ess
 	\label{fig:ess-sanns}
 \end{figure}
 
-Training this system complex, as it is not
-feasible to provide all possible correct commands for every possible
-input. Hence, back-propagation could not be used.
+Training this system is complex; back-propagation with gradient descent cannot be used to train it as the outputs are not known beforehand.
 Instead, Q-learning~\cite{qlearning2010}, a type of reinforcement learning, was used for training the network.
-Reinforcement learning trains an \ac{ANN} without knowledge of the correct output. 
+Reinforcement learning trains an \ac{ANN} without knowledge of the best possible output(s). 
 It trains based on the reinforcement of the reward of any given action $A$, with regard to the current state $S$. 
 An action that is \emph{good} will be given a high reward, and the \ac{SNN} will get its weights updated in an attempt to preserve the behaviour.
 A \emph{bad} action, however, will result in the  weights being modified so that it will have a reduced chance of choosing that action in that state again. 
@@ -133,7 +131,7 @@ These results are presented in Table~\ref{tbl:res-ess}.
 
 \begin{table}[H]
 	\centering
-	\caption{\ac{WCRT} results for \texttt{ESS}}
+	\caption{\ac{WCRT} and response time results for the different \texttt{ESS} executions}
 	\label{tbl:res-ess}
 	\begin{tabular}{|l|l|l|}
 		\hline
@@ -180,7 +178,7 @@ Once created, \ac{WCRT} values were able to be derived for both mono-cyclic and 
 
 \begin{table}[H]
 	\centering
-	\caption{\ac{WCRT} results for \texttt{AI-BRO}}
+	\caption{\ac{WCRT} and response time results for the different \texttt{AI-BRO} executions}
 	\label{tbl:res-aibro}
 	\begin{tabular}{|l|l|l|}
 		\hline
@@ -204,7 +202,7 @@ due to their simple 3-layer designs, and their \acp{WCRT} are presented in Table
 
 \begin{table}[H]
 	\centering
-	\caption{\ac{WCRT} results for \texttt{XOR} and \texttt{ADDER}}
+	\caption{\ac{WCRT} and response time results for the different \texttt{XOR} and \texttt{ADDER} executions}
 	\label{tbl:res-xor-adder}
 	\begin{tabular}{|l|l|l|}
 		\hline
@@ -230,7 +228,7 @@ The results of this system are presented in Table~\ref{tbl:res-hello}.
 
 \begin{table}[H]
 	\centering
-	\caption{\ac{WCRT} results for \texttt{HELLO}}
+	\caption{\ac{WCRT} and response time results for the different \texttt{HELLO} executions}
 	\label{tbl:res-hello}
 	\begin{tabular}{|l|l|l|}
 		\hline
@@ -262,9 +260,9 @@ The results of this system are presented in Table~\ref{tbl:res-hello}.
 
 The \texttt{RABBIT} game was designed to highlight the benefits of synchronous
 programming while designing meta neural networks. 
-The game is played in turns between two teams, wolves and a rabbit, who
-are moving in a map.
-Each animal in the game has its own functional \ac{ANN}, which operate synchronously, respecting causality and avoiding deadlocks. 
+The game is played in turns between two teams, two wolves versus one rabbit, who
+are all moving in the same grid.
+Each animal in the game has its own functional \ac{ANN}, which all operate synchronously, respecting causality and avoiding deadlocks. 
 The same system was also implemented in Python (using
 Pthreads), without the use of any synchronization primitives, and we found
 that the %\changed{\sout{
@@ -272,7 +270,7 @@ that the %\changed{\sout{
 %these examples to evaluate the correlation coefficient between the
 %Python and the Esterel implementation and found that the }
 outputs of the two versions were
-strongly correlated. %}
+strongly correlated with a Pearson's coefficient value of $0.999999802345$. %}
 
 \ignore{The \acp{ANN} were run concurrently on separate Pthreads and the system updated after each \ac{ANN} thread finished running. 
 	Although uncommon, it was noted that the Pthread implementation was
@@ -318,7 +316,7 @@ Using this system, an Esterel application was developed to recognize images usin
 
 \begin{table}[H]
 	\centering
-	\caption{Combined \ac{WCRT} results for \texttt{ESS}, \texttt{AI-BRO}, \texttt{XOR}, \texttt{ADDER} and \texttt{HELLO}}
+	\caption{Combined \ac{WCRT} results comparing the \texttt{ESS}, \texttt{AI-BRO}, \texttt{XOR}, \texttt{ADDER} and \texttt{HELLO} benchmarks, with the added comparison to \ac{MNN2C}}
 	\label{tbl:res-sann}
 	\begin{tabular}{|l|l|l|l|}
 		\hline

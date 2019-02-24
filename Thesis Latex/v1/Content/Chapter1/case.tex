@@ -16,7 +16,7 @@ methodology is applicable for any \ac{NN}.
 \begin{figure}[H]
 	\centering
 	\scalebox{0.8}{\input{Content/fig/xor-ann.tex}}
-	\caption{Example XOR \ac{MLP} \ac{ANN}.	\label{fig:xor-ann}}
+	\caption{Example of an XOR \ac{ANN} showing its layers and weights.	\label{fig:xor-ann}}
 \end{figure}
 
 Each neuron in this network is based on the model in Figure~\ref{fig:artificial-neuron}, with a simple Boolean step activation function and zero bias. 
@@ -89,7 +89,7 @@ In the following, we use $WCRT(\eta)$ and $\eta$ interchangeably.
 		end
 		\end{lstlisting}
 	\end{subfigure}
-	\caption{Mono-periodic `black-box', $WCRT = \eta$}
+	\caption{Mono-periodic `black-box' execution, $WCRT = \eta$}
 	\label{fig:tca-bb-n}
 \end{figure}
 
@@ -226,7 +226,7 @@ A summary of these approaches is presented in Table~\ref{tbl:sann-approaches}.
 %we separated each neuron call with \texttt{pause} statements --- i.e. called each neuron in its own tick. 
 \begin{table}[H]
 	\centering
-	\caption{Summary of \ac{SNN} approaches}
+	\caption{Summary of \ac{SNN} approaches and their relevant figures, \ac{WCRT}, cycles and response time}
 	\label{tbl:sann-approaches}
 	\begin{tabular}{|l|l|l|l|l|}
 		\hline
