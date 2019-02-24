@@ -1,6 +1,6 @@
 \section{\acfp{CPS}}
 A \acfp{CPS} is a system controlled by software, where the software and hardware of the system are tightly integrated~\cite{cps-design}.
-\acp{CPS} use a set of controllers that are distributed across a network for the control of physical processes~\cite{alur2015principles}. 
+\ac{CPS} use a set of controllers that are distributed across a network for the control of physical processes~\cite{alur2015principles}. 
 \ac{CPS} encompass a wide variety of disciplines, from mechatronics to civil infrastructure, some of these illustrated in Figure~\ref{fig:cps}.
 \ac{CPS} operate in the physical world, where environments can be unpredictable and uncontrolled.
 This introduces safety concerns for the \ac{CPS}; the hardware must be predictable and reliable and the software must be predictable and reliable.
@@ -9,11 +9,11 @@ This thesis focuses on the software requirements for \ac{CPS}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/1234.pdf}
-	\caption{Examples of \acp{CPS}~\cite{industry-pic}~\cite{crane-pic}~\cite{rover-pic}~\cite{factory-pic} \label{fig:cps}}
+	\caption{Examples of \ac{CPS}~\cite{industry-pic}~\cite{crane-pic}~\cite{rover-pic}~\cite{factory-pic} \label{fig:cps}}
 \end{figure}
 
 \ac{CPS} applications encompass real-time systems, where the system needs to satisfy a set of timing requirements to ensure correct operation. 
-Here, a missed deadline may result in catastrophic consequences, making these \acp{CPS} highly \textit{safety-critical}. 
+Here, a missed deadline may result in catastrophic consequences, making these \ac{CPS} highly \textit{safety-critical}. 
 These have strict timing and functionality requirements --- any errors in control can result in physical damage, injuries, and/or fatalities~\cite{ANNDevModel1999}. 
 
 
@@ -33,7 +33,7 @@ These have strict timing and functionality requirements --- any errors in contro
 However, the nature of \ac{AI} is non-linear, leaving many \ac{AI} hard to verify and validate.
 Additionally, as \ac{AI} adapt to learn larger data sets and more complex relationships, the size and complex of the \acp{AI} increase.
 Some of these \ac{AI} are susceptible to verification and validation techniques, however, as they grow in size, these techniques take longer and more resources to implement.
-In \ac{CPS}, it is essential for all components to be verified and validated, and thus the issue with \ac{AI} in \acp{CPS} is made clear.
+In \ac{CPS}, it is essential for all components to be verified and validated, and thus the issue with \ac{AI} in \ac{CPS} is made clear.
 
 \subsection{\acfp{ANN}}
 \acp{ANN} are a type of \ac{AI} designed to model the human brain~\cite{kohonen1988introduction}.
@@ -48,7 +48,7 @@ Thus, it is of utmost importance that any \ac{ANN} used in any \ac{CPS} is able 
 Without that guarantee of safety, the use of \ac{AI} in such systems is risky.
 There exists a large body of research towards the safety of \acp{ANN}, but there are still opportunities for new approaches to safe \acp{ANN} to emerge.
 
-\subsection{\acfp{WCET}}
+\subsection{\acf{WCET}}
 \todo{Section on timing analysis techniques}
 
 \section{Contribution}
@@ -63,7 +63,7 @@ However, a tool chain was created to replace Darknet that compiles Keras~\cite{c
 
 The major contributions of this thesis are as follows:
 \begin{itemize}
-	\item A time predictable approach to \acp{ANN} is developed using the synchronous language Esterel~\cite{berry2000foundations}. These predictable \acp{ANN} are termed \acfp{SNN} and are defined using formal methods. Using T-CREST as a platform, timing of these \acp{SNN} was done. These \acp{SNN} provide a safe approach to implementing \acp{ANN} in \acp{CPS}. The results of the \acp{SNN} are presented using a set of benchmarks. 
+	\item A time predictable approach to \acp{ANN} is developed using the synchronous language Esterel~\cite{berry2000foundations}. These predictable \acp{ANN} are termed \acfp{SNN} and are defined using formal methods. Using T-CREST as a platform, timing of these \acp{SNN} was done. These \acp{SNN} provide a safe approach to implementing \acp{ANN} in \ac{CPS}. The results of the \acp{SNN} are presented using a set of benchmarks. 
 	\item \acfp{MNN} are proposed as a framework for the composition of multiple \acp{SNN}. The thesis provides formal definitions for the \acp{MNN} and benchmarks are presented that show their efficacy. 
 	\item The thesis proposes the \acf{RV} of \acp{MNN} as an approach to dealing with input perturbation of \acp{ANN} that have complex inputs, such as image classification \acfp{CNN}. An \acf{AV} case study is created for this work, with an \ac{AV} object detection simulation created to prove the benefits of this proposition. 
 \end{itemize}
@@ -77,7 +77,7 @@ Furthermore, the meta combinations of these \acp{SNN}, termed \acp{MNN}, and the
 Lastly, a new Python tool chain that creates these \acp{SNN} from Keras is also introduced.
 
 Chapter 4 introduces the concept of \acf{RE} in combination with \acp{SNN}. 
-This chapter provides formal definitions for the combination of \acp{SNN} and \ac{RE} by expanding the definitions of \acp{MNN} introduced in Chapter 3 to include other synchronous components besides \acp{SNN}.
+This chapter provides formal definitions for the enforcers and safety policies enforced.
 An \acf{AV} case study is made for this chapter to show the efficacy of the \ac{RE} of \acp{SNN}.
 
 Chapter 5 proposes two different methods, used in tandem, to increase the safety of systems with complex inputs, such as object detection for \acp{AV}.

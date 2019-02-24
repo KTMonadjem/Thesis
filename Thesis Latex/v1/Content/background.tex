@@ -1,33 +1,24 @@
 This chapter provides an overview of \acfp{ANN}, synchronous programming and \acf{RE}.
-This chapter starts with an introduction on \acp{ANN}, their structure and their value in \acp{CPS}.
-The aim is to provide a general understanding to the functionality of \acp{ANN} and their safety regarding \acp{CPS}.
+This chapter starts with an introduction on \acp{ANN}, their structure and their value in \ac{CPS}.
+The aim is to provide a general understanding to the functionality of \acp{ANN} and their safety regarding \ac{CPS}.
 The next section briefly introduces synchronous programming, and highlights Esterel as the language of choice for this thesis. 
 And example of an Esterel program is given, with a quick run-down of how it functions and its syntax.
-Finally, \ac{RE} is introduced as a safety mechanism for \acp{CPS}.
+Finally, \ac{RE} is introduced as a safety mechanism for \ac{CPS}.
 A brief background to \ac{RE} and its combination with \acp{ANN} is discussed.
 
-\section{Artificial Neural Networks}
-\subsection{Machine Learning}
+\section{\acfp{ANN}}
 \acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio temporal patterns~\cite{rolston2007precisely}. 
 Similar timed activity of neurons in the cerebellum has been reported in~\cite{bullock1994neural, moore1989adaptively}. 
 A number of types of \ac{NN} which mimic their biological counterparts exist, varying in complexity and accuracy, including the \ac{SNN}~\cite{izhikevich2003spiking,maass1997spiking}, which was designed to model the brain and has been demonstrated to be periodic and run with discrete time intervals when implemented in software. 
 \acp{ANN} are also part of deep learning; \acfp{CNN}~\cite{schmidhuber2015deep} were introduced with many more layers than is possible on a \ac{MLP}. 
 \acp{CNN}, are widely used in \ac{CPS} applications such as autonomous vehicles, e.g. in \cite{EndToEndLearningForSelfDrivingCars}, where a \ac{CNN} is trained to map raw pixel data directly to vehicle steering commands.
 
-\subsection{Structure of an Artificial Neural Network}
+\subsection{Structure of an \acf{ANN}}
 Most \acp{ANN} do not feature such complex models like those of spiking neural networks, as they are more difficult to use, implement, and train. 
 Instead, they rely on simpler networks, which can be considered as \emph{un-timed non-linear} functions, where the outputs change relative to the inputs, but the timing of the change is not precisely defined. 
 An example of such a network is provided in Figure~\ref{fig:mlp-ann}, which is using neurons defined in Figure~\ref{fig:artificial-neuron}. 
 This is a type of \ac{ANN} known as an \acf{MLP}~\cite{yegnanarayana1994artificial}.
 A \ac{MLP} consists of interconnected layers of artificial neurons, each neuron providing input to neurons in the next layer.
-
-Specialised neural networks, called \acfp{RNN}~\cite{medsker2001recurrent}, were introduced to classify temporal sequences. 
-These operate in a step by step manner, where the operation in the current time step relies on the context from some previous step.
-
-\acp{CNN} were introduced to classify complex, 3-D inputs such as images.
-These are similar to \acp{ANN} such that they are composed of multiple layers, each providing inputs to the following layer. 
-However, \acp{CNN} have more complex neurons than \acp{MLP}, with varying types of layers such as convolutional layers, pooling layers and dense layers.
-A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
 
 \begin{figure}
 	\centering
@@ -39,17 +30,26 @@ A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
 	\scalebox{0.8}{\input{Content/fig/neuron.tex}}
 	\caption{A model of an artificial neuron. \label{fig:artificial-neuron}}
 \end{figure}
+
+Specialised neural networks, called \acfp{RNN}~\cite{medsker2001recurrent}, were introduced to classify temporal sequences. 
+These operate in a step by step manner, where the operation in the current time step relies on the context from some previous step.
+
+\acp{CNN} were introduced to classify complex, 3-D inputs such as images.
+These are similar to \acp{ANN} such that they are composed of multiple layers, each providing inputs to the following layer. 
+However, \acp{CNN} have more complex neurons than \acp{MLP}, with varying types of layers such as convolutional layers, pooling layers and dense layers.
+A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
+
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/cnn-img.pdf}
 	\caption{Example \ac{CNN} \label{fig:cnn}}
 \end{figure}
 
-\acp{ANN} are being increasingly used as controllers in \acp{CPS} due to their ability to learn data relationships in ways that are difficult to replicate~\cite{ANNSafety2007}. 
+\acp{ANN} are being increasingly used as controllers in \ac{CPS} due to their ability to learn data relationships in ways that are difficult to replicate~\cite{ANNSafety2007}. 
 \acp{ANN} can deal with novel inputs to the system and are able to outperform other forms of \ac{AI} at computational efficiency, pattern recognition, function approximation and image identification~\cite{AIComp2016, AIComp2017}. 
 However, it can be very difficult to ensure the safety of a system involving \acp{ANN}~\cite{ANNSafety2007, ANNSafety2018}.
 
-\subsection{Artificial Neural Networks for \ac{CPS}}
+\subsection{\acfp{ANN} for \acf{CPS}}
 In order for an \ac{ANN} to be used in any capacity within a system where safety is critical, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that they it is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}. 
 
 While considerable research effort is starting in the direction of formal verification of \ac{AI}-based \ac{CPS}~\cite{seshia2016towards, russell2015}, the issue of timing verification has received scant attention. 
@@ -69,7 +69,7 @@ These techniques are primarily \textit{proactive} in nature, producing \acp{ANN}
 However, as \acp{ANN} become larger and more full-featured, they  become harder to statically analyse.
 Problematic situations can arise when an \ac{ANN} exhibits unexpected behaviour that the system is unable to safely respond to, and in \ac{CPS} these situations can be life threatening.
 
-\subsection{Static Verification of \acp{ANN}}
+\subsection{Static Verification of \acfp{ANN}}
 There are a variety of pre-existing methods for statically checking the correctness of autonomous (i.e. artificially intelligent) systems.
 For instance, model checking on systems that use timed automata~\cite{timed-enf-autonomous}.
 Okano et. al. explore the concept of model checking of autonomous systems that use timed automata~\cite{timed-enf-autonomous}. 
@@ -169,7 +169,7 @@ The \ac{CNN} can be trained to 99.9\% accuracy according to the test cases used 
 However, this means that the \ac{CNN} fails 0.1\% of the time, and that is only on the tested population, not even taking the entire population into consideration.
 Having a method to verify this \ac{CNN} while it is running and pick up any inevitable failures would allows for this \ac{CNN} to be used in systems where safety is critical.
 
-\subsection{Runtime Enforcement}
+\subsection{\acf{RE}}
 % Runtime enforcement
 \ac{RE} is a subset of \ac{RA} that focuses on formal semantics and blocking, delaying, modifying and/or re-ordering of events in a system. 
 Processes that are deemed unsafe can be monitored by an enforcer at runtime to ensure that they obey desired policies and remain in a safe state at all times~\cite{theoryRE}. 
@@ -177,7 +177,7 @@ Formal runtime verification methodologies mathematically guarantee the detection
 For example, \ac{SA} have been proposed, which formally monitor uni-directional run-time properties only (e.g. outputs only)~\cite{enfsafepol}.
 Edit automata are a type of \ac{SA} that can edit, suppress or insert events~\cite{editautomata}. 
 \ac{DTA} have been proposed that can edit \textit{bi-directional} events at runtime~\cite{recps}. 
-They were designed for reactive \acp{CPS} demonstrated in a pacemaker environment~\cite{recps}. 
+They were designed for reactive \ac{CPS} demonstrated in a pacemaker environment~\cite{recps}. 
 
 An example of the placement of an enforcer, in this case a \ac{DTA}, in a \ac{CPS} is shown in Figure~\ref{fig:re} for an \acf{ESS}.
 It shows that the enforcer sits between the plant and the controller, monitoring the inputs and outputs of the controller.
@@ -188,7 +188,7 @@ It will be able to detect unsafe inputs/outputs to/from the controller and allow
 %	\caption{Example of \ac{RE} \label{fig:re}}
 %\end{figure}
 
-\subsection{Runtime Enforcement of \acp{ANN}}
+\subsection{\acf{RE} of \acfp{ANN}}
 % Write about exisiting autonomous RE
 The idea of \ac{RE} of autonomous systems is a researched topic. 
 De Niz et. al. propose a type of \ac{RE} they term temporal enforcement, which ensures that the system controller meets timing deadlines where outputs are concerned~\cite{safe-enforce-auto}. 
