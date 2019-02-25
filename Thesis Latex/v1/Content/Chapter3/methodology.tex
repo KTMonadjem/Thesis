@@ -3,7 +3,7 @@ The system designed for this case study was made to reflect an \acf{AV} and its 
 The system used multiple techniques to tackle the inherent issues of the \ac{AV} system, i.e. weakness to perturbed inputs and misclassification of detected objects.
 The system's sensors included an overhead, 360$^\circ$ \acf{LiDAR} apparatus, and a single set of front-facing cameras.
 Using only front-facing cameras was sufficient to demonstrate the efficacy of this solution, however it is to be noted that \ac{AV} systems generally use cameras facing multiple, different directions, so that the controller can make properly informed decisions.
-The architecture of the system used can be seen in Figure~\ref{fig:ssnn}. 
+The architecture of the system used can be seen in Figure~\ref{fig:mnn}. 
 
 \subsection{Architecture of a Traffic Sign Recognition AV System}
 Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
@@ -59,12 +59,12 @@ The system controller was encapsulated by a run-time enforcer~\cite{recps} that 
 This type of run-time enforcement, where neither the inputs nor outputs of the sensors or controller are enforced, has been termed as \textit{run-time verification}.
 \textit{Run-time verification} refers to the verification of system parameters during run-time, while ensuring that the system is aware of any failed guards in the enforced policy.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.6]{Content/fig/SSNN.pdf}
-	\caption{Block diagram showing the \acf{AV} system with enforcer}
-	\label{fig:ssnn}
-\end{figure}
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[scale=0.6]{Content/fig/SSNN.pdf}
+%	\caption{Block diagram showing the \acf{AV} system with enforcer}
+%	\label{fig:ssnn}
+%\end{figure}
 
 
 
