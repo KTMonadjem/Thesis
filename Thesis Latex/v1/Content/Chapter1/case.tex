@@ -13,7 +13,7 @@ There are other approaches for arranging the internals of each network while sti
 This network is depicted in Figure~\ref{fig:xor-ann}, and as can be seen, it features five neurons in three layers. While we use this simple illustration, the 
 methodology is applicable for any \ac{NN}.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\scalebox{0.8}{\input{Content/fig/xor-ann.tex}}
 	\caption{Example of an XOR \ac{ANN} showing its layers and weights.	\label{fig:xor-ann}}
@@ -74,13 +74,13 @@ The \ac{WCRT} is the time taken to execute the network function
 $\eta$, i.e. $WCRT\left(M\right) = WCRT\left( \eta\right)$. 
 In the following, we use $WCRT(\eta)$ and $\eta$ interchangeably.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
-	\begin{subfigure}[]{0.15\textwidth}
+	\begin{subfigure}[h]{0.15\textwidth}
 		\centering
 		\input{Content/fig/tca-simple-n.tex}
 	\end{subfigure}%
-	\begin{subfigure}[]{0.33\textwidth}
+	\begin{subfigure}[h]{0.33\textwidth}
 		\vspace{3mm}
 		\begin{lstlisting}
 		loop
@@ -224,7 +224,7 @@ implementations such as in \cite{yuan2011compiling}.
 
 A summary of these approaches is presented in Table~\ref{tbl:sann-approaches}.
 %we separated each neuron call with \texttt{pause} statements --- i.e. called each neuron in its own tick. 
-\begin{table}[H]
+\begin{table}[h]
 	\centering
 	\caption{Summary of \ac{SNN} approaches and their relevant figures, \ac{WCRT}, cycles and response time}
 	\label{tbl:sann-approaches}

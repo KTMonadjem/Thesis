@@ -77,10 +77,10 @@ Usually, it is made up of a connection to the grid, a connection to
 the load, one or more electrical storage devices (such as batteries), and a controller to manage the system, as 
 depicted in Figure~\ref{fig:ess-components}.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\vspace{-3mm}
 	\centering
-	\includegraphics[scale=0.68]{Content/fig/ess_components}
+	\includegraphics[scale=0.8]{Content/fig/ess_components}
 	\caption{Example \ac{ESS} components, showing IO and connections\label{fig:ess-components}}
 \end{figure}
 
@@ -109,9 +109,9 @@ The architecture of this meta neural network is presented in Figure~\ref{fig:ess
 %Using the ``layer by layer'' approach, we can guarantee a low \ac{WCRT} to ensure safety in the face of an electrical over-current, 
 %as the \textit{Safety Cutoff} heuristic will be evaluated in each synchronous tick.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
-	\scalebox{0.7}{\input{Content/fig/tca-ess-sanns.tex}}
+	\scalebox{0.8}{\input{Content/fig/tca-ess-sanns.tex}}
 	\caption{ESS \ac{SNN} / Safety Cutoff arrangement}
 	\label{fig:ess-sanns}
 \end{figure}
@@ -129,7 +129,7 @@ In order to validate this design, we performed \ac{WCRT} analysis of
 both the mono-periodic and multi-periodic implementations. 
 These results are presented in Table~\ref{tbl:res-ess}.
 
-\begin{table}[H]
+\begin{table}[h]
 	\centering
 	\caption{\ac{WCRT} and response time results for the different \texttt{ESS} executions}
 	\label{tbl:res-ess}
@@ -176,7 +176,7 @@ Consequently, it should output $(101)_2$.
 
 Once created, \ac{WCRT} values were able to be derived for both mono-cyclic and multi-cyclic implementations, and are provided in Table~\ref{tbl:res-aibro}.
 
-\begin{table}[H]
+\begin{table}[h]
 	\centering
 	\caption{\ac{WCRT} and response time results for the different \texttt{AI-BRO} executions}
 	\label{tbl:res-aibro}
@@ -200,7 +200,7 @@ an \ac{MLP} \texttt{ADDER} was also created that could add two 31-bit numbers to
 These two networks were both straightforward to train and analyse 
 due to their simple 3-layer designs, and their \acp{WCRT} are presented in Table~\ref{tbl:res-xor-adder}.
 
-\begin{table}[H]
+\begin{table}[h]
 	\centering
 	\caption{\ac{WCRT} and response time results for the different \texttt{XOR} and \texttt{ADDER} executions}
 	\label{tbl:res-xor-adder}
@@ -226,7 +226,7 @@ We implemented this system to demonstrate that the synchronous
 approach works with any type of \acp{ANN}, not just \acp{MLP}.
 The results of this system are presented in Table~\ref{tbl:res-hello}.
 
-\begin{table}[H]
+\begin{table}[h]
 	\centering
 	\caption{\ac{WCRT} and response time results for the different \texttt{HELLO} executions}
 	\label{tbl:res-hello}
@@ -285,7 +285,7 @@ strongly correlated with a Pearson's coefficient value of $0.999999802345$. %}
 	Due to the large number of neurons in the \acp{ANN} of this system, one of the wolf \ac{ANN} was used to calculate the correlation coefficient between an Esterel implementation of an \ac{ANN}, i.e. \ac{SNN}, and an asynchronous \ac{ANN} using the exact same weights.
 	
 	The results of these calculations are presented in Table~\ref{tbl:res-game}.
-	\begin{table}[H]
+	\begin{table}[h]
 		\centering
 		\caption{Correlation coefficient results for \texttt{RABBIT}}
 		\label{tbl:res-game}
@@ -314,7 +314,7 @@ of many types of \acp{ANN} in C, including \acp{CNN}.
 %mentioned blackbox approach and the layer--by--layer approach.}
 Using this system, an Esterel application was developed to recognize images using the black-box and the layer by layer approaches.%}
 
-\begin{table}[H]
+\begin{table}[h]
 	\centering
 	\caption{Combined \ac{WCRT} results comparing the \texttt{ESS}, \texttt{AI-BRO}, \texttt{XOR}, \texttt{ADDER} and \texttt{HELLO} benchmarks, with the added comparison to \ac{MNN2C}}
 	\label{tbl:res-sann}

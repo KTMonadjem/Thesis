@@ -20,7 +20,7 @@ It then outputs controls to the vehicles actuators, which in our case are repres
 A diagram of the \ac{AV} used in this system is shown in Figure~\ref{fig:av}. 
 %\todo{Consider adding a figure showing the NN layout}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/AV.pdf}
 	\caption{Diagram showing the sensor layout for the \ac{AV}. \label{fig:av}}
@@ -35,7 +35,7 @@ These outputs can each be between 0 and 1.
 If any of the values exceed 0.1, the highest valued action is chosen, otherwise the vehicle takes no action, i.e. it will continue at current speed (which could be zero).
 The enforcer layout of the \ac{AV} system can be seen in Figure~\ref{fig:avmnn}.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/AV-MNN.pdf}
 	\caption{Diagram showing the \ac{SNN} for the \ac{AV}, and its interaction with the plant via the enforcer. \label{fig:avmnn}}

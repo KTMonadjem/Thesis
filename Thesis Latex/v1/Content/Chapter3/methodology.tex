@@ -16,7 +16,7 @@ Additionally, the calculation of \acf{WCET} and \acf{WCRT} is enabled by using E
 These ensembles ran in synchronous concurrency with each other, forming a single, larger \ac{MNN}. 
 The outputs of each ensemble were then combined into a batch of outputs forming the \textit{predicted output}.
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/MNN.pdf}
 	\caption{Block diagram showing the \acf{MNN} ensembles and run-time enforcer used in this case study} \label{fig:mnn}
@@ -38,7 +38,7 @@ Once enough time passed without further misclassifications, the vehicle entered 
 However, if another misclassification was detected while unstable, the enforced policy entered a violation state and forced control of the \ac{AV} to the driver.
 The vehicle would not enter autonomous mode again until the system was restarted.
 A diagram of the enforced policy's safety automaton is shown in Figure~\ref{fig:signrte}.
-\begin{figure}[t]
+\begin{figure}[h]
 	\centering
 	\scalebox{1.3}{\input{Content/fig/sign-rte.tex}}
 	\begin{itemize}
@@ -59,7 +59,7 @@ The system controller was encapsulated by a run-time enforcer~\cite{recps} that 
 This type of run-time enforcement, where neither the inputs nor outputs of the sensors or controller are enforced, has been termed as \textit{run-time verification}.
 \textit{Run-time verification} refers to the verification of system parameters during run-time, while ensuring that the system is aware of any failed guards in the enforced policy.
 
-\begin{figure}[t]
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.6]{Content/fig/SSNN.pdf}
 	\caption{Block diagram showing the \acf{AV} system with enforcer}

@@ -15,7 +15,7 @@ This same table shows that when the inputs are perturbed, the enforcer picks up 
 Where input perturbations are concerned, the enforcer responds even better and picks up the majority of the total misclassifications.
 Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, showing that the enforcer performs even better under more unpredictable circumstances.
 
-\begin{table}[ht]
+\begin{table}[h]
 	\centering
 	\caption{Table showing the results of the \ac{AV} prediction \ac{MNN}}
 	\label{tbl:sign-resultsfull}
@@ -43,7 +43,7 @@ Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, sh
 	}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}[h]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graph-acc.tex}}
 	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{MNN} \label{fig:sign-graph-acc}}
@@ -61,7 +61,7 @@ Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, sh
 %	\caption{Line graph showing the number of misclassifications made by the system with perturbed inputs \label{fig:sign-graphpert}}
 %\end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graphboth.tex}}
 	\caption{Line graph showing the number of misclassifications caught by the enforcer \label{fig:sign-graphboth}}
@@ -90,7 +90,7 @@ This is due to the effective training methods used by Keras, allowing for better
 %	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{SNN} \label{fig:sign-graph-acc-mnn2c}}
 %\end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graphboth-mnn2c.tex}}
 	\caption{Line graph showing the number of misclassifications caught by the enforcer with \ac{MNN2C} generated \acp{MNN} \label{fig:sign-graphboth-mnn2c}}

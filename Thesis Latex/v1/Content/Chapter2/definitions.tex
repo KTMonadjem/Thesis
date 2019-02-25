@@ -10,7 +10,7 @@ The enforcers by \cite{recps} were demonstrated to satisfy all above constraints
 However, with the complex I/O of \acp{SNN}, an enforcer that edits only binary events is not sufficient.
 Additionally, the edit functions introduced by \cite{recps} are not sufficient with more complex \ac{DTA}.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{Content/Fig/RE.pdf}
 	\caption{Run-time enforcer between a \ac{SNN} and the \acf{AV}, to monitor the I/O events of the \ac{SNN}. \label{fig:re}}
@@ -31,7 +31,7 @@ In a VDTA, a transition consists of an action carrying values of external variab
 
 Before we look into the formal definition of VDTA, let us consider an example.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{avpedrte.tikz}
 	\caption{\ac{VDTA} for describing the safety policy for the pedestrian detection $\mathcal{V}_{ped}$\label{fig:avpedrte}}
@@ -200,17 +200,17 @@ $\mathcal{V}_{car}$ (Figure~\ref{fig:avcarrte}): Ensure that the car does not dr
 
 $\mathcal{V}_{ped}$ (Figure~\ref{fig:avpedrte}): Ensure that the car does not behave unsafely around pedestrians. If a pedestrian appears in-front of the vehicle $P=true$, then the car should select an appropriate braking action (either $B_S$ or $B_H$). If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise or a braking action is appropriate.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{avcarrte.tikz}
 	\caption{\ac{VDTA} for describing the safety policy for the car detection $\mathcal{V}_{car}$\label{fig:avcarrte}}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{avdriverte.tikz}
 	\caption{\ac{VDTA} for describing the safety policy for driving according to the rules $\mathcal{V}_{drive}$\label{fig:avdriverte}}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{avcnnrte.tikz}
 	\caption{\ac{VDTA} for describing the safety policy for the \ac{CNN} ensembles $\mathcal{V}_{cnn}$\label{fig:avcnnrte}}
