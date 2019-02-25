@@ -5,7 +5,7 @@ We propose the use of bi-directional run-time enforcers~\cite{recps} to enforce 
 In order to specify the safety policies Pinisetty et al define \acf{DTA}~\cite{recps}.
 These \ac{DTA} can enforce binary events at run-time using \textit{edit functions}~\cite{recps}.
 To enforce the policy $\varphi$, the run-time enforce must satisfy some constraints: soundness, monotonicity, instantaneity, transparency and causality.
-The enforcers by \cite{recps} were proved to satisfy all above constraints.
+The enforcers by \cite{recps} were demonstrated to satisfy all above constraints.
 
 However, with the complex I/O of \acp{SNN}, an enforcer that edits only binary events is not sufficient.
 Additionally, the edit functions introduced by \cite{recps} are not sufficient with more complex \ac{DTA}.
@@ -13,7 +13,7 @@ Additionally, the edit functions introduced by \cite{recps} are not sufficient w
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{Content/Fig/RE.pdf}
-	\caption{Run-time enforcer between a \ac{SNN} and the \acf{AV} \label{fig:re}}
+	\caption{Run-time enforcer between a \ac{SNN} and the \acf{AV}, to monitor the I/O events of the \ac{SNN}. \label{fig:re}}
 \end{figure}
 
 Consider Figure~\ref{fig:re}, we wish to enforce the inputs and outputs events of the \ac{SNN}, defined by some safety policy $\varphi$.
@@ -33,8 +33,8 @@ Before we look into the formal definition of VDTA, let us consider an example.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\linewidth]{avpedrte.tikz}
-	\caption{Safety Automaton for Policy $\mathcal{V}_{ped}$\label{fig:avpedrte}}
+	\includegraphics[width=0.7\linewidth]{avpedrte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for the pedestrian detection $\mathcal{V}_{ped}$\label{fig:avpedrte}}
 \end{figure}
 
 \begin{example}
@@ -189,16 +189,32 @@ The set of runs from the initial state $q_0\in Q$,  is denoted $\Run(\calA)$ and
 \subsection{Defining Safety Automata for an \ac{AV} system}
 In order for the \ac{AV} system to operate safely, it must follow a set of policies ($\mathcal{V}$), defined in English here:
 
-$\mathcal{V}_{cnn}$: The output of the vision \ac{CNN} ensemble networks ($O$) must match the \ac{LiDAR} values ($L$) when the confidence of the ensemble networks is low. 
+$\mathcal{V}_{cnn}$ (Figure~\ref{fig:avcnnrte}): The output of the vision \ac{CNN} ensemble networks ($O$) must match the \ac{LiDAR} values ($L$) when the confidence of the ensemble networks is low. 
 If the confidence is high, and there is a mismatch, the output should be classified as \textit{unknown} ($U$).
 The system should treat this output as if it were a pedestrian, i.e. with utmost caution.
 
-$\mathcal{V}_{drive}$: The vehicle may not exceed the safe speed limit. 
+$\mathcal{V}_{drive}$ (Figure~\ref{fig:avdriverte}): The vehicle may not exceed the safe speed limit. 
 An \textit{acceleration} command $A$ should be suppressed when the vehicle's speed limit of 100km/h is reached.
 
-$\mathcal{V}_{car}$: Ensure that the car does not drive into other vehicles. If an \textit{acceleration} command $A$ is asserted when the car in front (i.e. $O_{2_C}$ or $O_{5_C}$) is driving slower than the \ac{AV} ($O_{2_V}<S|O_{5_V}<S$), then this is suppressed and instead an appropriate brake speed $B_S$ (soft) or $B_H$ (hard) would be asserted instead.
+$\mathcal{V}_{car}$ (Figure~\ref{fig:avcarrte}): Ensure that the car does not drive into other vehicles. If an \textit{acceleration} command $A$ is asserted when the car in front (i.e. $O_{2_C}$ or $O_{5_C}$) is driving slower than the \ac{AV} ($O_{2_V}<S|O_{5_V}<S$), then this is suppressed and instead an appropriate brake speed $B_S$ (soft) or $B_H$ (hard) would be asserted instead.
 
-$\mathcal{V}_{ped}$: Ensure that the car does not behave unsafely around pedestrians. If a pedestrian appears in-front of the vehicle $P=true$, then the car should select an appropriate braking action (either $B_S$ or $B_H$). If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise or a braking action is appropriate.
+$\mathcal{V}_{ped}$ (Figure~\ref{fig:avpedrte}): Ensure that the car does not behave unsafely around pedestrians. If a pedestrian appears in-front of the vehicle $P=true$, then the car should select an appropriate braking action (either $B_S$ or $B_H$). If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise or a braking action is appropriate.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{avcarrte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for the car detection $\mathcal{V}_{car}$\label{fig:avcarrte}}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{avdriverte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for driving according to the rules $\mathcal{V}_{drive}$\label{fig:avdriverte}}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{avcnnrte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for the \ac{CNN} ensembles $\mathcal{V}_{cnn}$\label{fig:avcnnrte}}
+\end{figure}
 
 We can define these rules of the \ac{AV} system as a \textit{Safety Automata}~\cite{recps}, which are a kind of \acf{DTA}. 
 Examples of this are presented in Figures \ref{fig:avpedrte} - \ref{fig:avcnnrte}, which represent the automata used in the four policies of the \ac{AV} system.
@@ -207,22 +223,6 @@ $P$ is a flag that denotes the presence of a pedestrian in a position that will 
 $T_{lim}$ is a predefined length of time by which the system should have reacted to a pedestrian in a dangerous position.
 
 Finally, a complete policy framework can be established by simply ANDing the component policies together, i.e. \\ $\mathcal{V}_{av} = \mathcal{V}_{cnn} \wedge \mathcal{V}_{drive} \wedge \mathcal{V}_{car} \wedge \mathcal{V}_{ped}$.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\linewidth]{avcarrte.tikz}
-	\caption{Safety Automaton for Policy $\mathcal{V}_{car}$\label{fig:avcarrte}}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\linewidth]{avdriverte.tikz}
-	\caption{Safety Automaton for Policy $\mathcal{V}_{drive}$\label{fig:avdriverte}}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\linewidth]{avcnnrte.tikz}
-	\caption{Safety Automaton for Policy $\mathcal{V}_{cnn}$\label{fig:avcnnrte}}
-\end{figure}
 
 %The first policy, $\mathcal{V}_{cnn}$, compares the \ac{LiDAR} depiction and the classified image class from the corresponding ensemble outputs, if the \ac{LiDAR} and ensemble outputs are different, and the ensemble confidence value is low, the ensemble output is changed to match the output of the corresponding \ac{LiDAR} reading.
 %If the ensemble confidence is high, both the \ac{LiDAR} reading and the corresponding ensemble output are changed to signal that the object detected is \textit{Unknown} and should be treated with extra caution, as if the object were a pedestrian.

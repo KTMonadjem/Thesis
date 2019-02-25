@@ -22,12 +22,12 @@ Okano et. al. explore the concept of model checking of autonomous systems that u
 This technique is a static technique and cannot be applied to autonomous \ac{ANN} systems, where the behaviour of the \ac{ANN} controller cannot be defined by an automaton.
 For an autonomous system that includes at least one \ac{ANN} in its controller, novel techniques are required to guarantee the safety properties of the \acp{ANN}
 
-Deep learning is widely and extensively researched field with regards to modern machine learning that refers to the learning of data representations, rather than learning task specific algorithms~\cite{schmidhuber2015deep}.
+Deep learning is a widely and extensively researched field with regards to modern machine learning that refers to the learning of data representations, rather than learning task specific algorithms~\cite{schmidhuber2015deep}.
 Deep learning has applicability in a lot of current \ac{ANN} implementations, such as the autonomous vehicles used by Tesla and Uber.
 %More recently, progress has been made in the field of verification of Deep \acp{ANN}. 
 Verification of \ac{ANN}, specifically, \acfp{DNN}, can be performed for properties (such as robustness and accuracy) using \ac{SMT}~\cite{Gehr2018AI2SA,reluplex,DeepANNverify}. 
-Using \ac{SMT} and other techniques, certain safety properties of an \ac{ANN}, such as robustness, can be proven. 
-This is useful, because the robustness of a deep \ac{ANN} is critical property to its safety.
+Using \ac{SMT} and other techniques, certain safety properties of an \ac{ANN}, such as robustness, can be demonstrated. 
+This is useful, because the robustness of a deep \ac{ANN} is a critical to its safety.
 A robust \ac{ANN} is one that will provide consistently accurate outputs even when the input to the \ac{ANN} is noisy, incorrectly coloured or otherwise distorted. 
 However, \ac{SMT} has issues with scale: as the \acp{ANN} to analyse become larger, analysis time grows exponentially~\cite{Gehr2018AI2SA}, making it very difficult to verify large, deep \acp{ANN}.
 %Ergo, they are less efficient on larger deep \acp{ANN}.

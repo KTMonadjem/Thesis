@@ -8,7 +8,7 @@ Unfortunately, such faults have already occurred.
 For instance, both Tesla's and Uber's \acp{AV} have had accidents~\cite{stewart_2018,coldewey_2018}.
 
 It is difficult to build complete models of these scenarios, as \ac{AV} companies tend to produce or customise their own vehicles with their own proprietary hardware and software.
-Nevertheless, in this paper, we use these unfortunate incidents as inspiration for a case study for this paper, where we examine one aspect of \ac{AV} control: the braking mechanism.
+Nevertheless, in this thesis, we use these unfortunate incidents as inspiration for a case study for this paper, where we examine one aspect of \ac{AV} control: the braking mechanism.
  
 Here, we integrate a sensor package consisting of five cameras and a \ac{LiDAR} sensor. 
 Each of the five cameras feeds into an \acf{MNN} ensemble~\cite{Maqsood2004} of \acp{SNN}, using the Darknet library~\cite{darknet13}.
@@ -38,7 +38,7 @@ The enforcer layout of the \ac{AV} system can be seen in Figure~\ref{fig:avmnn}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/AV-MNN.pdf}
-	\caption{Diagram showing the \ac{SNN} for the \ac{AV}. \label{fig:avmnn}}
+	\caption{Diagram showing the \ac{SNN} for the \ac{AV}, and its interaction with the plant via the enforcer. \label{fig:avmnn}}
 \end{figure}
 
 Due to this design of this system, it is possible for the vehicle to behave badly in various ways. 
