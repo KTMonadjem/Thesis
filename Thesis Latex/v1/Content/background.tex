@@ -37,6 +37,7 @@ These operate in a step by step manner, where the operation in the current time 
 \acp{CNN} were introduced to classify complex, 3-D inputs such as images.
 These are similar to \acp{ANN} such that they are composed of multiple layers, each providing inputs to the following layer. 
 However, \acp{CNN} have more complex neurons than \acp{MLP}, with varying types of layers such as convolutional layers, pooling layers and dense layers.
+\acp{CNN}, due to their deep structure, are able to learn larger and more complex data relationships than the previously introduced \ac{MLP}.
 A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
 
 \begin{figure}
@@ -69,14 +70,24 @@ These techniques are primarily \textit{proactive} in nature, producing \acp{ANN}
 However, as \acp{ANN} become larger and more full-featured, they  become harder to statically analyse.
 Problematic situations can arise when an \ac{ANN} exhibits unexpected behaviour that the system is unable to safely respond to, and in \ac{CPS} these situations can be life threatening.
 
-\subsection{Static Verification of \acfp{ANN}}
+\subsection{Functional Verification of \acfp{ANN}}
+Typical approaches for ensuring that \acp{CPS} are safe involve processes to demonstrate that an acceptable level of risk has been achieved~\cite{scann}. 
+Designers of \ac{AI} software rely on several validation and verification technique, including, but not limited to, conventional testing, run-time monitoring, static analysis, model checking and theorem proving~\cite{menzies2005verification}.
+Unfortunately, due to the complexity of \acfp{ANN}, techniques such as static analysis, model checking and theorem proving are less valuable in \ac{ANN} environments. 
+Conventional testing is a common method to test the accuracy of \acp{ANN}, but this method is not fool-proof and its efficacy relies heavily on the creator of the test cases.
+Run-time monitoring is a technique that could greatly benefit the safety of running \acp{ANN}, but there has been minimal research done in this field.
+
 There are a variety of pre-existing methods for statically checking the correctness of autonomous (i.e. artificially intelligent) systems.
 For instance, model checking on systems that use timed automata~\cite{timed-enf-autonomous}.
-Okano et. al. explore the concept of model checking of autonomous systems that use timed automata~\cite{timed-enf-autonomous}. 
+Okano et. al. explore the concept of model checking of autonomous systems that use timed automata~\cite{timed-enf-autonomous}.
+Conventional model checking done on this automaton allowed the safety and robustness of the system to be demonstrated.
+While techniques such as model checking work very well on non-\ac{ANN} \ac{AI}, \acp{ANN} are not usually able to be simplified to simple automata. 
 This technique is a static technique and cannot be applied to autonomous \ac{ANN} systems, where the behaviour of the \ac{ANN} controller cannot be defined by an automaton.
 For an autonomous system that includes at least one \ac{ANN} in its controller, novel techniques are required to guarantee the safety properties of the \acp{ANN}.
 However, \acp{ANN} are not usually able to be simplified to simple automata.
 
+Deep learning is a widely and extensively researched field with regards to modern machine learning that refers to the learning of data representations, rather than learning task specific algorithms~\cite{schmidhuber2015deep}.
+Deep learning has applicability in a lot of current \ac{ANN} implementations, such as the autonomous vehicles used by Tesla and Uber.
 Verification of \ac{ANN}, specifically, Deep Neural Networks, can be performed for certain properties (such as robustness) using \ac{SMT}~\cite{Gehr2018AI2SA,reluplex,DeepANNverify}.
 This is useful, because the robustness of a deep \ac{ANN} is a critical property of its safety.
 A robust \ac{ANN} is one that will provide consistently accurate outputs even when the input to the \ac{ANN} is noisy, incorrectly coloured or otherwise distorted. 
@@ -86,11 +97,11 @@ Ergo, they are less efficient on larger, more complex \acp{ANN}.
 In addition, they require the \acp{ANN} to fulfil some specific properties, such as specific activation functions and specific \ac{ANN} variants, i.e. \cite{Gehr2018AI2SA} only allows \acp{CNN} and \acp{MLP} with \ac{ReLU} activation functions.
 This limits flexibility, as each \ac{ANN} must be designed around these restrictions, thus limiting properties of the \ac{ANN}, such as its activation function and size, could result in an \ac{ANN} that is inefficient, not robust, slow, etc.
 
-Manual testing is a simple method to check for the correctness of an \ac{ANN}-based system. 
-However, this is a time-consuming and error-prone process.
-It is very difficult to ensure that tests have acceptable coverage of all possible situations~\cite{ANN-test}.
+Due to these difficulties, it can be tempting for designers to simply rely on manual testing to check for the correctness of \ac{ANN}-based systems. 
+However, this is a time-consuming and error-prone process which cannot provide good guarantees, as it is very difficult to ensure that tests have acceptable coverage of all possible situations~\cite{ANN-test}.
+Furthermore, as with the static analysis approaches, as the \acp{ANN} increase in size and complexity, verification and validation of these networks becomes increasingly more difficult to achieve~\cite{Gehr2018AI2SA}; test data is not unlimited, time is a resource and verification is not 100\% accurate.
 
-Finally, no matter the chosen methodology, as \acp{ANN} increase in size and complexity, verification and validation of these networks becomes increasingly more difficult to achieve~\cite{Gehr2018AI2SA}.
+Finally, no matter the chosen methodology, as \acp{ANN} increase in size and complexity, verification and validation of these networks becomes increasingly more difficult and resource intensive to achieve~\cite{Gehr2018AI2SA}.
 
 \section{Synchronous Languages}
 Synchronous languages include a variety of different languages, some notable examples being Esterel, Lustre and Signal~\cite{benveniste2003synchronous}.
@@ -160,6 +171,25 @@ When combined, the statements in this example would combine to do the following,
 	\label{fig:esterel-abro}
 \end{figure}
 
+\section{\acf{WCET} of \acf{CPS}}
+The timing analysis done in this thesis, notably \acf{WCET} analysis, is done using the Patmos controller architecture by the T-CREST project~\cite{patmos}~\cite{patmos:ppes2011}.
+Patmos is a time-predictable processor architecture on which time-predictable software can be run and, more importantly, analysed.
+Platin~\cite{compiler:platin:kps15} is a \acf{WCET} analysis tool used to calculate the \ac{WCET} of software implemented on Patmos processors.
+The Platin tool is given the Patmos processor's parameters and an entry point in the C code that will be analysed.
+This entry point can be any reachable C function from the \textit{main} function of the given project.
+The Platin tool then compiles the C function to an intermediary file, upon which the tool uses to calculate the \ac{WCET}.
+The resultant \ac{WCET} is a number of cycles on the given Patmos processor type.
+
+However, this tool does introduce some rules to be followed for the C software to be time-predictable.
+These are listed as follows:
+\begin{itemize}
+	\item All loops must be bounded. Every loop contained or accessed by the entry function must have a minimum and maximum number of cycles within which it will finish executing. Any \textit{for} loops are analysed by the Platin tool for the minimum and maximum, however \textit{while} loops must be given these parameters using a \textit{pragma} in the following format: \textit{pragma loopbound min <minimum> max <maximum>}. These \textit{pragmas} may also be assigned to \textit{for} loops, but this is not necessary.
+	\item Dynamic memory allocation must be avoided. The use of \textit{malloc} and \textit{calloc} statements must be avoided.
+	\item No C \textit{string} manipulation can be handled by Platin. This includes, but is not limited to \textit{printf} and \textit{strcpy} functions.
+	\item While mathematical floating point operations can be handled by Platin, it does so very badly; i.e. a unnecessarily high \ac{WCET} is generated. As a result, floating point operations should be avoided and integer, or fixed-point, operations should be used instead.
+\end{itemize}
+All code generated for this thesis (except for \acp{CNN} generated using the Darknet library) adhere to this list of time-predictable rules.
+Thus, all code generated for this thesis (bar Darknet \acp{CNN}) is time-predictable when implemented on a Patmos processor.
 
 \section{\acf{RE} of Autonomous Systems}
 While static verification has its place, more dynamic approaches to verification and safety can be used to pick up anything that the static verification and testing may have missed.
@@ -178,9 +208,9 @@ Edit automata are a type of \ac{SA} that can edit, suppress or insert events~\ci
 \ac{DTA} have been proposed that can edit \textit{bi-directional} events at runtime~\cite{recps}. 
 They were designed for reactive \ac{CPS} demonstrated in a pacemaker environment~\cite{recps}. 
 
-An example of the placement of an enforcer, in this case a \ac{DTA}, in a \ac{CPS} is shown in Figure~\ref{fig:re} for an \acf{ESS}.
-It shows that the enforcer sits between the plant and the controller, monitoring the inputs and outputs of the controller.
-It will be able to detect unsafe inputs/outputs to/from the controller and allow the system to act in a safe manner.
+%An example of the placement of an enforcer, in this case a \ac{DTA}, in a \ac{CPS} is shown in Figure~\ref{fig:re} for an \acf{ESS}.
+%It shows that the enforcer sits between the plant and the controller, monitoring the inputs and outputs of the controller.
+%It will be able to detect unsafe inputs/outputs to/from the controller and allow the system to act in a safe manner.
 %\begin{figure}
 %	\centering
 %	\includegraphics[width=\textwidth]{Content/fig/ESS-RE.pdf}
@@ -197,14 +227,11 @@ While this looks at the enforcement of system outputs, the inputs are not monito
 Additionally, the case study involves a robot controlled by an automaton, not a highly complex \ac{AI} such as an \ac{ANN}.
 
 
-
-
-
 \section{Summary}
 This chapter covers the basics of the concepts introduced in this thesis.
 
 A description of what \acp{ANN} are, their functionality and their safety properties is given.
-The structure of various \acp{ANN} is shown and briefly described.
+The structure of some types of \acp{ANN} is shown and briefly described.
 
 The basics of synchronous programming is given, in which Esterel is described in more detail.
 A complete example of an Esterel program is given, which runs an \ac{ANN}, with a description of the syntax and how it runs.
