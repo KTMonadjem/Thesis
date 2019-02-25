@@ -71,7 +71,7 @@
    \RequirePackage[
      pdftex,
      a4paper,
-     twoside, % Simon: comment this out and use oneside in document options for single side
+     %twoside, % Simon: comment this out and use oneside in document options for single side
      verbose,
      bindingoffset=10mm,
      left=20mm,
@@ -87,7 +87,7 @@
      dvips,
      pdftex,
      a4paper,
-     twoside, % Simon: comment this out and use oneside in document options for single side
+     %twoside, % Simon: comment this out and use oneside in document options for single side
      verbose,
      bindingoffset=10mm,
      left=20mm,
