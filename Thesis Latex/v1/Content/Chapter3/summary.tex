@@ -9,7 +9,7 @@ Additionally, perturbations to a \ac{CNN}'s input can greatly decrease the predi
 This, in turn, increases the chance of a misclassification by the system's controller and decreases the safety of the system.
 
 In this chapter, two techniques are implemented to increase the safety of \acfp{CNN} in \acf{AV} systems.
-I.e. two techniques are introduced that make a system that misclassifies data safer: (1) reduce the chance of misclassifications and/or (2) act in a safe manner should a misclassification occur.
+The techniques are: (1) to reduce the chance of misclassifications; and (2) to act in a safe manner should a misclassification occur.
 
 To address the first, a complex \acf{MNN} was implemented as the system's controller, see Figure~\ref{fig:mnn}.
 This \ac{MNN} consisted of three different \ac{MNN} ensembles, each ensemble classifying a different aspect of the detected object.
@@ -22,7 +22,7 @@ The simulated system used the above-mentioned \ac{MNN} and sensor fusion to addr
 The system combined \acf{LiDAR} input with the \ac{MNN}, thereby increasing the chance of detecting a misclassification.
 Additionally, a timed automaton was used as the safety policy; this allowed the system to check for consecutive misclassifications and enforce the control of the vehicle where necessary.
 
-The runtime enforcement used in this system hs been termed ``runtime verification'', as the outputs of the \ac{MNN} itself were not enforced.
+The runtime enforcement used in this system has been termed ``runtime verification'', as the outputs of the \ac{MNN} itself were not enforced.
 Rather, the control of the vehicle (autonomous or driver operated) was enforced.
 If a situation was deemed unsafe by the safety policy, the runtime enforcer would force control of the vehicle to the driver.
 

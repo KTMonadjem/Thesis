@@ -22,7 +22,7 @@ The solution proposed is to use runtime enforcement as a means to safely combine
 
 \subsection{Input Perturbation for Deep Artificial Neural Networks}
 This chapter also tackles another problematic aspect of using \acp{CNN}: input perturbations.
-A group showed that very slight modifications to the input image of a \acf{CNN}, such as the discolouration of a few pixels, could cause the image to be misclassified~\cite{Gehr2018AI2SA, ann-pert}.
+A research group showed that very slight modifications to the input image of a \acf{CNN}, such as the discolouration of a few pixels, could cause the image to be misclassified~\cite{Gehr2018AI2SA, ann-pert}.
 A \ac{CNN} can train to high accuracy, e.g. 99.99\%, on the training set, but simple perturbations to the \ac{CNN}'s input can lead to drastically reduced accuracy once the \ac{CNN} has been deployed.
 This thesis shows two methods of increasing the prediction accuracy of an \ac{CNN} affected by input perturbations: the first is the above-mentioned sensor fusion with runtime enforcement and the other is using a \acf{MNN} ensemble of different \acp{CNN}, each classifying a different aspect of the input image and congregating to make a decision as a whole.
 
@@ -33,7 +33,7 @@ Sensor fusion is the combination of two or more different sensor types to increa
 Where \acfp{AV} are concerned safety is of utmost importance, making this the biggest area of research for sensor fusion using \acp{CNN}.
 
 The proposed approach to safe deep \acp{ANN} combines runtime enforcement and sensor fusion to safely increase the detection accuracy of \acp{CNN} in \acp{AV}.
-The sensors in question are a 360$\circ$ \ac{LiDAR} sensor and three front-facing cameras.
+The sensors in question are a $360^\circ$ \ac{LiDAR} sensor and three front-facing cameras.
 The sensor outputs are combined synchronously using a synchronous runtime enforcer, however the runtime enforcer does not enforce the outputs of the detection system.
 Rather, the runtime enforcer verifies the integrity of the detected outputs, and in the case of a possible misclassification the system is put into a safe mode where control of the vehicle is returned to the driver.
 This type of runtime enforcement has been termed as ``runtime verification''.

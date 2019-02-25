@@ -1,8 +1,8 @@
 \section{Simulating a Traffic Sign Recognition AV System}
-The system designed for this case study was made to reflect a \acf{AV} and its object detection mechanisms. 
+The system designed for this case study was made to reflect an \acf{AV} and its object detection mechanisms. 
 The system used multiple techniques to tackle the inherent issues of the \ac{AV} system, i.e. weakness to perturbed inputs and misclassification of detected objects.
 The system's sensors included an overhead, 360$^\circ$ \acf{LiDAR} apparatus, and a single set of front-facing cameras.
-Using only front-facing cameras was sufficient to prove the efficacy of this solution, however it is to be noted that \ac{AV} systems generally use cameras facing multiple, different directions, so that the controller can make properly informed decisions.
+Using only front-facing cameras was sufficient to demonstrate the efficacy of this solution, however it is to be noted that \ac{AV} systems generally use cameras facing multiple, different directions, so that the controller can make properly informed decisions.
 The architecture of the system used can be seen in Figure~\ref{fig:ssnn}. 
 
 \subsection{Architecture of a Traffic Sign Recognition AV System}
@@ -19,7 +19,7 @@ The outputs of each ensemble were then combined into a batch of outputs forming 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/MNN.pdf}
-	\caption{Block diagram showing the \acf{MNN} ensemble} \label{fig:mnn}
+	\caption{Block diagram showing the \acf{MNN} ensembles and run-time enforcer used in this case study} \label{fig:mnn}
 \end{figure}
 
 \subsection{Sensor Fusion for a Traffic Sign Recognition AV System}
@@ -31,8 +31,8 @@ The camera outputs were fed into a \ac{MNN} (see Figure~\ref{fig:mnn}) where the
 Sensor fusion happened after classification occurred and was done using an enforcer during runtime.
 
 \subsection{Input Perturbation Safety Policy}
-A safety (timed) automata~\cite{recps} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
-The automata started in a safe state, where control of the vehicle was autonomously handled by the system controller.
+A \acf{VDTA}~\cite{recps} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
+The automaton started in a safe state, where control of the vehicle was autonomously handled by the system controller.
 If a misclassification was detected, the enforced policy entered an unstable state, still under autonomous control. 
 Once enough time passed without further misclassifications, the vehicle entered the safe state again.
 However, if another misclassification was detected while unstable, the enforced policy entered a violation state and forced control of the \ac{AV} to the driver.

@@ -9,14 +9,16 @@ To test the \ac{MNN}'s ability to deal with perturbations, the input images (tak
 Figure~\ref{fig:sign-graph-acc} shows that the input perturbations decreased the accuracy of the classifiers by as much as 50\%, a huge amount.
 However, the aim of this approach is not only to increase the classification accuracy of the \acp{SNN} but rather catch misclassifications made by the \acp{SNN}, i.e. verify that the classifications made by the \acp{MNN} are valid.
 As such the results displayed don't show an increase in accuracy, but rather that the enforcer is fully capable of catching misclassifications made by the \acp{MNN}.
-Table~\ref{tbl:sign-resultsfull} shows that without input perturbations, the enforcer caught about 70\% of all misclassifications. 
+Table~\ref{tbl:sign-resultsfull} shows that without input perturbations, the enforcer captured more than 65\% of all misclassifications. 
 This is a huge amount, more than half of all the misclassifications made were detected by the enforcer, and the safety of the system turned over to the driver.
-This same table show that when the inputs are perturbed, the enforcer picks up more misclassifications than with the original images, averaging at around 80\% of all misclassifications.
+This same table shows that when the inputs are perturbed, the enforcer picks up more misclassifications than with the original images, averaging at around 80\% of all misclassifications.
 Where input perturbations are concerned, the enforcer responds even better and picks up the majority of the total misclassifications.
 Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, showing that the enforcer performs even better under more unpredictable circumstances.
 
 \begin{table}[ht]
 	\centering
+	\caption{Table showing the results of the \ac{AV} prediction \ac{MNN}}
+	\label{tbl:sign-resultsfull}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{|p{0.2\linewidth}||p{0.2\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|}
 			\hline
@@ -39,8 +41,6 @@ Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, sh
 			7000 (best) & 60.42 & 49.13 & 81.31 \\ \hline
 		\end{tabular}%
 	}
-	\caption{Table showing the results of the \ac{AV} prediction \ac{MNN}}
-	\label{tbl:sign-resultsfull}
 \end{table}
 
 \begin{figure}[t]
