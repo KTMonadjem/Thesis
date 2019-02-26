@@ -28,11 +28,6 @@ Table~\ref{table:policies} lists every policy and provides a brief overview of e
 	\end{tabular}
 \end{table}
 
-Table~\ref{table:policies} shows the average execution time and overhead of each policy used in this chapter.
-The overhead of the combined policies was less than 5\% for \ac{ESS} and RABBIT; these systems both had relatively simple and small enforcers.
-The overhead for the \ac{AV} combined policy was less than 10\% but still more than the 5\% of the other benchmarks.
-This policy had more safety conditions to enforce than either of the other two systems.
-
 \begin{table}[h]
 	\centering
 	\caption{Design and overhead of the policies used in \ac{ESS}, \ac{AV} and RABBIT}
@@ -54,7 +49,7 @@ This policy had more safety conditions to enforce than either of the other two s
 		& 2 & 99 & Yes & 803 & 9.1 \\ \hline       
 		\multicolumn{6}{|p{0.70\linewidth}|}{RABBIT} \\ \hline
 		$None$ 										&  &  &  & 90.1 & 0 \\ 
-		$\varphi_{bound}$ 							& 2 & 16 & No & 89.45 & -0.7 \\
+		$\varphi_{bound}$ 							& 2 & 16 & No & 89.45 & 0.0 \\
 		$\varphi_{score}$ 							& 2 & 112 & Yes & 94 & 4.3 \\
 		$\varphi_{bound} \wedge \varphi_{score}$ 	& 2 & 126 & Yes & 93.8 & 4.1 \\ \hline      
 	\end{tabular}
@@ -62,14 +57,11 @@ This policy had more safety conditions to enforce than either of the other two s
 
 \subsection{\acf{ESS}} \label{sec:ess4}
 The \ac{ESS} is inspired by \cite{chaudhari2017hybrid}, in which an \ac{EV} charging station has a separate battery that it uses to assist the charging of the \acp{EV}, with the general idea that the battery is charged when power is cheap, and discharged when demand is high or power is expensive.
-The \ac{ESS} uses a three-layer \ac{MLP} to decide the action for the battery in the next tick.
-The overall output of this \ac{MLP} is whether the battery is charging or discharging, and how much power it is charging or discharging.
-Since the ideal outputs of the \ac{ESS} are unknown, the \ac{ESS} controller was trained using a type of reinforcement learning called Q-learning~\cite{qlearning2010}.
-While the \ac{AV} system is a hard real-time system the \ac{ESS} system is a soft real-time system, as a missed deadline won't result in fatalities.
+The \ac{ESS} uses a pre-trained, three-layer \ac{MLP}, previously introduced in Chapter 3, to decide the action for the battery in the next tick.
+While the \ac{AV} system is a hard real-time system the \ac{ESS} system is a soft real-time system, as a missed deadline will not result in fatalities.
 Failures in this system could cause damage to electrical components and potentially cause fires (from overcharging or overcurrent) and maybe even customer property, i.e. the charging station and the \acp{EV}, and thus appropriate policies can be put into place to make the system safer.
-Even though this system's \ac{MLP} was well-trained, and tests of it only showed safe behaviour (it never outputted dangerous commands that could have overcharged the battery or allowed for an overcurrent discharge to occur), it is very difficult for testing to be fully comprehensive of any system.
-Hence, \ac{RE} can be used to formally guarantee that the controller will behave safely at all times.
-This allows us to show that even though the system has been well trained and hardly even makes mistakes, \ac{RE} can still be used to improve the system's safety without affecting the performance of the system.
+\ac{RE} can be used to formally guarantee that the controller will behave safely at all times.
+This allows us to show that even though the system has been well trained and hardly makes mistakes, \ac{RE} can still be used to improve the system's safety without affecting the performance of the system.
 The enforced policies monitor the controller's \ac{MLP} outputs and ensure that (1) the battery levels never reach critical levels, and (2) that too much power is never given or taken from the battery in too short a period of time.
 Running this system with enforced policies shows that the battery's \ac{SoC} never exceeds critical values and that the battery never charges or discharges too much power.
 The charge of buying and selling electricity to the customer's \ac{EV} does not change by any significant amount when the enforcer is in place, i.e. it does not affect the performance of the system while it keeps the system safe.
@@ -91,20 +83,30 @@ The results of the system with and without the policies enforced are shown in Ta
 	\end{tabular}
 \end{table}
 
+Table~\ref{table:essres} shows the instances of dangerous or unsafe behaviour by the system over an entire run of the system.
+The \ac{ESS}, without the enforcer in place, operated under safe levels for a total of 87 minutes in one day.
+This is a large amount of time for the battery to spend undercharged and can cause damage to the battery.
+However, with the enforcer, the \ac{ESS} was as safe as an ideal system: no time was spent under- or over-charged.
+Additionally, the cost of buying power, accrued over one day, did not change much from the enforced to the unenforced system.
+The \$1 difference is due to the floating-point to integer conversions taken when using the run-time enforcer.
+
 \subsection{\acf{AV}}
 The \acp{ANN} in this system were trained for varying amounts of epochs, notably 1, 10, 100, 1,000, 10,000 and 100,000 epochs.
-A partially trained \ac{ANN} will exhibit behaviour that is unexpected, and perhaps unsafe, because \acp{ANN} gain robustness through training, i.e. a less trained \ac{ANN} will be less robust.
+A partially trained \ac{ANN} will exhibit behaviour that is unexpected, and perhaps unsafe, because \acp{ANN} gain robustness through training, a less trained \ac{ANN} will be less robust.
+This is also true for an over-trained \ac{ANN}, these are too used to training in a certain environment and are not able to respond well to being used in an untrained environment.
 This partially trained system is used to show how \ac{RE} can prevent unsafe events in a system that does not behave as expected.
 
 The \ac{AV} system's performance was measured by the amount of time the \ac{AV} was able to run before an accident occurred within the system.
 At every level of training, the whole system was run 10,000 times, where one run consisted of running the system for 100 ticks, noting if and when an accident occurred and what caused the accident. 
 The simulation for these runs worked by randomly generating objects (vehicles and people) in the sensor positions of the vehicle (see Figure~\ref{fig:av}).
 As a result, the \ac{AV} had limited time to respond to each generated object, occasionally ending up in situations where an accident was unavoidable, such as being rear-ended by the vehicle behind when braking to avoid hitting a pedestrian ahead.
-The results show this, as the number of incidents per run is high, regardless of the amount of training or the enforcer, seen in Figure~\ref{fig:avaccidents}.
+The results show this, as the number of incidents per run is high, shown in Figure~\ref{fig:avaccidents}.
+This also affected the time the system was able to run before an accident occurred, since being rear-ended by another vehicle would end the run as soon as it happened.
+With the more trained \acp{ANN}, most of the incidents were due to a collision with a vehicle behind it.
 
 Figure~\ref{fig:avtrained} compares the amount of training of the \ac{AV} system's \acp{ANN} with the performance of the system at that amount of training, as measured by the average number of ticks the system ran for before an unsafe incident occurred.
-As expected, there is a direct relationship between the amount of training and the duration before an accident occurred, the difference between a less trained and more trained system is noticeable.
-However, the difference between a less trained and more trained system is almost unnoticeable when the system has enforced policies. 
+There is a direct relationship between the amount of training and the duration before an accident occurred, the difference between a less trained and more trained system is noticeable.
+However, the difference between a less trained and more trained system is negligible when the system has enforced policies; both were able to run for almost an entire run. 
 
 Over-training is a well known phenomenon that \acp{ANN} suffer. 
 Over-training occurs when \acp{ANN} become too well trained on the data set they are trained with and, as a result, perform poorly on extrapolated data sets. 
@@ -157,11 +159,7 @@ An additional measure of performance was the percentage of brake actions the veh
 
 \subsection{RABBIT} \label{sec:rabbit}
 RABBIT is a simple game that is played between two teams: a team with one rabbit on it, and an opposing team with two wolves. 
-The goal of the game differs for the two teams; the rabbit must make it safely off the playing field using a rabbit hole, while the wolves need to try reach the rabbit before it escapes.
-The playing field is an $m\times{n}$ matrix, where each coordinate is a possible position that each animal could move in to.
-The rabbit holes are place on the game boundary, i.e. the edges of the matrix.
-Each animal is controlled using a single \ac{ANN} that decides, based on the animal's "vision", into which adjacent space the animal is moving to next.
-The \acp{ANN} were trained using reinforcement learning, as the ideal actions of each animal in any given state were unknown, there are simply too many states to compute that.
+This benchmark was introduced in Chapter 3.
 RABBIT has no safety implications to humans, as it is a game played between two teams of \ac{AI}, but policies can be enforced to increase the efficiency of the animals and reduce the errors made by the animals.
 The policies ensure that the animals never leave the playing field, and that their movements are more refined, e.g. not getting stuck in one place, not moving away from their objective, etc.
 The results of the policies are shown in Table~\ref{table:rabbitres}, and the structure and overhead of these policies are described in Table~\ref{table:policies}.

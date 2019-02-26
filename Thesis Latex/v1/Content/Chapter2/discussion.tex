@@ -10,46 +10,29 @@ The \ac{AV} system, when using \ac{RE} to enforce some safety policies, showed a
 Without the enforcer, at best the system was able to run for 73 ticks before an accident occurred, according to Table~\ref{table:avenf}.
 At lower epochs of training, the system was able to run for at most 3 ticks before an accident occurred.
 However, when the enforcer was implemented, the system was able to run for up to 97 ticks before an accident occurred.
-At it's worst trained epoch, the system was still able to run for 58 ticks.
+At its worst trained epoch, the system was still able to run for 58 ticks.
 
 Table~\ref{table:avenf} also shows that the number of the accidents over all runs in the system decreased as the system was trained, even with the enforcer in place.
 An untrained \ac{SNN} would have an accident on 75\% of the runs, while the same \ac{SNN} trained for 100,000 epochs would only have an accident 57\% of the time.
-This shows that the enforcer, while increasing the safety of the system, does so proportionally to the level of training of the \ac{SNN} it is monitoring.
-
-As the \ac{SNN} was trained, it exhibited more careful behaviour; the vehicle's average speed decreased at and the vehicle performed more braking actions than necessary.
-Even with the enforcer in place, the speed decreased in proportion to the number of epochs trained, while the vehicle still braked unnecessarily.
+This shows that the enforcer, while increasing the safety of the system, does so proportionally to the level of training of the \ac{SNN}.
 
 While the enforcer allowed the vehicle to drive safely for longer periods of time, it did not decrease the number of incidents in the system proportionally to the time the vehicle stayed safe.
 Likewise, the enforcer did not result in the vehicle driving at a reasonable speed.
 With or without the enforcer, the vehicle braked more often and drove more slowly.
-We can conclude that the enforcer did efficiently increase the safety of the system by our given measurement, however other safety aspects of the system were not addressed to the same level.
-This shows that the amount of training the \ac{SNN} has is relevant, enforcer or no.
+We can conclude that the enforcer did efficiently increase the safety of the system by allowing the system to run for longer, however other aspects of the systems safety, like the total number of accidents, were dependant on the amount of the training the \ac{ANN} had.
+This shows that the amount of training the \ac{SNN} has is relevant and makes a difference to the overall safety of the system.
+
+As the \ac{SNN} was trained, it exhibited more careful behaviour; the vehicle's average speed decreased at and the vehicle performed more braking actions than necessary.
+Even with the enforcer in place, the speed decreased in proportion to the number of epochs trained, while the vehicle still was still braking unnecessarily.
+While the enforcer does help the \ac{ANN} act more carefully, the a less trained \ac{ANN} will still behave less carefully than a more trained \ac{ANN}.
 
 The \ac{ESS} (Table~\ref{table:essres}) showed that the enforcer increased safety by preventing dangerously low \acf{SoC}.
 However, with RABBIT game (Table~\ref{table:rabbitres}) the enforcer increased the efficiency of the players in the game, as the game had no safety requirements.
 
-
-
-
-
-
-
-This is a concern for systems that are \textit{safety-critical}, as even though it is well-known that \acp{ANN} can be thoroughly trained and produce confidence intervals greater than 90~\%, any misbehaviour in a safety-critical system can result in  catastrophic consequences.
-In order for an \ac{ANN} to be used in any capacity within such a system, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that they is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}.
-In order to have \textit{safe} \acp{ANN}, some key problems to consider are: \acp{ANN} must (1) tolerate faults and inconsistencies in their inputs; (2) not create hazardous outputs; (3) be robust and repeatable; and (4) be trained on clean, reliable data~\cite{EstSafeCriteria2003}.
-
-To solve these problems, there exist safety measures such as risk management systems that span the entire development process of the \ac{ANN}~\cite{ANNDevModel1999} and standards with which \acp{ANN} can be certified before they are used in \acp{CPS}~\cite{SCANNStandard}, producing \acp{ANN} that are classified as \textit{safe enough} for their role. 
-However, as \acp{ANN} become larger and more full-featured, they  become harder to statically analyse.
-Problematic situations can arise when an \ac{ANN} exhibits unexpected behaviour that the system is unable to safely respond to.
-
-To address this issue, we propose the use of \ac{RE} within the \ac{ANN} domain for \ac{CPS} as a methodology for protecting the safety of \ac{CPS} \textit{at runtime}.
-\ac{RE} is an existing approach to ensuring the safety of \acp{CPS} and is used to enforce safety policies that monitor and edit the events of the target system~\cite{rta-cps}.
-\ac{RE} is formally defined to be used in \acp{CPS}~\cite{recps}, however there has been no formal approach to combining \ac{RE} with \acp{ANN}. 
-
-% What is in this paper
-The key contributions of this chapter are thus: (1) combining \acp{SNN} and \ac{RE} for the first time; (2) formalisation for \ac{RE} of \acp{SNN} by formally defining \acfp{VDTA}; and (3) demonstrating that this synchronous composition results in a system that is safe, i.e. it produces safe outputs and responds to real-time deadlines. 
-
-
-
-
-
+Being able to reactively verify \ac{ANN} properties allows the use of \ac{ANN} that are difficult, or impossible, to verify in \ac{CPS}.
+This solves a lot of problems that the static verification of \ac{ANN} has not yet solved.
+Gehr et al~\cite{Gehr2018AI2SA} introduce a very effective static verification method for the robustness of \acp{ANN}.
+However, this method does scale with the size of the ]ac{ANN} well, however it would still take longer periods of time to verify larger networks.
+Additionally, this method only works for \acp{ANN} using the ReLu activation function and does not handle more complex, non-linear activation functions.
+Finally, this method is not fool proof, not always being able to identify and prove all the specified robustness properties. 
+Our reactive method of verifying \acp{ANN} using \ac{RE} allows the reactive verification, finding and correcting faults that may have been missed during static analysis.
