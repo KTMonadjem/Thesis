@@ -1,11 +1,51 @@
 \section{Defining Safety Specifications for Synchronous Neural Networks}
 \label{sec:definitions}
 
+Chapter 3 introduced \acp{SNN} as time-predictable \acp{ANN} to address the timing verification of \acp{ANN} for \acp{CPS}.
+The functional verification of \acp{ANN} has not yet been addressed.
+This chapter tackles the problem of the functional verification of \acp{ANN} by proposing the combination of the previously defined \acp{SNN} and \acf{RE}~\cite{recps}.
+
 We propose the use of bi-directional run-time enforcers~\cite{recps} to enforce the I/O events of \acp{SNN} at run-time.
 In order to specify the safety policies Pinisetty et al define \acf{DTA}~\cite{recps}.
-These \ac{DTA} can enforce binary events at run-time using \textit{edit functions}~\cite{recps}.
+These \ac{DTA} can be used to represent safety policies $\varphi$ which can be enforced at run-time using \textit{edit functions}~\cite{recps}.
 To enforce the policy $\varphi$, the run-time enforce must satisfy some constraints: soundness, monotonicity, instantaneity, transparency and causality.
 The enforcers by \cite{recps} were demonstrated to satisfy all above constraints.
+
+Run-time enforcers are able to enforce binary I/O events at run-time.
+I.e. the enforcers can enforce the absence or presence of an input or output signal at run-time.
+A unique property of \ac{DTA} is their ability to express timed properties which can be enforced by a run-time enforcer.
+A \ac{DTA} can have one or more timers, which increment at each discrete time instance.
+Guards and transitions can be enforced that check the timer.
+An example \ac{DTA} is given in Example~\ref{ex:dta}.
+
+\begin{example}[Syntax of a \ac{DTA}]\label{ex:dta}
+	The \ac{DTA} shown in Figure~\ref{fig:avdta} represents a basic safety policy.
+	The policy as inputs A, B and C and output O and starts in the safe state $l_{safe}$.
+	The policy's safe state transitions are described in layman's terms below: \\
+	While A and B are present simultaneously, transition back to the safe state.\\
+	However, if A and B are not detected simultaneously, transition to the unsafe state $l_{unsafe}$, suppress the output signal O ($O~:=~0$) and set the timer to 0 ($t~:=~0$).\\
+	The statement $\sum\textbackslash~Z$ reads as ``anything except Z''.
+	The enforcer actions are indicated by statements using the syntax $X~:=~Y$, which reads ``set X to Y''.\\
+	\\
+	The unsafe state has the following transitions:\\
+	If the timer is less than 3 and C is not been present, transition back here while suppressing output 0.\\
+	If the timer is greater than, or equal to, 3 and C is not been present, transition to the safe state.\\
+	If C is detected, transition to the violation state.\\
+	The absence of a signal is detected using the \textbf{overline}, e.g. ``not X'' would be $\overline{X}$.\\
+	\\
+	The violation state has only a single transition that returns to the violation state on anything.\\
+	\\
+	A brief description to the \ac{DTA} would be to say the A and B must be present together. 
+	If they are not, the system is unsafe for 3 clock cycles, within which if C is present a violation occurs.
+	After 3 cycles, the system returns to a safe state.
+	While the system is in the unsafe state, the output O is suppressed by the enforcer.
+\end{example}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{avdta.tikz}
+	\caption{\ac{DTA} example showing the syntax used to describe \acp{DTA} in this thesis\label{fig:avdta}}
+\end{figure}
 
 However, with the complex I/O of \acp{SNN}, an enforcer that edits only binary events is not sufficient.
 Additionally, the edit functions introduced by \cite{recps} are not sufficient with more complex \ac{DTA}.
