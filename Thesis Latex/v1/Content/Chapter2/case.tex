@@ -18,7 +18,7 @@ The \ac{AV} system used in this chapter consists of on vehicle, run by an autono
 The sensor package consists of five cameras, each with its own, unique field of view and a \acf{LiDAR} sensor.
 Each camera picks up a certain area in the surrounding area, and each camera has an associated \ac{LiDAR} reading for the area is is detecting.
 Each of the five cameras feeds into a \acf{MNN} ensemble~\cite{Maqsood2004} of \acp{SNN}, using the Darknet library~\cite{darknet13}, while the \ac{LiDAR} reading are passed directly to the controller.
-These ensembles will be covered in the \ac{AI} section of this case study.
+These ensembles are covered in the Chapter 2 of this thesis.
 These \ac{SNN} ensembles classify their input image and provide a confidence level for the classified image, before passing this information to the controller.
 The controller \ac{SNN} is a \ac{MLP}, and decides the best course of action given the environment and the status of the vehicle itself. 
 The current status of the vehicle is noted by the current speed of the vehicle ($S$) and the previous speed of the vehicle($S'$).
@@ -128,8 +128,7 @@ Finally, a complete policy framework can be established by simply ANDing the com
 
 The \acp{AI} in this case study include the \ac{MMN} ensembles in the plant and a single \ac{MLP} \ac{SNN} for the controller.
 
-An \ac{ANN} ensemble the parallel execution of multiple \acp{ANN} working in combination to produce more accurate output~\cite{Maqsood2004}.
-In this case study, each \ac{MNN} consisted of three \acp{CNN}.
+In this case study, each \ac{MNN} ensemble consisted of three \acp{CNN} feeding into an ensemble function.
 Each \ac{CNN} in the ensemble provided its output to an ensemble function, which then produced higher grade output using a custom averaging function based off the \acp{CNN}' class scores.
 Due to the synchronous nature of the \acp{CNN}, each \ac{CNN} was run in synchronous concurrency with the others to provide output to the ensemble function.
 	
