@@ -1,6 +1,6 @@
 \section{\acf{CPS}}
 \acf{CPS} refer to a network of distributed controllers that manage the physical processes of the system~\cite{cps-design}~\cite{alur2015principles}. 
-\ac{CPS} encompass a wide variety of disciplines, from mechatronics to civil infrastructure, illustrated in Figure~\ref{fig:cps}.
+\ac{CPS} encompass a wide variety of disciplines, from mechatronics to civil infrastructure (Figure~\ref{fig:cps}).
 \ac{CPS} operate in the physical world, where environments can be unpredictable and uncontrolled.
 This introduces safety concerns for the \ac{CPS}; the hardware must be predictable and reliable, and the software must be predictable and reliable.
 This thesis focuses on the software requirements for \ac{CPS}.
@@ -11,7 +11,7 @@ This thesis focuses on the software requirements for \ac{CPS}.
 	\caption{Examples of \ac{CPS}~\cite{industry-pic}~\cite{crane-pic}~\cite{rover-pic}~\cite{factory-pic}, from left to right, top to bottom: A) factories, B) robotics, C) power and electricity, and D) construction \label{fig:cps}}
 \end{figure}
 
-\ac{CPS} applications encompass real-time systems, where the systems need to satisfy a set of timing requirements to ensure correct operation. 
+\ac{CPS} applications encompass real-time systems, where the systems need to satisfy a set of timing and functional requirements to ensure correct operation. 
 Here, a missed deadline may result in catastrophic consequences, making these \ac{CPS} highly \textit{safety-critical}. 
 These have strict timing and functionality requirements --- any errors in control can result in physical damage, injuries, and/or fatalities~\cite{ANNDevModel1999}. 
 
@@ -25,27 +25,27 @@ These have strict timing and functionality requirements --- any errors in contro
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.4\textwidth]{Content/fig/ai-girl.png}
-	\caption{\acp{AI} are used as the controllers of robots, such as the one above~\cite{robotgirl-pic} \label{fig:ai-girl}}
+	\caption{\acp{AI} are frequently used as the controllers of robots~\cite{robotgirl-pic} \label{fig:ai-girl}}
 \end{figure}
 
 \ac{AI} are increasingly used in \ac{CPS}, where safety is critical.
-However, the nature of \ac{AI} is non-linear, leaving many \ac{AI} hard to verify and validate.
+However, the mathematical nature of \ac{AI} is non-linear, leaving many \ac{AI} difficult to verify and validate.
 Additionally, as \ac{AI} adapt to learn larger data sets and more complex relationships, the size and complexity of the \acp{AI} increase.
-Some of these \ac{AI} are susceptible to verification and validation techniques~\cite{aiverify}, however, as they grow in size, these techniques take longer and more resources to implement.
-In \ac{CPS}, it is essential for all components to be verified and validated, and thus the issue with \ac{AI} in \ac{CPS} is made clear.
+Some of these \acp{AI} are easier to verify and validate than others~\cite{aiverify} however, as they grow in size, these techniques take more time and other resources to implement.
+In \ac{CPS}, it is essential for all components to be verified and validated, and thus the issue with \ac{AI} in \ac{CPS} is made clear: conventional techniques cannot be used to verify \acp{AI} for \ac{CPS}.
 
 \subsection{\acfp{ANN}}
-\acp{ANN} are a type of \ac{AI} designed to model functionality of the human brain~\cite{kohonen1988introduction}.
-The resulting \ac{AI} are generally large and complex.
-They are composed of interconnected artificial neurons, each passing messages along to the next, and can be represented mathematically by a long, non-linear equation.
-They are able to store large and complex data relationships, like their biological counterpart.
-The result of this is that \acp{ANN} are extremely difficult to verify or validate~\cite{menzies2005verification}.
+\acp{ANN} are a type of \ac{AI} designed to model the functionality of the human brain~\cite{kohonen1988introduction}.
+The resulting \acp{ANN} are generally large and complex.
+They are composed of layers interconnected artificial neurons, each neuron passing numerical messages along to the next, and can be represented mathematically by a complex, non-linear equation.
+They are able to store large and complex data relationships~\cite{ANNSafety2007}, like their biological counterpart, and this is where they are most useful.
+However, the result is that \acp{ANN} are extremely difficult to verify or validate~\cite{menzies2005verification}.
 
-\acp{ANN} are often used in big data, but also show up in \ac{CPS} such as \acfp{AV}.
+\acp{ANN} are often used in big data and Internet of Things (IoT), but also show up in \ac{CPS} such as \acfp{AV}.
 Their use in \ac{CPS} is highly contended, as \acp{ANN} are not 100\% reliable and accidents happen~\cite{coldewey_2018}.
-Thus, it is of utmost importance that any \ac{ANN} used in any \ac{CPS} is verified to be safe for that system in \textit{any} environment.
-Without that guarantee of safety, the use of \ac{AI} in such systems is risky.
-There exists a large body of research dealing with the safety of \acp{ANN}, but there are still opportunities for research towards safe \acp{ANN}.
+Thus, it is of utmost importance that any \ac{ANN} used in any \ac{CPS} is verified to be safe for that system in all possible environments.
+Without that guarantee of safety the use of \ac{AI} in such systems is risky and an endangerment to any person involved with the system and its environment~\cite{ANNSafety2018}.
+There exists a large body of research dealing with the safety of \acp{ANN}, but there are plenty of opportunities for research towards safe \acp{ANN}.
 
 \section{Contribution}
 This thesis provides novel techniques to the verification and validation of \acfp{ANN} in \acf{CPS}.
@@ -59,7 +59,7 @@ However, a tool chain was created to replace Darknet that compiles Keras~\cite{c
 
 The major contributions of this thesis are as follows:
 \begin{itemize}
-	\item A time predictable approach to \acp{ANN} is developed using the synchronous language Esterel~\cite{berry2000foundations}. These predictable \acp{ANN} are termed \acfp{SNN} and are defined using formal methods. Using T-CREST's Patmos processor architecture~\cite{patmos:ppes2011}, timing of these \acp{SNN} was done. These \acp{SNN} provide a safe approach to implementing \acp{ANN} in \ac{CPS}. The results of the \acp{SNN} are presented using a set of benchmarks. 
+	\item A time predictable approach to \acp{ANN} is developed using the synchronous language Esterel~\cite{berry2000foundations}. These predictable \acp{ANN} are termed \acfp{SNN} and are defined using formal methods. Using T-CREST's Patmos processor architecture~\cite{patmos:ppes2011}, timing analysis of these \acp{SNN} is possible. These \acp{SNN} provide a safe approach to implementing \acp{ANN} in \ac{CPS}. The results of the \acp{SNN} are presented using a set of benchmarks. 
 	\item \acfp{MNN} are proposed as a framework for the composition of multiple \acp{SNN}. The thesis provides formal definitions for the \acp{MNN} and benchmarks are presented that show their efficacy. 
 	\item The combination of \acf{RE} and \acp{SNN} is investigated, with the intent to modify unsafe events. This provides functional safety for \acp{SNN}, something not covered in previous chapters. An \acf{AV} case study is introduced for the purposes of this work and a simulation is created to demonstrate its efficacy.
 	\item \acf{RV} of \acp{MNN} is proposed as an approach to dealing with input perturbation. This demonstrates a functional verification method for \acp{ANN} that have complex inputs, such as image classification \acfp{CNN}, where \ac{RE} is not an option. An \ac{AV} case study is also created for this work, with an \ac{AV} object detection simulation created to demonstrate the benefits of this proposition. 
