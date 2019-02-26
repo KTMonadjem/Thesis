@@ -9,7 +9,7 @@ We deal with the linear, forward movement of the \ac{AV} and the braking involve
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\textwidth]{Content/fig/AV.pdf}
+	\includegraphics[scale=0.4]{Content/fig/AV.pdf}
 	\caption{Sensor layout for the \ac{AV} example. \label{fig:av}}
 \end{figure}
 
@@ -66,6 +66,63 @@ This enforcer will monitor the I/O events of the controller \ac{SNN} and \textit
 	\includegraphics[width=\textwidth]{Content/fig/AV-sys.pdf}
 	\caption{Block diagram of the \ac{AV} system, with run-time enforcer, used in the case study. \label{fig:avenf}}
 \end{figure}
+
+The run-time enforcer for the \ac{AV} system enforces a set of policies ($\mathcal{V}$), described and defined in English here:
+
+$\mathcal{V}_{ped}$ (Figure~\ref{fig:avpedrte}): Ensure that the car does not behave unsafely around pedestrians. 
+
+The automaton starts in state $l_{drive}$, with a transition to itself if the vehicle is not braking and no pedestrian is in front.
+If a pedestrian appears in-front of the vehicle, then the car should select an appropriate braking action: $B_S$ if $O_5~=~P$ or $B_H$ if $O_2~=~P$.
+If the vehicle attempts to drive into a pedestrian or suddenly slam on the brakes for no reason, the violation transition to $l_v$ is taken.
+ 
+When a braking action is started and a pedestrian is in front of the vehicle, the transition from $l_{drive}$ to $l_{brake}$ is taken and the timer $t$ is set to 0.
+From the $l_{brake}$ state, there is a transition back to $l_{brake}$ if $t$ is less than $T_{lim}$, where $T_{lim}~=~3$ ($t~<~T_{lim}$), and the vehicle is still braking and not accelerating.
+If the timer has $T_{lim}$ or more ($t~>=~T_{lim}$) and the vehicle has stopped braking, then the transition back to $l_{drive}$ is taken.
+If the vehicle attempts to accelerate before the timer reaches $T_{lim}$ ($t~<~T_{lim}$) or stops braking then the violation transition is taken.
+
+If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{avpedrte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for the pedestrian detection $\mathcal{V}_{ped}$\label{fig:avpedrte}}
+\end{figure}
+
+$\mathcal{V}_{car}$ (Figure~\ref{fig:avcarrte}): Ensure that the car does not drive into other vehicles. 
+This automaton only has a single safe state $l_{drive}$ and a violation state $l_v$.
+The transition to the violation state occurs when the vehicle is going faster that the car in front of it ($O_{2_S}~<~S~|~O_{5_S}~<~S$) and not braking appropriately.
+If the vehicle is going slower than the car behind it ($S~<~O_{4_S}$) and not accelerating, the transition to the violation also occurs.
+The transition to the safe state occurs if there is no violation.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{avcarrte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for the car detection $\mathcal{V}_{car}$\label{fig:avcarrte}}
+\end{figure}
+
+$\mathcal{V}_{drive}$ (Figure~\ref{fig:avdriverte}): The vehicle may not exceed the safe speed limit. 
+This automaton only has a single safe state $l_{drive}$ and a violation state $l_v$.
+This transitions to a violation when the vehicle attempts to accelerate while driving at the maximum speed (in this case when $S~=~2$).
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{avdriverte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for driving according to the rules $\mathcal{V}_{drive}$\label{fig:avdriverte}}
+\end{figure}
+
+$\mathcal{V}_{cnn}$ (Figure~\ref{fig:avcnnrte}): The \ac{MNN} ensembles and the \ac{LiDAR} should agree on the detected objects.
+This automaton only has a single safe state $l_{drive}$ and a violation state $l_v$.
+Considering each sensor $x~\in~[1,5]$, the output of the \ac{CNN} ensemble network $x$ ($O_x$) must match the corresponding \ac{LiDAR} value ($L_x$).
+If they do match the transition back to the safe state is taken, and if they do no match ($\overline{O_x~=~L_x}$) then the violation transition is taken.
+If the confidence is high, and there is a mismatch, the output should be classified as a pedestrian ($O_x~=~P$) to consider the worst case and treat the unknown object with utmost care.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{avcnnrte.tikz}
+	\caption{\ac{VDTA} for describing the safety policy for the \ac{CNN} ensembles $\mathcal{V}_{cnn}$\label{fig:avcnnrte}}
+\end{figure}
+
+Finally, a complete policy framework can be established by simply ANDing the component policies together, i.e. \\ $\mathcal{V}_{av} = \mathcal{V}_{cnn} \wedge \mathcal{V}_{drive} \wedge \mathcal{V}_{car} \wedge \mathcal{V}_{ped}$.
 
 \subsection{\acf{AI} for the \acf{AV} system}
 

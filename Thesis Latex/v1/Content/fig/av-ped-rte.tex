@@ -11,19 +11,19 @@
 \node[state, violate]         (C) [below of=B, yshift=1cm, xshift=-2.75cm]  {$l_v$};
 
 \path[->] 
-		(A) edge [loop above]       node [above, xshift=-1em]  
+		(A) edge [loop above]       node [above, xshift=-1cm]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{B_H}~\&\\~ \overline{(B_S~\&~O_{5_P})}, \\ t := 0}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{(B_H~\&~(O_2~=~P))~|~(B_S~\&~(O_5~=~P))}, \\ t := 0}$
 		} (A)
 		
 		(A) edge [bend left]		node [above]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{A}~\&~(B_H~|~(B_S~\&~O_{5_P})), \\ t := 0}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{A}~\&\\~((B_H~\&~(O_2~=~P))~|\\~(B_S~\&~(O_5~=~P))), \\ t := 0}$
 		} (B)
 	
 		(A) edge [right]	node [left, xshift=-1em]
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big((\overline{B_H}~\&~\overline{(B_S~\&~ O_{5_P})})~|\\~(\overline{A}~\&~(B_H~|~(B_S~\&~O_{5_P})))\Big)}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big((\overline{(B_H~\&~(O_2~=~P))~|~(B_S~\&~ (O_5~=~P))})~|\\~(\overline{A}~\&~((B_H~\&~(O_2~=~P))~|~(B_S~\&~(O_5~=~P))))\Big)}$
 		} (C)
 	
 		(A) edge [right]	node [right]
@@ -33,7 +33,7 @@
 	
 		(B) edge [loop above]		node [above, xshift=1em]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{(t < T_{lim}~|~B_H~|~B_S) \\~\&~\overline{A}}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{(t~<~T_{lim}~|~B_H~|~B_S) \\~\&~\overline{A}}$
 		} (B)
 	
 		(B) edge [bend left]				node [above]  
@@ -43,7 +43,7 @@
 		
 		(B) edge [left]			node [right, xshift=2em]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(t < T_{lim}~|~B_H~|~B_S|\\(t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&\\~\overline{B_S~\&~O_{5_P}})\Big)}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(t~<~T_{lim}~|~B_H~|~B_S|\\(t~>=~T_{lim}~\& \\ A~\&~\overline{(B_H~\&~(O_2~=~P))~|~B_S~\&~(O_5~=~P)})\Big)}$
 		} (C)
 	
 		(B) edge [left]			node [left]  

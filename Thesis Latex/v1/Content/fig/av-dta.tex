@@ -1,6 +1,6 @@
 
 
-\begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=4cm, scale = 1, transform shape]
+\begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=6cm, scale = 1, transform shape]
 
 \tikzstyle{accept} = [draw=blue!75,fill=blue!20]
 \tikzstyle{violate} = [draw=red!75,fill=red!40, dashed]
@@ -8,7 +8,7 @@
 
 \node[state, initial, accepting, accept] (A) {$l_{safe}$};
 \node[state, accepting, accept, unstable] (B) [right of=A] {$l_{unsafe}$};
-\node[state, violate]         (C) [below of=B, yshift=1cm, xshift=-2cm]  {$l_v$};
+\node[state, violate]         (C) [below of=B, yshift=1cm, xshift=-3cm]  {$l_v$};
 
 \path[->] 
 		(A) edge [loop above]       node [above]  
