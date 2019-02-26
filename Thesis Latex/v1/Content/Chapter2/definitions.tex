@@ -36,7 +36,7 @@ Before we look into the formal definition of VDTA, let us consider an example.
 	This policy has been described in more detail in the previous section.
 	
 	This is encoded as a \ac{VDTA} with a set of locations $L = \{l_{drive}, l_{brake}, l_v\}$ and accepting locations $F = \{l_{drive}\}$, with the initial state being $l_{drive}$.
-	The set of external variables $C = \{O_2, O_5, O_{2_v}, O_{5_v}, S, A, B_S, B_H\}$ are all 32-bit signed integers, where $O_2$, $O_5$, $O_{2_S}$, $O_{5_S}$ and $S$ are input channels and $A$, $B_S$ and $B_H$ are output channels.
+	The set of external variables $C = \{O_2, O_5, O_{2_v}, O_{5_v}, S\\, A, B_S, B_H\}$ are all 32-bit signed integers, where $O_2$, $O_5$, $O_{2_S}$, $O_{5_S}$ and $S$ are input channels and $A$, $B_S$ and $B_H$ are output channels.
 	The set of actions $\Sigma = \{O_2, O_5, O_{2_S}, O_{5_S}, S, A, B_S, B_H\}$, and the set of internal variables $V = \{T_{lim}\}$, where $T_{lim}$ is a 32-bit signed integer.
 	$X$, the finite set of discrete clocks, is limited to $t$ for this example: $X~=~\{t\}$.
 	

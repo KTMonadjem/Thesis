@@ -81,7 +81,13 @@ The output of an \ac{ANN} ensemble is more accurate than any individual \ac{ANN}
 These are used to increase the prediction or classification of a system.
 
 \subsubsection{\acfp{ANN} libraries used in this work}
-
+Primarily, the our own \ac{SNN} library was used in this thesis.
+This library was able to implement and train any \ac{MLP} \ac{ANN} as a time-predictable \ac{SNN}.
+This library was developed in C in conjunction with the synchronous language Esterel to produce the \acp{SNN}.
+However, this library was unable to handle \acp{CNN}, and we use the Darknet~\cite{darknet13} C library to implement any \acp{CNN}.
+These \acp{CNN} were not time-predictable, but were able to run synchronously as \acp{SNN} using Esterel.
+The Python tool-chain \acf{MNN2C} was introduced at a later stage.
+This tool-chain was able to take Keras~\cite{chollet2015keras} trained \acp{ANN}, compose a \acf{MNN} from these \acp{ANN} and generate synchronous, time-predictable \acp{MNN} in C.  
 
 \subsection{Synchronous Languages}
 Synchronous languages include a variety of different languages, some notable examples being Esterel, Lustre and Signal~\cite{benveniste2003synchronous}.
@@ -152,7 +158,7 @@ When combined, the statements in this example would combine to do the following,
 \end{figure}
 
 \subsection{\acf{WCET} of \acf{CPS}}
-The timing analysis done in this thesis, notably \acf{WCET} analysis, is done using the Patmos controller architecture by the T-CREST project~\cite{patmos}~\cite{patmos:ppes2011}.
+The timing analysis done in this thesis, notably \acf{WCET} analysis, is done using the Patmos controller architecture by the T-CREST project~\cite{TCREST}~\cite{patmos:ppes2011}~\cite{patmos}.
 Patmos is a time-predictable processor architecture on which time-predictable software can be run and, more importantly, analysed.
 Platin~\cite{compiler:platin:kps15} is a \acf{WCET} analysis tool used to calculate the \ac{WCET} of software implemented on Patmos processors.
 The Platin tool is given the Patmos processor's parameters and an entry point in the C code that will be analysed.

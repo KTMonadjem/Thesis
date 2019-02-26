@@ -4,6 +4,7 @@ This research provides a solution for two aspects of \acf{AV} systems: predictin
 The issue of input perturbations was addressed using a \acf{MNN} of different convolutional \acfp{SNN}, each \ac{SNN} working in tandem to predict more accurately.
 Misclassification by the system's controller was addressed by implementing sensor fusion between cameras and \ac{LiDAR}.
 This was done using a run-time enforcer that enforced a safety automaton.
+The benchmark was written in Esterel and C and run on an 8 core Intel processor on the Ubuntu OS.
 
 To test the \ac{MNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2012 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
 Figure~\ref{fig:sign-graph-acc} shows that the input perturbations decreased the accuracy of the classifiers by as much as 50\%, a huge amount.

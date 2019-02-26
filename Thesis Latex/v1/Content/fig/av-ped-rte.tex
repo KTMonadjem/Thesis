@@ -13,17 +13,17 @@
 \path[->] 
 		(A) edge [loop above]       node [above, xshift=-1cm]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{(B_H~\&~(O_2~=~P))~|~(B_S~\&~(O_5~=~P))}, \\ t := 0}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{\big(B_H~|~(O_2~=~P)~|~B_S~|~(O_5~=~P)\big)}, \\ t := 0}$
 		} (A)
 		
 		(A) edge [bend left]		node [above]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{A}~\&\\~((B_H~\&~(O_2~=~P))~|\\~(B_S~\&~(O_5~=~P))), \\ t := 0}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\overline{A}~\&\\~\big(B_H~\&~(O_2~=~P)~|\\~B_S~\&~(O_5~=~P)\big), \\ t := 0}$
 		} (B)
 	
 		(A) edge [right]	node [left, xshift=-1em]
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big((\overline{(B_H~\&~(O_2~=~P))~|~(B_S~\&~ (O_5~=~P))})~|\\~(\overline{A}~\&~((B_H~\&~(O_2~=~P))~|~(B_S~\&~(O_5~=~P))))\Big)}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(\overline{\big(B_H~|~(O_2~=~P)~|~B_S~|~(O_5~=~P)\big)}~|\\~\big(\overline{A}~\&~(B_H~\&~(O_2~=~P)~|\\~B_S~\&~(O_5~=~P))\big)\Big)}$
 		} (C)
 	
 		(A) edge [right]	node [right]
@@ -33,17 +33,17 @@
 	
 		(B) edge [loop above]		node [above, xshift=1em]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{(t~<~T_{lim}~|~B_H~|~B_S) \\~\&~\overline{A}}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\Big(t~<~T_{lim}~|\\~B_H~\&~(O_2~=~P)~|\\~B_S~\&~(O_5~=~P)\Big)~\&~\overline{A}}$
 		} (B)
 	
-		(B) edge [bend left]				node [above]  
+		(B) edge [bend left]				node [above, yshift=1em]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&~\overline{B_S}}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&~\overline{B_S}~\&\\~\overline{(O_2~=~P)}~\&~\overline{(O_5~=~P)}}$
 		} (A)
 		
-		(B) edge [left]			node [right, xshift=2em]  
+		(B) edge [left]			node [right]  
 		{
-			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(t~<~T_{lim}~|~B_H~|~B_S|\\(t~>=~T_{lim}~\& \\ A~\&~\overline{(B_H~\&~(O_2~=~P))~|~B_S~\&~(O_5~=~P)})\Big)}$
+			\scriptsize$\let\scriptstyle\textstyle\substack{\sum\textbackslash \Big(\big((t~<~T_{lim}~|\\~B_H~|~(O_2~=~P)~|\\~B_S~|~(O_5~=~P))~\&~\overline{A}\big)~|~\\~\big(t >= T_{lim}~\& \\ A~\&~\overline{B_H}~\&~\overline{B_S}~\&\\~\overline{(O_2~=~P)}~\&~\overline{(O_5~=~P)}\big)\Big)}$
 		} (C)
 	
 		(B) edge [left]			node [left]  

@@ -4,7 +4,8 @@
 
 We have developed a set of benchmark applications to evaluate the efficacy of the developed approach.
 These benchmarks are presented in Table \ref{table:benchmarks4}.
-All benchmarks were written in Esterel and C, and the safety automata implemented according to the \ac{VDTA} introduced earlier in this chapter.
+All benchmarks were written in Esterel and C and run on an 8 core Intel processor on the Ubuntu OS.
+The safety automata implemented according to the \ac{VDTA} introduced earlier in this chapter.
 
 Benchmarks include: an \acf{AV} braking system, described in Section \ref{sec:case}; an \acf{ESS} inspired by~\cite{chaudhari2017hybrid}; and a simple, two-team, zero-sum game called RABBIT.
 The \ac{ESS} (described in Section~\ref{sec:ess4}) has two different policies; ensuring that the system battery's \ac{SoC} never drops too low or rises too high  ($\varphi_{soc}$) and ensuring that the power by which the battery is charging or discharging is never too high ($\varphi_{charge}$).
