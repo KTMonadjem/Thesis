@@ -121,7 +121,7 @@ The \textit{function getOutput()} takes no input, and but returns an integer as 
 The \textit{call} statement can be used to run a procedure, and just like in C the parameters are passed in brackets.
 However, since \textit{A} and \textit{B} are signals, the \textbf{\emph{``?''}} is used to fetch the value at that signal, rather than the presence (or absence) of the signal.
 In Esterel a \textit{function} returns some value, this value can be stored in a variable using the operator \textbf{\emph{``:=''}}, or it can be passed straight to the next function or, as with this example, be emitted by passing the parameter to the \textit{emit} statement.
-The statement \textit{emit O} sets the output signal \textit{O} to be present for one clock cycle, and sets its value according to its parameters.
+The statement \textit{emit O} sets the output signal \textit{O} to be present for one tick, and sets its value according to its parameters.
 
 When combined, the statements in this example would combine to do the following, described in English for convenience:
 \begin{enumerate}
@@ -252,8 +252,8 @@ An example \ac{DTA} is given in Example~\ref{ex:dta} to introduce the syntax use
 	The violation state has only a single transition that returns to the violation state on anything.\\
 	\\
 	A brief description to the \ac{DTA} would be to say the A and B must be present together. 
-	If they are not, the system is unsafe for 3 clock cycles, within which if C is present a violation occurs.
-	After 3 cycles, the system returns to a safe state.
+	If they are not, the system is unsafe for 3 ticks, within which if C is present a violation occurs.
+	After 3 ticks, the system returns to a safe state.
 	While the system is in the unsafe state, the output O is suppressed by the enforcer.
 \end{example}
 
