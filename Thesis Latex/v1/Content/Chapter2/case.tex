@@ -1,20 +1,19 @@
 \section{Case study: \acf{AV} braking}
 \label{sec:case}
 
-\acfp{AV} are \acfp{CPS} that are safety critical: any faults in their operation can lead to accidents resulting in injuries or fatalities.
-Examples being Tesla's and Uber's accidents~\cite{coldewey_2018}~\cite{stewart_2018}.
+\acfp{AV} are \acf{CPS} that are safety critical: any faults in their operation can lead to accidents resulting in injuries or fatalities.
+For instance, both Tesla's and Uber's have had accidents with their \acp{AV}~\cite{coldewey_2018}~\cite{stewart_2018}.
 In this chapter, we take inspiration from such accidents and create a case study involving the braking mechanism of \acp{AV}.
 
-We propose an abstracted \acf{AV} represented in Figure~\ref{fig:av} as our case study.
-We deal with the linear, forward movement of the \ac{AV} and the braking involved with such movement.
-
+\subsection{\acf{AV} system}
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.4]{Content/fig/AV.pdf}
 	\caption{Sensor layout for the \ac{AV} example. \label{fig:av}}
 \end{figure}
 
-\subsection{\acf{AV} system}
+We propose an abstracted \acf{AV} represented in Figure~\ref{fig:av} as our case study.
+We deal with the linear, forward movement of the \ac{AV} and the braking involved with such movement.
 The \ac{AV} system consists of one \acf{AV}, interacting with other vehicles and pedestrians in its proximity, run by an autonomous controller, with 5 directional, sensor inputs (see Figure~\ref{fig:av}).
 The sensor package consists of five cameras, each with its own, unique field of view and a \acf{LiDAR} sensor.
 Each camera picks up a certain area relative to the \ac{AV}, and each camera has an associated \ac{LiDAR} reading for the area is is detecting.
@@ -83,10 +82,11 @@ The directions were limited to (North, East, South and West), represented by the
 	Consider speed and direction: object 5 moving quickly would be $O_{5_S}~=~2$; the object to the left of the vehicle facing westward would be $O_{1_D}~=~3$.
 \end{example}
 
-The environment updated in such a way that objects would move in the direction they are facing at a speed relative to the \ac{AV}.
+The environment updates in such a way that objects move in the direction they are facing at a speed relative to the \ac{AV}.
 For example, a pedestrian facing the road and moving quickly would be placed in front of the vehicle in position 2 on the next tick.
 However, a pedestrian moving away from the road, or not moving at all, would be removed from the sensors detection areas on the next tick.
-Each update tick, each camera ``produced'' an appropriate input image from the \ac{VOC} 2012 dataset~\cite{pascal-voc-2012} as the object in that position (either a person, car or nothing).
+To emulate camera behaviour we rely on the \ac{VOC} 2012 dataset~\cite{pascal-voc-2012}.
+Each tick, each camera will select an image from this dataset for processing by the corresponding \ac{MNN} ensemble.
 
 Due to this design of this system, it is possible for the vehicle to behave badly in various ways. 
 These include speeding, unnecessarily braking, hitting other vehicles on the road, hitting pedestrians on the road and even not driving at all.
@@ -118,14 +118,14 @@ The run-time enforcer for the \ac{AV} system enforces a set of policies ($\mathc
 $\mathcal{V}_{ped}$ (Figure~\ref{fig:avpedrte}): Ensure that the car does not behave unsafely around pedestrians. 
 
 The automaton starts in state $l_{drive}$, with a transition to itself if the vehicle is not braking and no pedestrian is in front.
-If the vehicle attempts to drive into a pedestrian or suddenly slam on the brakes for no reason, the violation transition to $l_v$ is taken.
+If the vehicle attempts to drive into a pedestrian or suddenly slam on the brakes for no reason, the violation transition to $l_v$ is taken as this is a potentially dangerous situation.
  
 When a braking action is started and a pedestrian is in front of the vehicle, the transition from $l_{drive}$ to $l_{brake}$ is taken and the timer $t$ is set to 0.
-From the $l_{brake}$ state, there is a transition back to $l_{brake}$ if $t$ is less than $T_{lim}$, where $T_{lim}~=~3$ ($t~<~T_{lim}$), or the vehicle is still braking, or there is a pedestrian in front, and the vehicle must not be accelerating.
-If the timer has $T_{lim}$ or more ($t~>=~T_{lim}$) and the vehicle has stopped braking, then the transition back to $l_{drive}$ is taken.
-If the vehicle attempts to accelerate before the timer reaches $T_{lim}$ ($t~<~T_{lim}$) or stops braking then the violation transition is taken.
+From the $l_{brake}$ state, there is a transition back to $l_{brake}$ if $t$ is less than $T_{lim}$ ($t~<~T_{lim}$ where $T_{lim}~=~3$), or the vehicle is still braking, or there is a pedestrian in front, and the vehicle must not be accelerating.
+If the timer has reached (or passed) $T_{lim}$ ($t~>=~T_{lim}$), the vehicle has stopped braking and there is no pedestrian ahead, then the transition back to $l_{drive}$ is taken because it is safe to continue driving.
+If the vehicle attempts to accelerate before the timer reaches $T_{lim}$ ($t~<~T_{lim}$) or stops braking then the violation transition is taken to prevent potentially harmful actions.
 
-If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise.
+If a pedestrian remains off to the side of the vehicle, then either the vehicle should cruise, since pedestrians keeping to the side-walk are safe from the vehicle on the road.
 
 \begin{figure}[h]
 	\centering
@@ -136,7 +136,9 @@ If a pedestrian remains off to the side of the vehicle, then either the vehicle 
 $\mathcal{V}_{car}$ (Figure~\ref{fig:avcarrte}): Ensure that the car does not drive into other vehicles. 
 This automaton only has a single safe state $l_{drive}$ and a violation state $l_v$.
 The transition to the violation state occurs when the vehicle is going faster that the car in front of it ($O_{2_S}~<~S~|~O_{5_S}~<~S$) and not braking appropriately.
-If the vehicle is going slower than the car behind it ($S~<~O_{4_S}$) and not accelerating, the transition to the violation also occurs.
+This could result in a situation where the \ac{AV} would be forced to try overtake or slam on the brakes, neither of which are safe actions.
+If the vehicle is going slower than the car behind it ($S~<~O_{4_S}$) and not accelerating, and there is no pedestrian in front of the vehicle, the transition to the violation also occurs.
+This could result in unsafe circumstances where the car behind is forced to slow down or take over.
 The transition to the safe state occurs if there is no violation.
 
 \begin{figure}[h]
@@ -147,7 +149,7 @@ The transition to the safe state occurs if there is no violation.
 
 $\mathcal{V}_{drive}$ (Figure~\ref{fig:avdriverte}): The vehicle may not exceed the safe speed limit. 
 This automaton only has a single safe state $l_{drive}$ and a violation state $l_v$.
-This transitions to a violation when the vehicle attempts to accelerate while driving at the maximum speed (in this case when $S~=~2$).
+This transitions to a violation when the vehicle attempts to accelerate while driving at the maximum speed (in this case when $S~=~2$), since speeding is against the law.
 
 \begin{figure}[h]
 	\centering
@@ -161,7 +163,8 @@ Considering each sensor $x~\in~[1,5]$, the output of the \ac{CNN} ensemble netwo
 If they do match the transition back to the safe state is taken, and if they do no match ($\overline{O_x~=~L_x}$) then the violation transition is taken.
 If the confidence is high, and there is a mismatch, the output should be classified as a pedestrian ($O_x~=~P$) to consider the worst case and treat the unknown object with utmost care.
 
-Finally, a complete policy framework can be established by simply ANDing the component policies together, i.e. \\ $\mathcal{V}_{av} = \mathcal{V}_{cnn} \wedge \mathcal{V}_{drive} \wedge \mathcal{V}_{car} \wedge \mathcal{V}_{ped}$.
+It is possible to specify policies as \ac{VDTA} which encompass multiple safety rules.
+Though we have presented one safety rule per \ac{VDTA}, it is possible to specify policies as \ac{VDTA} which encompass multiple safety rules.
 
 \subsection{\acf{AI} for the \acf{AV} system}
 
@@ -176,12 +179,13 @@ Each \ac{CNN} was trained for up to 100,000 epochs on the \acf{VOC} 2012 data se
 The \acp{CNN} took an input image of 28x28 pixels and output three class probabilities; one for a person, one for a car and one for nothing.
 
 The controller \ac{MLP} consisted of three layers of artificial neurons, with seventeen input neurons, ten hidden layer neurons and three output neurons.
-The implemented system and environment were complex enough that back-propagation was not an applicable method to train the controller, as the desired outputs for a set of seventeen different inputs was not possible effectively map by hand.
+The implemented system and environment were complex enough that back-propagation was not an applicable method to train the controller, as it was not possible to map out every possible input set with a known output set.
 The controller \ac{MLP} was trained used a type of reinforcement learning called Q-learning~\cite{qlearning2010}.
 This training processes works by reinforcing good actions with positive rewards, and removing bad actions with negative rewards.
-Like the \acp{CNN}, this ac{ANN} was also trained for up to 100,000 epochs using this technique.
-The controller took the seventeen different inputs, as an array of integers, in the following order (using the previously defined labels): $(S, S', O_1, O_2, O_3, O_4, O_5, O_{1_D}, O_{2_D}, O_{3_D}, O_{4_D}, O_{5_D}, O_{1_S}, O_{2_S}, O_{3_S}, O_{4_S}, O_{5_S})$.
+Like the \acp{CNN}, this ac{ANN} was also trained for 100,000 epochs using this technique.
+The controller took the seventeen different inputs, as an array of integers, in the following order (using the previously defined labels in Table~\ref{table:encoding}): $(S, S', O_1, O_2, O_3, O_4, O_5, O_{1_D}, O_{2_D}, O_{3_D}, O_{4_D}, O_{5_D}, O_{1_S}, O_{2_S}, O_{3_S}, O_{4_S}, O_{5_S})$.
 The outputs of the controller were a binary array representing the actions that could be taken: $(A, B_S, B_H)$, where each value could be $1$ or $0$.
+An absence of all the outputs is seen as a ``cruise'' action, where the vehicle does not accelerate.
 
 Figure~\ref{fig:avmnn} is an expanded diagram of the \ac{AV} system, showing the \ac{ANN} layout for this system.
 Each \ac{MNN} ensemble is labelled by its corresponding sensor number and shows three \acp{CNN} feeding into a single ensemble function for each \ac{MNN}.
