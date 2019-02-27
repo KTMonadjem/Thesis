@@ -57,7 +57,7 @@ Tables~\ref{table:objects} and \ref{table:encoding} show the environment encodin
 	\centering
 	\caption{Table showing the encoding of the \ac{AV}'s environment}
 	\label{table:encoding}
-	\begin{tabular}{|p{0.25\textwidth}|p{0.1\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|}
+	\begin{tabular}{|p{0.3\textwidth}|p{0.1\textwidth}|p{0.25\textwidth}|p{0.2\textwidth}|}
 		\hline
 		Item & Symbol & Possible values & Possible numerical values \\ \hline
 		Camera Object $x$ & $O_x$ & [P, C, N] & $[0, 1, 2]$ \\
@@ -167,7 +167,6 @@ It is possible to specify policies as \ac{VDTA} which encompass multiple safety 
 Though we have presented one safety rule per \ac{VDTA}, it is possible to specify policies as \ac{VDTA} which encompass multiple safety rules.
 
 \subsection{\acf{AI} for the \acf{AV} system}
-
 The \acp{AI} in this case study include the \ac{MNN} ensembles in the plant and a single \ac{MLP} \ac{SNN} for the controller.
 
 In this case study, each \ac{MNN} ensemble consisted of three \acp{CNN} feeding into an ensemble function.
@@ -197,6 +196,4 @@ The controller's decision is made by its \ac{MLP}, and then passed back to the v
 	\includegraphics[width=\textwidth]{Content/fig/AV-MNN.pdf}
 	\caption{Diagram showing the \ac{SNN} for the \ac{AV}, and its interaction with the plant via the enforcer. \label{fig:avmnn}}
 \end{figure}
-
-
 

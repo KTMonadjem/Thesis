@@ -58,12 +58,6 @@ And while the ensemble does not increase the effectiveness of a ``best'' \ac{ANN
 When ensuring timing and, in this case, functional safety of a system, the worst case must always be considered, and these ensembles will turn a worst case \ac{ANN} into a best case \ac{ANN}.
 
 \subsection{Results of a Darknet~\cite{darknet13} implemented \ac{AV} system}
-The \ac{MNN} used in this system were trained for 10,000 epochs using the Darknet library~\cite{darknet13}.
-Table~\ref{tbl:sign-resultsfull} shows the results of the Darknet generated classifier.
-The first column shows the total number of misclassifications made, normalized to 100.
-The second column shows the total number of misclassifications caught by the verifier, also normalized to 100.
-The final column shows the relative percentage of the total misclassifications caught by the verifier.
-
 \begin{table}[h]
 	\centering
 	\caption{Table showing the results of the \ac{AV} prediction \ac{MNN}}
@@ -91,6 +85,12 @@ The final column shows the relative percentage of the total misclassifications c
 		\end{tabular}%
 	}
 \end{table}
+
+The \ac{MNN} used in this system were trained for 10,000 epochs using the Darknet library~\cite{darknet13}.
+Table~\ref{tbl:sign-resultsfull} shows the results of the Darknet generated classifier.
+The first column shows the total number of misclassifications made, normalized to 100.
+The second column shows the total number of misclassifications caught by the verifier, also normalized to 100.
+The final column shows the relative percentage of the total misclassifications caught by the verifier.
 
 Using the original inputs the verifier caught more than 65\% of the total misclassifications.
 More than half of all the misclassifications made were detected by the verifier, and the safety of the system turned over to the driver.

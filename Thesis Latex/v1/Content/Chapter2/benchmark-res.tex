@@ -39,20 +39,20 @@ Table~\ref{table:policies} lists every policy and provides a brief overview of e
 		$None$ 										& N/A & N/A & N/A & 2.70 & 0 \\ 	
 		$\varphi_{soc}$    							& 1 & 7 & No & 2.836 & 4.9 \\
 		$\varphi_{charge}$    						& 1 & 4 & No & 2.71 & 0.346 \\
-		$\varphi_{soc} \wedge \varphi_{charge}$  	& 1 & 11 & No & 2.84 & 4.935 \\ \hline       
+		$\varphi_{soc}~+~\varphi_{charge}$  	& 1 & 11 & No & 2.84 & 4.935 \\ \hline       
 		\multicolumn{6}{|p{0.70\linewidth}|}{\ac{AV}} \\ \hline
 		$None$ 						&  &  &  & 736 & 0 \\
 		$\varphi_{cnn}$ 			& 1 & 15 & No & 764 & 3.8 \\
 		$\varphi_{drive}$ 			& 1 & 4 & No & 740 & 0.54 \\
 		$\varphi_{car}$ 			& 1 & 7 & No & 774 & 5.1 \\
 		$\varphi_{ped}$ 			& 2 & 56 & Yes & 767 & 4.2 \\
-		$\varphi_{cnn} \wedge \varphi_{drive} \wedge \varphi_{car} \wedge \varphi_{ped}$ 	
+		$\varphi_{cnn}~+~\varphi_{drive}~+~\varphi_{car}~+~\varphi_{ped}$ 	
 		& 2 & 99 & Yes & 803 & 9.1 \\ \hline       
 		\multicolumn{6}{|p{0.70\linewidth}|}{RABBIT} \\ \hline
 		$None$ 										&  &  &  & 90.1 & 0 \\ 
 		$\varphi_{bound}$ 							& 2 & 16 & No & 89.45 & 0.0 \\
 		$\varphi_{score}$ 							& 2 & 112 & Yes & 94 & 4.3 \\
-		$\varphi_{bound} \wedge \varphi_{score}$ 	& 2 & 126 & Yes & 93.8 & 4.1 \\ \hline      
+		$\varphi_{bound}~+~\varphi_{score}$ 	& 2 & 126 & Yes & 93.8 & 4.1 \\ \hline      
 	\end{tabular}
 \end{table}
 
@@ -97,6 +97,31 @@ Additionally, the cost of buying power, accrued over one day, did not change muc
 The \$1 difference is due to the floating-point to integer conversions taken when using the run-time enforcer.
 
 \subsection{\acf{AV}}
+\begin{table}[h]
+	\centering
+	\caption{Results of the AV system with and without the enforced policies}
+	\label{table:avenf}
+	\begin{tabular}{|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|}
+		\hline Number of epochs trained & Runs resulting in accidents (\%) & Average minutes to first accident per run (/100) & Average speed (km/h) & Unnecessary braking incidents per run (\%) \\ \hline
+		\multicolumn{5}{|p{0.75\linewidth}|}{Not enforced} \\ \hline
+		0 & 100	 & 3.21 & 98 & 19 \\ \hline
+		1 & 100 & 3.3 & 93 & 19 \\ \hline
+		10 & 100 & 3.8 & 81 & 57 \\ \hline
+		100 & 100 & 5.35 & 59 & 24 \\ \hline
+		1000 & 100 & 5.31 & 58 & 27 \\  \hline
+		10000 & 48.5 & 73.9 & 18 & 63 \\ \hline
+		100000 & 91.5 & 39 & 31.5 & 65 \\ \hline 
+		\multicolumn{5}{|p{0.75\linewidth}|}{Enforced} \\ \hline
+		0 & 75.7 & 75.6 & 45 & 0.7 \\ \hline 
+		1 & 70.2 & 82.8 & 47 & 4.2 \\ \hline 
+		10 & 88.5 & 58.9 & 37 & 20 \\ \hline 
+		100 & 79.5 & 72.6 & 41 & 17 \\ \hline 
+		1000 & 80.5 & 71.0 & 40 & 18 \\ \hline 
+		10000 & 64 & 97.07 & 27.5 & 27 \\ \hline   
+		100000 & 57 & 97.14 & 29 & 28 \\ \hline                  
+	\end{tabular}
+\end{table}
+
 The \acp{ANN} in this system were trained for varying amounts of epochs, notably 1, 10, 100, 1,000, 10,000 and 100,000 epochs.
 A partially trained \ac{ANN} will exhibit behaviour that is unexpected, and perhaps unsafe, because \acp{ANN} gain robustness through training, a less trained \ac{ANN} will be less robust.
 This is also true for an over-trained \ac{ANN}, these are too used to training in a certain environment and are not able to respond well to being used in an untrained environment.
@@ -137,31 +162,6 @@ This has applicability in many autonomous systems, where the ideal amount of tra
 Fewer accidents were noted when the system used \ac{RE} (see Figure~\ref{fig:avaccidents}), and the few accidents that did occur were the result of a vehicle hitting the \ac{AV} from behind when it slammed on the brakes to avoid a collision in front of it.
 As seen in Table~\ref{table:avenf}, the enforcer not only reduced the number of accidents, but also reduced the speed of the vehicle to safe levels. 
 An additional measure of performance was the percentage of brake actions the vehicle took that were unnecessary, i.e. brake actions when there were no obstacles on the road or pedestrians in sight.
-
-\begin{table}[h]
-	\centering
-	\caption{Results of the AV system with and without the enforced policies}
-	\label{table:avenf}
-	\begin{tabular}{|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|}
-		\hline Number of epochs trained & Runs resulting in accidents (\%) & Average minutes to first accident per run (/100) & Average speed (km/h) & Unnecessary braking incidents per run (\%) \\ \hline
-		\multicolumn{5}{|p{0.75\linewidth}|}{Not enforced} \\ \hline
-		0 & 100	 & 3.21 & 98 & 19 \\ \hline
-		1 & 100 & 3.3 & 93 & 19 \\ \hline
-		10 & 100 & 3.8 & 81 & 57 \\ \hline
-		100 & 100 & 5.35 & 59 & 24 \\ \hline
-		1000 & 100 & 5.31 & 58 & 27 \\  \hline
-		10000 & 48.5 & 73.9 & 18 & 63 \\ \hline
-		100000 & 91.5 & 39 & 31.5 & 65 \\ \hline 
-		\multicolumn{5}{|p{0.75\linewidth}|}{Enforced} \\ \hline
-		0 & 75.7 & 75.6 & 45 & 0.7 \\ \hline 
-		1 & 70.2 & 82.8 & 47 & 4.2 \\ \hline 
-		10 & 88.5 & 58.9 & 37 & 20 \\ \hline 
-		100 & 79.5 & 72.6 & 41 & 17 \\ \hline 
-		1000 & 80.5 & 71.0 & 40 & 18 \\ \hline 
-		10000 & 64 & 97.07 & 27.5 & 27 \\ \hline   
-		100000 & 57 & 97.14 & 29 & 28 \\ \hline                  
-	\end{tabular}
-\end{table}
 
 \subsection{RABBIT} \label{sec:rabbit}
 RABBIT is a simple game that is played between two teams: a team with one rabbit on it, and an opposing team with two wolves. 

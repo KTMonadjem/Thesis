@@ -51,8 +51,8 @@ A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
 \end{figure}
 
 \acp{ANN} are being increasingly used as controllers in \ac{CPS} due to their ability to learn data relationships in ways that are difficult to replicate~\cite{ANNSafety2007}. 
-\acp{ANN} can deal with novel inputs to the system and are able to outperform other forms of \ac{AI} at computational efficiency, pattern recognition, function approximation and image identification~\cite{AIComp2016, AIComp2017}. 
-However, it can be very difficult to ensure the safety of a system involving \acp{ANN}~\cite{ANNSafety2007, ANNSafety2018}.
+\acp{ANN} can deal with novel inputs to the system and are able to outperform other forms of \ac{AI} at computational efficiency, pattern recognition, function approximation and image identification~\cite{AIComp2017, AIComp2016}. 
+However, it can be very difficult to ensure the safety of a system involving \acp{ANN}~\cite{ANNSafety2018, ANNSafety2007}.
 
 \subsubsection{Training of \acfp{ANN}}
 \acp{ANN} need to be trained to learn data relationships, these cannot just be made up or drawn out by hand~\cite{ann-train}.
@@ -73,7 +73,7 @@ In such systems, reinforcement learning is used to train the \ac{ANN}~\cite{rein
 Reinforcement learning works by giving the \ac{ANN} a positive reward when it produces outputs that are good in its environment, and giving it negative rewards when it produces outputs that are bad. 
 Thus, the \ac{ANN} can learn from good and bad decisions and learn to produce the best outputs in a given situation.
 
-\subsubsection{\acfp{ANN} ensembles}
+\subsubsection{\acf{ANN} ensembles}
 An \ac{ANN} ensemble is the parallel execution of multiple \acp{ANN} working in combination to produce more accurate output~\cite{Maqsood2004}.
 An ensemble can contain different \acp{ANN}, with different structures, inputs, outputs and even programming languages.
 The output of an \ac{ANN} ensemble represents some combination of all the \acp{ANN} in the ensemble.
@@ -86,13 +86,13 @@ A \ac{CNN} can train to high accuracy, e.g. 99.99\%, on the training set, but si
 Figure~\ref{fig:sign-graph-acc} shows the effect of input perturbation on a \ac{ANN} trained classifier.
 Misclassifications by a \ac{ANN} controller in a \ac{CPS} can have drastic consequences to the safety of the system.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graph-acc.tex}}
 	\caption{Line graph showing the effect of input perturbation on the prediction accuracy of a \ac{MNN} \label{fig:sign-graph-acc}}
 \end{figure}
 
-\subsubsection{\acfp{ANN} libraries used in this work}
+\subsubsection{\acf{ANN} libraries used in this work}
 Primarily, the our own \ac{SNN} library was used in this thesis.
 This library was able to implement and train any \ac{MLP} \ac{ANN} as a time-predictable \ac{SNN}.
 This library was developed in C in conjunction with the synchronous language Esterel to produce the \acp{SNN}.
@@ -117,6 +117,31 @@ Communication between threads is done using globally broadcast signals.
 The communication between Esterel's threads is deterministic, i.e. a single signal cannot be read as both present and not present in any tick.
 Esterel can, additionally, use \textit{pre()} (pre-emption) statements to check the past presence, or absence, of signals, allowing for logical delays in the execution of an action.
 Due to the structure of Esterel's loops, unbounded loops are not allowed; it must be guaranteed that a loop will be paused at least once per iteration.
+
+\begin{figure}[h]
+	\begin{lstlisting}
+	module ANN:
+	
+	procedure runANN()(integer, integer);
+	function getOutput(): integer;
+	
+	input A: integer, B: integer;
+	output O: integer;
+	
+	loop
+	[
+	[await A || await B] 
+	call runANN()(?A, ?B);
+	pause;
+	emit O(getOutput());
+	]
+	end
+	
+	end module
+	\end{lstlisting}
+	\caption{An Esterel module to run a basic \ac{ANN} using C function calls.}
+	\label{fig:esterel-abro}
+\end{figure}
 
 Figure~\ref{fig:esterel-abro} shows an \ac{ANN} run example.
 This module has 2 defined input signals \textit{A} and \textit{B} and one defined output signal \textit{O}.
@@ -143,31 +168,6 @@ When combined, the statements in this example would combine to do the following,
 	\item Emit O with the returned value of \textit{getOutput} as its integer value.
 	\item Repeat from \textbf{1}.
 \end{enumerate}
-
-\begin{figure}[h]
-	\begin{lstlisting}
-	module ANN:
-	
-	procedure runANN()(integer, integer);
-	function getOutput(): integer;
-	
-	input A: integer, B: integer;
-	output O: integer;
-	
-	loop
-	[
-		[await A || await B] 
-		call runANN()(?A, ?B);
-		pause;
-		emit O(getOutput());
-	]
-	end
-	
-	end module
-	\end{lstlisting}
-	\caption{An Esterel module to run a basic \ac{ANN} using C function calls.}
-	\label{fig:esterel-abro}
-\end{figure}
 
 \subsection{\acf{WCET} of \acf{CPS}}
 The timing analysis done in this thesis, notably \acf{WCET} analysis, is done using the Patmos controller architecture by the T-CREST project~\cite{TCREST}~\cite{patmos:ppes2011}~\cite{patmos}.
@@ -252,8 +252,8 @@ An example \ac{DTA} is given in Example~\ref{ex:dta} to introduce the syntax use
 	The policy's safe state transitions are described in layman's terms below: \\
 	While A and B, denoted as $A~\&~B$ and not to be confused with A OR B ($A~|~B$), are present simultaneously, transition back to the safe state.\\
 	However, if A and B are not detected simultaneously, transition to the unsafe state $l_{unsafe}$, suppress the output signal O ($O~:=~0$) and set the timer to 0 ($t~:=~0$).\\
-	The statement $\sum\textbackslash~Z$ reads as ``anything except Z''.
-	The enforcer actions are indicated by statements using the syntax $X~:=~Y$, which reads ``set X to Y''.\\
+	The statement ``$\sum\textbackslash~Z$'' reads as ``anything except Z''.
+	The enforcer actions are indicated by statements using the syntax ``$X~:=~Y$'', which reads ``set X to Y''.\\
 	\\
 	The unsafe state has the following transitions:\\
 	If the timer is less than 3 and C is not been present, transition back here while suppressing output 0.\\
@@ -308,7 +308,7 @@ However, \acp{ANN} are not usually able to be simplified to simple automata.
 
 Deep learning is a widely and extensively researched field with regards to modern machine learning that refers to the learning of data representations, rather than learning task specific algorithms~\cite{schmidhuber2015deep}.
 Deep learning has applicability in a lot of current \ac{ANN} implementations, such as the autonomous vehicles used by Tesla and Uber.
-Verification of \ac{ANN}, specifically, Deep Neural Networks, can be performed for certain properties (such as robustness) using \ac{SMT}~\cite{Gehr2018AI2SA,reluplex,DeepANNverify}.
+Verification of \ac{ANN}, specifically, Deep Neural Networks, can be performed for certain properties (such as robustness) using \ac{SMT}~\cite{Gehr2018AI2SA,DeepANNverify,reluplex}.
 This is useful, because the robustness of a deep \ac{ANN} is a critical property of its safety.
 A robust \ac{ANN} is one that will provide consistently accurate outputs even when the input to the \ac{ANN} is noisy, incorrectly coloured or otherwise distorted. 
 However, this approach is not flawless. 
