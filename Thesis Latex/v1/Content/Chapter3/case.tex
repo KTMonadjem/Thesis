@@ -20,13 +20,20 @@ This works very well with feed forward \acp{ANN}, as their inputs are, generally
 Take the AI-BRO \ac{ANN} discussed in Section~\ref{sec:motivating-example}; this \ac{ANN} has a vector of defined inputs representing the objects ``seen'' by the vehicle.
 Since dangerous situations are defined by both inputs and outputs, the outputs of this \ac{ANN} can be enforced because both the inputs and outputs are known at all times.
 
-Images, as inputs to \acfp{CNN}, are unable to be recognised by a simple algorithm, the purpose of such \acp{CNN} is to classify image inputs.
-Since the inputs cannot be defined as something recognisable, the decision made by the \ac{ANN} cannot be classified as dangerous because a dangerous situation is defined by known inputs and outputs.
-Take a \ac{CNN} that classifies pedestrians; we are using the \ac{CNN} because the software cannot recognise whether the input image shows a pedestrian or not.
-If the pedestrian is misclassified as a different object, the system has no way to know this based off of the inputs to the \ac{CNN} alone.
-Thus, behaviour of \acp{CNN} cannot be enforced using only the inputs to the \ac{ANN}.
+\ac{RE} can only function with well-defined inputs and outputs.
+For instance, the \ac{ESS} system is well-defined, because we can trust current and voltage measurements, and we know that a given model of battery has a minimum state of charge.
+We can enforce behaviour over a system relying on components such as these because constraints can be well defined.
 
-The solution proposed is to use runtime verification as a means to safely combine the outputs from various sensors in the system and use these to verify the outputs of the \ac{ANN}.
+However, systems that rely on ill-defined inputs, such as camera images, are not so straightforward.
+How should a rule that says "stop the car if you detect a pedestrian" be implemented?
+In the previous section, we used \ac{RE} to enforce a controller \ac{MLP} with well-defined inputs and output, but this isn't directly applicable in a real-world situation.
+\acp{CNN} are used as image classifiers because we don't have a guaranteed method for doing this analysis.
+An enforcer has no way of detecting if any one output from a \ac{CNN} is wrong, as it has no baseline of truth to operate from nor has any way of knowing what to change a value to in the event of a violation.
+
+\acf{RV} provides the formal methodology for detecting faults that Runtime Enforcement relies upon.
+By utilising this framework, rather than \ac{RE}, we can instead define, detect, and flag "anomalous" or "unsafe" situations.
+For an \ac{AV} system, this would correspond to the system then returning control to the human driver.
+The solution proposed is to use a run-time verifier to verify the outputs of a complex classifier \ac{MNN}.
 
 \subsection{Sensor Fusion and Runtime Verification for an \acf{AV}~\cite{SensorFusion2017}}
 Sensor fusion is a technique for increasing the accuracy of object detection \acp{CNN}. 
@@ -43,7 +50,7 @@ Additionally, to reduce the impact of perturbations to the \ac{CNN}'s inputs, a 
 This \ac{MNN} aims to greatly increase the prediction accuracy by splitting the prediction process amongst multiple, different \acp{CNN} such that the weakness of each \ac{CNN} is addressed by the other \acp{CNN}.
 
 \subsection{An \acf{AV} Object Detection System}
-Replicating an \ac{AV} system, such as Uber's or Tesla's, would be very difficult in a thesis; it is expensive to purchase the technology such as \ac{LiDAR} and the machine vision cameras, and the time taken to implement the system as a single researcher is also not feasible.
+Using the Tesla and Uber incidents as inspiration, we construct an environment to emulate a crash situation where adversarial inputs could cause a \ac{CNN}-controlled \ac{AV} to misclassify a roadside obstacle and crash.
 As such, a simulation of an \ac{AV} was made to try and capture the intricacies of such a system where safety is concerned, while showing the efficacy of the proposed techniques.
 Unlike the previous chapter, this \ac{AV} system focuses only on the object classification module of an \ac{AV} controller.
 This \ac{AV} controller consisted of 3 \ac{MNN} ensembles, similar to the ensembles used in Chapter 4.

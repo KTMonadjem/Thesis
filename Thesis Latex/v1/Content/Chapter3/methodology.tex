@@ -43,6 +43,15 @@ The syntax for this figure is explained in Chapter 2.
 
 \begin{figure}[h]
 	\centering
+	\includegraphics[width=\textwidth]{Content/fig/flow-misclassify.pdf}
+	\caption{Flow-chart simplifying the algorithm used to detect misclassifications made by the \ac{MNN} controller.} \label{fig:flow}
+\end{figure}
+
+This policy uses a complex algorithm to determine if an object has been misclassified or not.
+For simplicity, this algorithm has been transferred to a flow-chart (Figure~\ref{fig:flow}), rather than being shown on the \ac{VDTA}.
+
+\begin{figure}[h]
+	\centering
 	\scalebox{1}{\input{Content/fig/sign-rte.tex}}
 	\begin{itemize}
 		\item $M$: Binary misclassification verdict: no misclassification (0) or misclassification detected (1).
@@ -51,15 +60,6 @@ The syntax for this figure is explained in Chapter 2.
 	
 	\caption{Enforcer policy for the \acf{AV} prediction system}
 	\label{fig:signrte}
-\end{figure}
-
-This policy uses a complex algorithm to determine if an object has been misclassified or not.
-For simplicity, this algorithm has been transferred to a flow-chart (Figure~\ref{fig:flow}), rather than being shown on the \ac{VDTA}.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{Content/fig/flow-misclassify.pdf}
-	\caption{Flow-chart simplifying the algorithm used to detect misclassifications made by the \ac{MNN} controller.} \label{fig:flow}
 \end{figure}
 
 The automaton started in a safe state, where control of the vehicle was autonomously handled by the system controller.
