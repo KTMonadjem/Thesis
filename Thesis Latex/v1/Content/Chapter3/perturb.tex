@@ -1,46 +1,8 @@
-\section{Verification of Deep Artificial Neural Networks}
-Deep \acfp{ANN}~\cite{schmidhuber2015deep}, \acp{ANN} with large, complex inputs and a large, complex layer structure and multiple layers, are hard to verify due to their complex nature~\cite{Gehr2018AI2SA}. 
-Lots of work has been put into the verification of \acp{ANN}, but the results yielded from this work have many limitations and are generally time consuming.
+\section{Introduction}
+This chapter discusses the issue of adversarial perturbation~\cite{Gehr2018AI2SA} in \acfp{ANN} and introduces a new method for dealing with these.
+We propose the use of reactive \acf{RV}~\cite{runtime-verify} to functionally verify the I/O events of an \ac{ANN} controller at run-time.
+Additionally, we use \ac{ANN} ensembles~\cite{Maqsood2004} to passively increase the classification accuracy of an \ac{ANN} controller.
 
-Previously, this thesis introduced the concept of using runtime enforcement to dynamically ``verify'' an \ac{ANN} as it runs. 
-While this works very well for simple, feed forward \acp{ANN}, this does not extend to more complicated \acp{CNN}.
-
-\subsection{Runtime Enforcement of Deep Artificial Neural Networks}
-Runtime Enforcement, as a solution to the verification of \acp{ANN} and introduced in the previous chapter, only works when the inputs to the \ac{ANN} are known.
-This works very well with feed forward \acp{ANN}, as their inputs are, generally, defined and known.
-Take the AI-BRO \ac{ANN} discussed in Section~\ref{sec:motivating-example}; this \ac{ANN} has a vector of defined inputs representing the objects ``seen'' by the vehicle.
-Since dangerous situations are defined by both inputs and outputs, the outputs of this \ac{ANN} can be enforced because both the inputs and outputs are known at all times.
-
-Complex \ac{ANN} inputs (such as images for \acp{CNN}) are unknown, and the purpose of the \acp{ANN} is to classify said inputs.
-Since the inputs cannot be defined as something recognisable, the decision made by the \ac{ANN} cannot be classified as dangerous because a dangerous situation is defined by known inputs and outputs.
-Take a \ac{CNN} that classifies pedestrians; we are using the \ac{CNN} because the software cannot recognise whether the input image shows a pedestrian or not.
-If the pedestrian is misclassified as a tree, the system has no way to know this based off of the inputs to the \ac{CNN} alone.
-Thus, behaviour of \acp{ANN} with complex inputs (most commonly classification \acp{ANN}) cannot be enforced using only the inputs to the \ac{ANN}.
-
-The solution proposed is to use runtime enforcement as a means to safely combine the outputs from various sensors in the system and use these to enforce the outputs of the \ac{ANN}.
-
-
-\subsection{Input Perturbation for Deep Artificial Neural Networks}
-This chapter also tackles another problematic aspect of using \acp{CNN}: input perturbations.
-A research group showed that very slight modifications to the input image of a \acf{CNN}, such as the discolouration of a few pixels, could cause the image to be misclassified~\cite{Gehr2018AI2SA, ann-pert}.
-A \ac{CNN} can train to high accuracy, e.g. 99.99\%, on the training set, but simple perturbations to the \ac{CNN}'s input can lead to drastically reduced accuracy once the \ac{CNN} has been deployed.
-This thesis shows two methods of increasing the prediction accuracy of an \ac{CNN} affected by input perturbations: the first is the above-mentioned sensor fusion with runtime enforcement and the other is using a \acf{MNN} ensemble of different \acp{CNN}, each classifying a different aspect of the input image and congregating to make a decision as a whole.
-
-
-\subsection{Sensor Fusion and Runtime Verification for Deep Artificial Neural Networks}
-Sensor fusion is a highly researched topic for increasing the accuracy of object detection \acp{CNN}~\cite{SensorFusion2017}. 
-Sensor fusion is the combination of two or more different sensor types to increase the overall sensor detection accuracy of the system.
-Where \acfp{AV} are concerned safety is of utmost importance, making this the biggest area of research for sensor fusion using \acp{CNN}.
-
-The proposed approach to safe deep \acp{ANN} combines runtime enforcement and sensor fusion to safely increase the detection accuracy of \acp{CNN} in \acp{AV}.
-The sensors in question are a $360^\circ$ \ac{LiDAR} sensor and three front-facing cameras.
-The sensor outputs are combined synchronously using a synchronous runtime enforcer, however the runtime enforcer does not enforce the outputs of the detection system.
-Rather, the runtime enforcer verifies the integrity of the detected outputs, and in the case of a possible misclassification the system is put into a safe mode where control of the vehicle is returned to the driver.
-This type of runtime enforcement has been termed as ``runtime verification''.
-Using a \acf{SNN} as the \ac{CNN} in the \ac{AV} system, the system is kept synchronous, time predictable and easy to formalise.
-
-Additionally, to reduce the impact of perturbations to the \ac{CNN}'s inputs, a \ac{MNN} composed of three \ac{MNN} ensembles is used, each with three synchronous \acp{CNN}.
-This \ac{MNN} aims to greatly increase the prediction accuracy by splitting the prediction process amongst multiple, different \acp{CNN} such that the weakness of each \ac{CNN} is addressed by the other \acp{CNN}.
 
 
 

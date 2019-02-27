@@ -1,32 +1,41 @@
 \section{Discussion}
+Deep \acfp{ANN}~\cite{schmidhuber2015deep}, \acp{ANN} with large, complex inputs (such as images) and a large number of layers are difficult to statically verify due to their complex nature~\cite{Gehr2018AI2SA}. 
+Lots of work has been put into the verification of \acp{ANN}, but the results yielded from this work have many limitations and are generally time consuming.
+
+Previously, this thesis introduced the concept of using runtime enforcement to dynamically enforce the safety properties of an \ac{ANN} as it runs. 
+While this works very well for simple, feed forward \acp{ANN}, this does not extend to more complicated \acp{CNN}.
+The output of a \ac{CNN} cannot be enforced as the input images are not recognisable by a simple algorithm.
+
 This chapter presents techniques to increase the safety of \ac{AV} systems. 
-The first technique involves creating \ac{MNN} ensembles, consisting of multiple \acp{CNN}, which work together to increase the prediction accuracy.
-The second technique uses runtime enforcement to verify the integrity of the \ac{MNN}'s classifications, attempting to detect misclassifications dynamically and put the vehicle in safe state if one is detected.
+We create an \acf{AV} case study that focuses on the object detection of the \ac{AV}. 
+To verify the safety of the system, we use \ac{MNN} ensembles, consisting of multiple \acp{CNN}, which work together to increase the prediction accuracy and runtime verification to verify the integrity of the \ac{MNN}'s classifications, attempting to detect misclassifications dynamically and put the vehicle in safe state if one is detected.
 These two techniques work in tandem to greatly increase the safety of the \ac{AV} system where object misclassification is concerned.
 
 Creating a \ac{MNN}  with three synchronous \acp{CNN}, forming a \ac{MNN} ensemble, did have a large effect on the classification accuracy of the system.
-The classification accuracy was higher than that of an ordinary \ac{CNN} regardless of the number of epochs trained, but it was noted that the increase in accuracy was smaller the better trained the ordinary \ac{CNN} was.
-This means that using \ac{MNN} ensembles is more effective for poorly or incompletely trained \acp{CNN}, but it still increases the prediction accuracy even when extensively trained \acp{CNN} are used.
-However, implementing three \acp{CNN} is very resource intensive; each has to be trained separately to a suitable standard and on different data, each has to be implemented separately and each has to run separately.
-This takes much more time, memory and processing power than implementing a single \ac{CNN} to classify the input images.
-The \ac{MNN} used more than three times the resources that a single \ac{CNN} would use, but it can be argued that this trade-off is worth the increase in classification accuracy where human lives are concerned.
+The classification accuracy was higher than that of the average, ordinary \ac{CNN}.
+Using \ac{MNN} ensembles is more effective for poorly or incompletely trained \acp{CNN}, but does not offer an increase in classification accuracy when extensively trained \acp{CNN} are used.
+The ensembles do, however address the issue of worst case \acp{ANN}, by effectively classifying at the same accuracy as a best cast \ac{ANN} would.
+Implementing three \acp{CNN} is more resource intensive; each has to be trained separately to a suitable standard and on different data, each has to be implemented separately and each has to run separately.
+This takes more time, memory and processing power than implementing a single \ac{CNN} to classify the input images.
+The \ac{MNN} ensembles in this case study used three times the resources that a single \ac{CNN} would use, but it can be argued that this trade-off is worth the increase in classification accuracy where human lives are concerned, as the ensemble tend to the worst case scenario.
+The ensemble function used for these tests was a very basic function that went little beyond simple averaging.
+With a better ensemble function for these \ac{MNN} ensembles, a more significant increase in accuracy may be seen.
 
-The second technique, the runtime enforcer, increased the prediction accuracy by 43\% for an extensively trained \ac{MNN} when input perturbations are involved.
-The system only improved by 6\% when there were no input perturbations.
-The enforcer provided an increase in performance regardless of the amount of training the \ac{MNN} had.
+The runtime verifier increased the prediction accuracy by 43\% for an extensively trained \ac{MNN} when input perturbations are involved, but only improved by 6\% when there were no input perturbations.
+Regardless of the amount of training the \ac{MNN} ensembles had, the run-time verifier was still able to detect a large number of misclassifications.
 With no training, the classification accuracy of the system matched the accuracy of the \ac{LiDAR} sensor.
 As the system trained, and the \ac{MNN} became more confident with its decisions, the accuracy of the system began to match the accuracy of the \ac{MNN}.
-If the system were to be trained for more than 10,000 epochs, and the accuracy of the \ac{MNN} exceeded the accuracy of the \ac{LiDAR}, the overall accuracy of the system would likely increase beyond the accuracy of the \ac{LiDAR}.
-More extensive training and testing of this system is proposed for future work.
 
-%Using an enforcer to combine the \ac{MNN} output instead of another ANN
-The biggest downside to this system is that it uses three different \acp{MNN} to run.
-Each \ac{MNN} is an ensemble of \acp{CNN}, as introduced previously.
-This means that using this layout increases the resource usage of the system by 300\%, as opposed using a single \ac{MNN} ensemble, or 900\% compared to using a single \ac{CNN}.
-However, the trade-off for the safety of the system is well worth the extra resource cost.
-Future work could look into decreasing the resource intensity of this system.
+This system showed that the functional verification of \acp{ANN} for \acp{CPS} was possible using the reactive \ac{RV}. 
+As opposed to the static verification methods such as~\cite{Gehr2018AI2SA}~\cite{reluplex}, this technique does not need to view the internals of the \acp{ANN}, but rather regards the \acp{ANN} as a black box.
+This allows easier, scalable verification of \ac{ANN} systems.
+Additionally, ensembles were demonstrated to be a method to cater for the worst case trained \ac{ANN} using synchronous compositions of \ac{SNN}.
+With more work on an averaging function, these ensembles could increase prediction accuracy even for the best case trained \ac{ANN}.
 
-%\todo{Read memomcode paper on functional ANNs}
-%\todo{Direct comparison to AI2}
-%\todo{Train ANNs more and start at 1k epochs}
+
+
+
+
+
+
 

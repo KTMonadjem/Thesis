@@ -4,23 +4,51 @@ With the growing use of \acp{AV} comes an increase in accidents related to these
 The majority of these accidents have one thing in common: a misclassification occurred right before the accident.
 Input perturbations greatly decrease accuracy, thereby increasing the chance of a misclassification and, by proxy, the chance of an accident.
 
-
 \subsection{Object Misclassification in Autonomous Vehicle Systems}
 The inspiration for this case study was taken from the more recent Uber and Tesla \ac{AV} accident, such as~\cite{coldewey_2018}.
 In these accidents, a misclassification, or series thereof, precedented the crash.
 In the case of the Uber accident~\cite{coldewey_2018} a pedestrian crossing the road (at night) was misclassified a minimum of three times before the accident occurred.
 
 Theoretically, this accident could have been prevented in two ways: the first being that no misclassifications occurred and the second being that the system recognised the misclassifications sooner and acted accordingly.
-The misclassifications could have occurred because it was night-time and the input(s) of the pedestrian were perturbed, or the misclassification could have occurred in that 0.001\% of misclassifications. 
-Either way, a system can be implemented to increase prediction accuracy regardless of the state of the inputs, perturbed or not.
-Secondly, by implementing a runtime enforcer and a safe, timed automaton as the safety policy misclassifications can be detected quickly and effectively.
+The misclassifications could have occurred due to adversarial perturbations of the input image due to the darkness. 
+A system can be implemented to increase prediction accuracy regardless of the state of the inputs, perturbed or not.
+By implementing a runtime verifier and a \acf{VDTA} (discussed in Chapter 4) to define the safety policy, misclassifications can be detected quickly and effectively.
 
+\subsection{Runtime Verification of \acfp{CNN}}
+Runtime Enforcement, as a solution to the verification of \acp{ANN} and introduced in the previous chapter, only works when the inputs to the \ac{ANN} are known.
+This works very well with feed forward \acp{ANN}, as their inputs are, generally, defined and known.
+Take the AI-BRO \ac{ANN} discussed in Section~\ref{sec:motivating-example}; this \ac{ANN} has a vector of defined inputs representing the objects ``seen'' by the vehicle.
+Since dangerous situations are defined by both inputs and outputs, the outputs of this \ac{ANN} can be enforced because both the inputs and outputs are known at all times.
 
-\subsection{Simulation of an Autonomous Vehicle Object Detection System}
-Replicating an \ac{AV} system, such as Uber's or Tesla's, would be impossible; it is expensive to purchase the technology such as \ac{LiDAR} and the machine vision cameras, and the time taken to implement the system as a single researcher is also not feasible.
-As such, a simulation of the \ac{AV} was made to try and capture the intricacies of such a system where safety is concerned, while showing the efficacy of the proposed techniques.
+Images, as inputs to \acfp{CNN}, are unable to be recognised by a simple algorithm, the purpose of such \acp{CNN} is to classify image inputs.
+Since the inputs cannot be defined as something recognisable, the decision made by the \ac{ANN} cannot be classified as dangerous because a dangerous situation is defined by known inputs and outputs.
+Take a \ac{CNN} that classifies pedestrians; we are using the \ac{CNN} because the software cannot recognise whether the input image shows a pedestrian or not.
+If the pedestrian is misclassified as a different object, the system has no way to know this based off of the inputs to the \ac{CNN} alone.
+Thus, behaviour of \acp{CNN} cannot be enforced using only the inputs to the \ac{ANN}.
 
-%The simulated system needed a simulation of real \ac{LiDAR}, a simulated camera and an actual controller. 
-%The \ac{LiDAR} and camera inputs would need to be simulated so that they are represented accurately, but in a simplistic manner.
-%The controller would need to process the \ac{LiDAR} input and the camera inputs, meaning that it needed to include at least one \ac{ANN}.
+The solution proposed is to use runtime verification as a means to safely combine the outputs from various sensors in the system and use these to verify the outputs of the \ac{ANN}.
+
+\subsection{Sensor Fusion and Runtime Verification for an \acf{AV}~\cite{SensorFusion2017}}
+Sensor fusion is a technique for increasing the accuracy of object detection \acp{CNN}. 
+Sensor fusion is the combination of two or more different sensor types to increase the overall sensor detection accuracy of the system.
+In \acfp{AV} safety is of utmost importance, and we consider the issue of input perturbations in such systems.
+
+The proposed approach to safe deep \acp{ANN} combines \acf{RV}~\cite{runtime-verify} and sensor fusion to safely increase the detection accuracy of \acp{CNN} in \acp{AV}.
+The sensors in question are a $360^\circ$ \ac{LiDAR} sensor and three front-facing cameras.
+The sensor outputs are combined synchronously using a synchronous runtime verifier.
+The runtime verifier checks the integrity of the detected outputs, and in the case of a possible misclassification the system is put into a safe mode where control of the vehicle is returned to the driver.
+Using a \acf{SNN} as the \ac{CNN} in the \ac{AV} system, the system is kept synchronous, time predictable and easy to formalise.
+
+Additionally, to reduce the impact of perturbations to the \ac{CNN}'s inputs, a \ac{MNN} composed of three \ac{MNN} ensembles is used, each with three synchronous \acp{CNN}.
+This \ac{MNN} aims to greatly increase the prediction accuracy by splitting the prediction process amongst multiple, different \acp{CNN} such that the weakness of each \ac{CNN} is addressed by the other \acp{CNN}.
+
+\subsection{An \acf{AV} Object Detection System}
+Replicating an \ac{AV} system, such as Uber's or Tesla's, would be very difficult in a thesis; it is expensive to purchase the technology such as \ac{LiDAR} and the machine vision cameras, and the time taken to implement the system as a single researcher is also not feasible.
+As such, a simulation of an \ac{AV} was made to try and capture the intricacies of such a system where safety is concerned, while showing the efficacy of the proposed techniques.
+Unlike the previous chapter, this \ac{AV} system focuses only on the object classification module of an \ac{AV} controller.
+This \ac{AV} controller consisted of 3 \ac{MNN} ensembles, similar to the ensembles used in Chapter 4.
+Each \ac{MNN} ensemble aims to classify a different aspect of the input image: the first classifies the colour of the object; the second classifies the shape of the object; and the last classifies the type of object.
+These \acp{MNN} were trained and implemented using the \ac{VOC} 2012~\cite{pascal-voc-2012} and \ac{GTSRB}~\cite{Stallkamp2012-gtsrb} datasets.
+Each ensemble aims to increase the overall classification accuracy and the run-time verifier provides an overall verdict of the object type being detected.
+Using these three different classifications, a run-time verifier can more accurately give a verdict on the type of object classified by the third \ac{MNN} ensemble.
 

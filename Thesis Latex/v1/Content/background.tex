@@ -80,6 +80,18 @@ The output of an \ac{ANN} ensemble represents some combination of all the \acp{A
 The output of an \ac{ANN} ensemble is more accurate than any individual \ac{ANN} in the ensemble.
 These are used to increase the prediction or classification of a system.
 
+\subsubsection{Adversarial Perturbation in \acfp{ANN}}
+A research group showed that marginal modifications to the input image of a \acf{CNN}, such as the discolouration of a few pixels, could cause the image to be misclassified~\cite{Gehr2018AI2SA, ann-pert}.
+A \ac{CNN} can train to high accuracy, e.g. 99.99\%, on the training set, but simple perturbations to the \ac{CNN}'s input can lead to drastically reduced accuracy.
+Figure~\ref{fig:sign-graph-acc} shows the effect of input perturbation on a \ac{ANN} trained classifier.
+Misclassifications by a \ac{ANN} controller in a \ac{CPS} can have drastic consequences to the safety of the system.
+
+\begin{figure}[h]
+	\centering
+	\scalebox{0.9}{\input{Content/fig/sign-graph-acc.tex}}
+	\caption{Line graph showing the effect of input perturbation on the prediction accuracy of a \ac{MNN} \label{fig:sign-graph-acc}}
+\end{figure}
+
 \subsubsection{\acfp{ANN} libraries used in this work}
 Primarily, the our own \ac{SNN} library was used in this thesis.
 This library was able to implement and train any \ac{MLP} \ac{ANN} as a time-predictable \ac{SNN}.

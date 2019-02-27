@@ -3,18 +3,68 @@
 This research provides a solution for two aspects of \acf{AV} systems: predicting accurately with perturbations to the system's inputs and safely dealing with misclassifications by the system.
 The issue of input perturbations was addressed using a \acf{MNN} of different convolutional \acfp{SNN}, each \ac{SNN} working in tandem to predict more accurately.
 Misclassification by the system's controller was addressed by implementing sensor fusion between cameras and \ac{LiDAR}.
-This was done using a run-time enforcer that enforced a safety automaton.
+This was done using a run-time verifier that verified a safety automaton.
 The benchmark was written in Esterel and C and run on an 8 core Intel processor on the Ubuntu OS.
 
-To test the \ac{MNN}'s ability to deal with perturbations, the input images (taken from the \ac{VOC} 2012 and \ac{GTSRB} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
-Figure~\ref{fig:sign-graph-acc} shows that the input perturbations decreased the accuracy of the classifiers by as much as 50\%, a huge amount.
+A graph was generated to show the affect of adversarial input perturbation, this figure was presented first in Chapter 2.
+Figure~\ref{fig:sign-graph-acc} shows that the input perturbations decreased the accuracy of the classifiers by as much as 50\%.
 However, the aim of this approach is not only to increase the classification accuracy of the \acp{SNN} but rather catch misclassifications made by the \acp{SNN}, i.e. verify that the classifications made by the \acp{MNN} are valid.
-As such the results displayed don't show an increase in accuracy, but rather that the enforcer is fully capable of catching misclassifications made by the \acp{MNN}.
-Table~\ref{tbl:sign-resultsfull} shows that without input perturbations, the enforcer captured more than 65\% of all misclassifications. 
-This is a huge amount, more than half of all the misclassifications made were detected by the enforcer, and the safety of the system turned over to the driver.
-This same table shows that when the inputs are perturbed, the enforcer picks up more misclassifications than with the original images, averaging at around 80\% of all misclassifications.
-Where input perturbations are concerned, the enforcer responds even better and picks up the majority of the total misclassifications.
-Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, showing that the enforcer performs even better under more unpredictable circumstances.
+As such the results displayed do not show an increase in accuracy, but rather that the verifier is fully capable of catching misclassifications made by the \acp{MNN}.
+
+To test the \ac{MNN}'s ability to deal with perturbations and misclassifications, the input images (taken from the \ac{VOC} 2012~\cite{pascal-voc-2012} and \ac{GTSRB}~\cite{Stallkamp2012-gtsrb} datasets) were perturbed by randomly replacing approximately 7\% of the image pixels with randomly coloured pixels.
+The system was then run for over 10,000 ticks.
+Each tick the classifier was presented an image to classify. 
+The results of the overall classification was noted: did the \ac{MNN} controller make a misclassification and if so, was it caught by the run-time verifier.
+
+\subsection{Results of the \ac{MNN} ensembles}
+To test the efficacy of \ac{MNN} ensembles, a three \acp{SNN} were trained on the data set.
+These \acp{ANN} were then tested, individually, on both the original images and the same perturbed images and the results were noted in Table~\ref{tbl:sign-enemble}.
+The overall average accuracy of three \acp{SNN} was also noted.
+An ensemble made up of the three \acp{SNN} was then run on the exact same images and its classification accuracy noted.
+
+\begin{table}[h]
+	\centering
+	\caption{Table showing the results of the \ac{MNN} ensemble}
+	\label{tbl:sign-enemble}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|l||l|}
+			\hline
+			\ac{ANN} & Classification accuracy (\%) \\ \hline
+			\multicolumn{2}{|l|}{Original Inputs} \\ \hline
+			\ac{SNN} 1 & 84.24 \\ 
+			\ac{SNN} 2 & 92.05 \\ 
+			\ac{SNN} 3 & 89.62 \\ 
+			\ac{SNN} Average & 88.64 \\
+			\ac{MNN} Ensemble & 91.17 \\ 
+			\hline
+			\multicolumn{2}{|l|}{Perturbed Inputs} \\ \hline
+			\ac{SNN} 1 & 56.52 \\ 
+			\ac{SNN} 2 & 63.16 \\ 
+			\ac{SNN} 3 & 62.85 \\ 
+			\ac{SNN} Average & 60.84 \\
+			\ac{MNN} Ensemble & 62.91 \\ 
+			\hline
+		\end{tabular}%
+	}
+\end{table}
+
+Table~\ref{tbl:sign-enemble} shows the impact of \ac{MNN} ensembles on the classification accuracy of images.
+Without being in an ensemble, the overall classification accuracy of the \acp{ANN} was 88.64\% for the original images and 60.84\% for the perturbed images.
+However, this average was increased to 91.17\% and 62.92\% for the original and perturbed images respectively.
+Additionally, the ensemble performed significantly better than the ``worst'' \ac{SNN}.
+
+While the \ac{MNN} ensemble did not perform better than the ``best'' \ac{SNN}, it did not perform significantly worse either.
+This does not mean that the ensembles are useless.
+When an \ac{ANN} is trained, it is not know before deployment whether that \ac{ANN} is a ``worst'' or a ``best''.
+And while the ensemble does not increase the effectiveness of a ``best'' \ac{ANN}, it significantly increases the accuracy of a ``worst'' \ac{ANN}.
+When ensuring timing and, in this case, functional safety of a system, the worst case must always be considered, and these ensembles will turn a worst case \ac{ANN} into a best case \ac{ANN}.
+
+\subsection{Results of a Darknet~\cite{darknet13} implemented \ac{AV} system}
+The \ac{MNN} used in this system were trained for up to 10,000 epochs using the Darknet library~\cite{darknet13}.
+Table~\ref{tbl:sign-resultsfull} shows the results of the Darknet generated classifier.
+The first column shows the total number of misclassifications made, normalized to 100.
+The second column shows the total number of misclassifications caught by the verifier, also normalized to 100.
+The final column shows the relative percentage of the total misclassifications caught by the verifier.
 
 \begin{table}[h]
 	\centering
@@ -44,58 +94,46 @@ Figure~\ref{fig:sign-graphboth} presents these results in a graphical format, sh
 	}
 \end{table}
 
-\begin{figure}[h]
-	\centering
-	\scalebox{0.9}{\input{Content/fig/sign-graph-acc.tex}}
-	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{MNN} \label{fig:sign-graph-acc}}
-\end{figure}
+Using the original inputs the verifier caught more than 65\% of the total misclassifications.
+More than half of all the misclassifications made were detected by the verifier, and the safety of the system turned over to the driver.
+This same table shows that when the inputs are perturbed, the verifier picked up more misclassifications than with the original images, catching more than 76\% of all misclassifications.
+These results are summarised in Figure~\ref{fig:sign-graphboth}.
 
-%\begin{figure}[t]
-%	\centering
-%	\scalebox{0.9}{\input{Content/fig/sign-graph.tex}}
-%	\caption{Line graph showing the performance of the system trained over an increasing amount of epochs using unperturbed inputs \label{fig:sign-graph}}
-%\end{figure}
-
-%\begin{figure}[t]
-%	\centering
-%	\scalebox{0.9}{\input{Content/fig/sign-graphpert.tex}}
-%	\caption{Line graph showing the number of misclassifications made by the system with perturbed inputs \label{fig:sign-graphpert}}
-%\end{figure}
-
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graphboth.tex}}
-	\caption{Line graph showing the number of misclassifications caught by the enforcer \label{fig:sign-graphboth}}
+	\caption{Line graph showing the number of misclassifications caught by the verifier for the Darkent \ac{MNN} classifier. \label{fig:sign-graphboth}}
 \end{figure}
+
+Where input perturbations are concerned, the verifier responded even better and picked up the majority of the total misclassifications.
+The verifier caught more misclassifications in untrained \acp{ANN} due to the untrained \acp{ANN} having no confidence about their output.
+However, with more trained \acp{ANN} the verifier caught a lower percentage of the total misclassifications due to the \acp{ANN} being 100\% sure that they were correct, even when they were not.
 
 \subsection{An \ac{AV} System Using \acf{MNN2C}}
 \ac{MNN2C}, introduced in Section~\ref{sec:mnn2c}, creates time-predictable, modular \acfp{MNN} for C from existing Keras (with Tensorflow) trained \acp{ANN}. 
 This compiler makes implementing \acfp{MNN} in C easy and safe.
-For the purposes of testing and demonstration, the complex \ac{MNN} used in this chapter, shown in Figure~\ref{fig:mnn}, was trained in Python, using Keras and the exact same images used to train the original system.
+For the purposes of testing and demonstration, the complex \ac{MNN} used in this chapter, shown in Figure~\ref{fig:mnn}, was trained in Python, using Keras and the exact same images used to train the original, Darknet system.
 This \ac{MNN} was then described in the \ac{MNN2C} format, and modular C code was generated to initialise, run and incorporate the \ac{MNN}.
-To show the efficacy of \ac{MNN2C}, the generated \ac{MNN} was implemented in an identical system to the original, and run with the same tests. 
-It has already been shown that \ac{MNN2C} generates outputs identical to the Keras trained \acp{ANN} with a one hundred-thousandth tolerance, so the output of each individual \ac{SNN} is not being tested, rather that the system as a whole runs as the original does.
+To show the efficacy of \ac{MNN2C}, the generated \ac{MNN} was implemented and tested in an identical system to the original. 
+\ac{MNN2C} generates outputs identical to the Keras trained \acp{ANN} with a one hundred-thousandth tolerance, so the output of each individual \ac{SNN} is not being tested here, rather that the system as a whole runs as the original does.
+As with the Darknet trained system, the \ac{MNN2C} system was implemented in C using Ubuntu and then run on an 8 core Intel processor.
 
-\subsubsection{Results of an \ac{MNN2C} Generated \ac{AV} System}
-Figure~\ref{fig:sign-graphboth-mnn2c} shows that the enforcer stills runs perfectly fine with Keras trained \acp{MNN} compiled to C code.
-The enforcer picked up more than 70\% of all misclassifications, catching more misclassifications as the training of the \acp{MNN} was increased. 
-As the training increased, the \acp{MNN} become more confident with their predictions, and thus the enforcer is able to more accurately determine misclassifications.
+\subsubsection{Results of a \ac{MNN2C} generated \ac{AV} system}
+Since these \acp{MNN} were trained in Keras, they did not need to go through same, extensive training to get to a reasonable classification accuracy, only needing 100 epochs, as opposed to the 10,000 epochs of training the Darknet \acp{MNN} were trained for.
 
-Since these \acp{MNN} were trained in Keras, they did not need to go through extensive training to get to a reasonable classification accuracy, only needing 100 epochs to get to level as the Darknet \acp{MNN}.
-The enforcer works very similarly for perturbed and unperturbed images, unlike the Darknet \acp{MNN}.
-This is due to the effective training methods used by Keras, allowing for better trained \acp{MNN} even with input perturbations.
-
-%\begin{figure}[t]
-%	\centering
-%	\scalebox{0.9}{\input{Content/fig/sign-graph-acc-mnn2c.tex}}
-%	\caption{Line graph showing the effect of input perturbations on the prediction accuracy of a \ac{SNN} \label{fig:sign-graph-acc-mnn2c}}
-%\end{figure}
-
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\scalebox{0.9}{\input{Content/fig/sign-graphboth-mnn2c.tex}}
-	\caption{Line graph showing the number of misclassifications caught by the enforcer with \ac{MNN2C} generated \acp{MNN} \label{fig:sign-graphboth-mnn2c}}
+	\caption{Line graph showing the number of misclassifications caught by the verifier with \ac{MNN2C} generated \acp{MNN} \label{fig:sign-graphboth-mnn2c}}
 \end{figure}
+
+Figure~\ref{fig:sign-graphboth-mnn2c} shows that the verifier stills work efficiently with Keras trained \acp{MNN} compiled to C code.
+With the original images, the verifier caught more than 70\% of all misclassifications caught more than 60\% of all misclassifications when the inputs were perturbed.
+As the \acp{MNN} are more trained, the number of caught misclassifications increases.
+This shows that the system works better with more extensively trained \acp{MNN}.
+Unlike the Darknet \acp{MNN}, the verifier was not able to catch 100\% of all the misclassifications for untrained \acp{MNN}.
+\acp{ANN} trained in Keras are trained slightly differently and, as a result, the confidence of the classifier was different to that of the Darknet classifier.
+However, the majority of the misclassifications were still caught, regardless of the number of epochs the classifier was trained for.
 
 
 

@@ -6,47 +6,46 @@ Using only front-facing cameras was sufficient to demonstrate the efficacy of th
 The architecture of the system used can be seen in Figure~\ref{fig:mnn}. 
 
 \subsection{Architecture of a Traffic Sign Recognition AV System}
-Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
-A \ac{MNN} is a structure containing at least one \acf{SNN} synchronously combined with any number of other functional blocks.
-Each of the three \ac{MNN} ensembles were used to classify shape, colour and object type of each object being output by the camera.
-Each ensemble synchronously combined the outputs of three different convolutional \acp{SNN}, providing increased prediction accuracy for shape, colour and object type. 
-Each \ac{SNN} was implemented in the synchronous language Esterel~\cite{Esterel}.
-Synchronous programming guarantees code that is deterministic, causal and bounded.
-Additionally, the calculation of \acf{WCET} and \acf{WCRT} is enabled by using Esterel with C.
-These ensembles ran in synchronous concurrency with each other, forming a single, larger \ac{MNN}. 
-The outputs of each ensemble were then combined into a batch of outputs forming the \textit{predicted output}.
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{Content/fig/MNN.pdf}
-	\caption{Block diagram showing the \acf{MNN} ensembles and run-time enforcer used in this case study} \label{fig:mnn}
+	\caption{Block diagram showing the \acf{MNN} ensembles and run-time verifier used in this case study} \label{fig:mnn}
 \end{figure}
+
+Utilising synchronous semantics~\cite{benveniste2003synchronous}, a \acf{MNN}, containing three other \ac{MNN} ensembles, was created.
+This structure can be seen in Figure~\ref{fig:mnn}.
+A \ac{MNN} is a synchronous composition of multiple \acf{SNN}.
+Each of the three \ac{MNN} ensembles were used to classify shape, colour and object type of each object being output by the camera.
+Each ensemble synchronously combined the outputs of three different convolutional \acp{SNN}, providing increased prediction accuracy for shape, colour and object type. 
+Each \ac{SNN} was implemented in the synchronous language Esterel~\cite{Esterel} using the Darknet library~\cite{darknet13} to train and implement the \ac{CNN}.
+After the introduction of \acf{MNN2C}, this system was trained in Python using Keras~\cite{chollet2015keras} and converted to time-predictable \acp{SNN} in C.
+These ensembles ran in synchronous concurrency with each other, forming a single, larger \ac{MNN}. 
+
+The individual \ac{CNN} outputs were passed to an ensemble function that combined the classifications of each \ac{CNN} together, resulting in a more accurate overall classification.
+Each ensemble used custom averaging function that worked out the most likely class of the classified object using the top 2 most likely classes output by each \ac{CNN}.
+The outputs of each ensemble were then combined into a batch of outputs forming the \textit{predicted output} for the colour, shape and object type of the detected object.
 
 \subsection{Sensor Fusion for a Traffic Sign Recognition AV System}
 Two sensors were used for the purpose of sensor fusion; \ac{LiDAR} and cameras.
-The \ac{LiDAR} controller for this system was accurate 93\% of the time~\cite{lidarFusion}, to closely simulate a system using real \ac{LiDAR}.
+The \ac{LiDAR} controller for this system used the 93\% accuracy of the research group in~\cite{lidarFusion}, to closely simulate a system using real \ac{LiDAR}.
 The simulated camera outputs consisted of test images from both the \ac{VOC} 2012~\cite{pascal-voc-2012} and \ac{GTSRB}~\cite{Stallkamp2012-gtsrb} datasets, in a combination of people, vehicles and various traffic signs.
 The \ac{LiDAR} and camera outputs were handled by different parts of the controller.
 The camera outputs were fed into a \ac{MNN} (see Figure~\ref{fig:mnn}) where they were classified by shape, colour and object type.
-Sensor fusion happened after classification occurred and was done using an enforcer during runtime.
+Sensor fusion happened after classification occurred and was done using by the run-time verifier.
 
-\subsection{Input Perturbation Safety Policy}
-A \acf{VDTA}~\cite{recps} was designed to verify predictions made by the \ac{MNN} and ensure utmost safety at all times.
-The automaton started in a safe state, where control of the vehicle was autonomously handled by the system controller.
-If a misclassification was detected, the enforced policy entered an unstable state, still under autonomous control. 
-Once enough time passed without further misclassifications, the vehicle entered the safe state again.
-However, if another misclassification was detected while unstable, the enforced policy entered a violation state and forced control of the \ac{AV} to the driver.
-The vehicle would not enter autonomous mode again until the system was restarted.
-A diagram of the enforced policy's safety automaton is shown in Figure~\ref{fig:signrte}.
+\subsection{\acf{RV}~\cite{runtime-verify} for a Traffic Sign Recognition AV System}
+The system controller was encapsulated by a run-time verifier~\cite{recps} that used sensor fusion to check for misclassifications made by the \ac{MNN}.
+A run-time verifier gives a verdict on every I/O sequence given to i by the controller.
+The \ac{RV} can be seen in Figure~\ref{fig:mnn}, between the controller and the plant, monitoring the outputs of the \ac{MNN} controller.
+The run-time verifier was given a \acf{VDTA}, introduced in Chapter 4, as the safety policy to be used.
+This \ac{VDTA} is shown in Figure~\ref{fig:signrte}.
+The syntax for this figure is explained in Chapter 2.
+
 \begin{figure}[h]
 	\centering
-	\scalebox{1.3}{\input{Content/fig/sign-rte.tex}}
+	\scalebox{1}{\input{Content/fig/sign-rte.tex}}
 	\begin{itemize}
-		\item $P$: Misclassification of a person.
-		\item $V$: Misclassification of a vehicle.
-		\item $N$: Classification of an object when there is nothing.
-		\item $S$: Misclassification of a traffic sign.
-		\item $C$: Confidence rating of the \ac{MNN} classification.
+		\item $M$: Binary misclassification verdict: no misclassification (0) or misclassification detected (1).
 		\item $t$: Timer for the unstable state.
 	\end{itemize}
 	
@@ -54,33 +53,20 @@ A diagram of the enforced policy's safety automaton is shown in Figure~\ref{fig:
 	\label{fig:signrte}
 \end{figure}
 
-\subsection{Runtime Enforcer for a Traffic Sign Recognition AV System}
-The system controller was encapsulated by a run-time enforcer~\cite{recps} that used sensor fusion to check for misclassifications made by the \ac{MNN}.
-This type of run-time enforcement, where neither the inputs nor outputs of the sensors or controller are enforced, has been termed as \textit{run-time verification}.
-\textit{Run-time verification} refers to the verification of system parameters during run-time, while ensuring that the system is aware of any failed guards in the enforced policy.
+This policy uses a complex algorithm to determine if an object has been misclassified or not.
+For simplicity, this algorithm has been transferred to a flow-chart (Figure~\ref{fig:flow}), rather than being shown on the \ac{VDTA}.
 
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[scale=0.6]{Content/fig/SSNN.pdf}
-%	\caption{Block diagram showing the \acf{AV} system with enforcer}
-%	\label{fig:ssnn}
-%\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Content/fig/flow-misclassify.pdf}
+	\caption{Flow-chart simplifying the algorithm used to detect misclassifications made by the \ac{MNN} controller.} \label{fig:flow}
+\end{figure}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+The automaton started in a safe state, where control of the vehicle was autonomously handled by the system controller.
+If a misclassification was detected, the verified policy entered an unstable state, still under autonomous control. 
+Once enough time passed without further misclassifications, the vehicle entered the safe state again.
+However, if another misclassification was detected while unstable, the verified policy entered a violation state and control of the \ac{AV} was passed to the driver by the system.
+The vehicle would not enter autonomous mode again until the system was restarted.
 
 
 
