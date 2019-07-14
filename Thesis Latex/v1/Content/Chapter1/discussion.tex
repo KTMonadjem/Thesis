@@ -8,11 +8,11 @@ applications operate safely at all times~\cite{seshia2016towards}. This has led 
 techniques for functional verification of AI-based \ac{CPS}. However,
 the issue of timing verification has received scant attention. 
 
-This paper, for the first time, develops neural networks with timed
+This thesis, for the first time, develops neural networks with timed
 semantics called \acfp{SNN}. Our approach develops periodic networks,
 where the response time of a network may be between $1$-tick (called
 \emph{mono-periodic} networks) to $n$-ticks (called
-\emph{multi-periodic} networks). We propose a timing semantics of such
+\emph{multi-periodic} networks). We propose timing semantics of such
 networks using \ac{WCRT}-algebra~\cite{wang2017timing}. Multi-periodic networks are
 introduced to reduce the system reaction time, while keeping the
 response time within the specified deadline (see the \texttt{ESS} case
@@ -21,7 +21,7 @@ study in Section~\ref{sec:results}).
 For complex CPS, we propose meta neural networks for designing concurrent applications where the output from
 one network influences other networks. We provide several alternative
 architectures and study such systems in
-Section~\ref{sec:results}. Overall, this paper develops a new approach
+Section~\ref{sec:results}. Overall, this thesis develops a new approach
 for the design of time predictable \acf{CPS} involving interacting 
 AI modules.
 
@@ -33,9 +33,9 @@ second limitation is that we are relying on ``compiling away'' Esterel
 concurrency, which is not ideal for many-core processors. We will develop parallel implementations
 of \acp{SNN} in the near future. 
 Additionally, we developed \acp{SNN} to ensure timing correctness. 
-However, synchronous semantics could also aid in the
-validation of functional correctness for \acp{NN}, due to their
-deterministic and reactive nature. This aspect will be examined in the future.
+\ignore{However, synchronous semantics could also aid in the
+validation of functional correctness for \acp{ANN}, due to their
+deterministic and reactive nature. This aspect will be examined in the future.}
 Finally, we could have considered
 data-flow synchronous languages like Lustre~\cite{benveniste2003synchronous} for
 \acp{SNN}. However, we selected Esterel due to the nature of \ac{CPS}

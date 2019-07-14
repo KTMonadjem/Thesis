@@ -133,7 +133,91 @@ It can be noted that by Proposition~\ref{lemma1}, any \ac{ANN} implemented using
 	\end{example}
 }
 
-\input{Content/fig/mlp-arrangements.tex}%\pr{This Figure could be split and each aspect properly explained in the text.}
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[h]{0.6\textwidth}
+		\centering
+		\begin{subfigure}[h]{0.3\textwidth}
+			\centering
+			\input{Content/fig/tca-simple.tex}
+		\end{subfigure}%
+		\begin{subfigure}[h]{0.66\textwidth}
+			\vspace{3mm}
+			\begin{lstlisting}
+			loop
+			call run_XOR_ANN_li()(?x1, ?x2);
+			call run_XOR_ANN_lh();
+			emit y(run_XOR_ANN_lo());
+			pause;
+			end
+			\end{lstlisting}
+		\end{subfigure}
+	\end{subfigure}
+\caption{Mono-periodic `layer by layer' execution, $WCRT = l_i \odot l_h \odot l_o$}
+\label{fig:tca-bb}
+\end{figure}
+
+\begin{figure}[h]	
+	\centering
+	\vspace{5mm}
+	\begin{subfigure}[h]{0.5\textwidth}
+		\centering
+		\begin{subfigure}[h]{0.3\textwidth}
+			\centering
+			\input{Content/fig/tca-layers.tex}
+		\end{subfigure}%
+		\begin{subfigure}[h]{0.66\textwidth}
+			\begin{lstlisting}
+			loop
+			call run_XOR_ANN_li()(?x1, ?x2);
+			pause;
+			call run_XOR_ANN_lh();
+			pause;
+			emit y(run_XOR_ANN_lo());
+			pause;
+			end
+			\end{lstlisting}
+		\end{subfigure}
+	\end{subfigure}
+\caption{Multi-periodic `layer by layer' execution, $WCRT = l_i \oplus l_h \oplus l_o$}
+\label{fig:tca-layers}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\vspace{5mm}
+	\begin{subfigure}[h]{0.8\textwidth}
+		\centering
+		\begin{subfigure}[h]{0.3\textwidth}
+			\centering
+			\input{Content/fig/tca-neurons.tex}
+		\end{subfigure}%
+		\begin{subfigure}[h]{0.66\textwidth}
+			\begin{lstlisting}
+			loop
+			[
+			call run_XOR_ANN_i1()(?x1);
+			|| 
+			call run_XOR_ANN_i2()(?x2);
+			];
+			pause;
+			[
+			call run_XOR_ANN_h1()();
+			||
+			call run_XOR_ANN_h2()();
+			||
+			call run_XOR_ANN_h3()();
+			];
+			pause;
+			emit y(run_XOR_ANN_o1());
+			pause;
+			end
+			\end{lstlisting}
+		\end{subfigure}
+	\end{subfigure}
+\caption{Multi-periodic, neuron-by-neuron execution, $WCRT = \left(i_1 \odot i_2\right) \oplus \left(h_1 \odot h_2 \odot h_3\right) \oplus o_1$}
+\label{fig:tcas-xor}
+\end{figure}
 
 As mentioned, using the approach in Figure~\ref{fig:tca-bb-n} to implement complex \acp{ANN} i.e. \acp{CNN} may lead to implementations that violate their timing requirements. 
 The synchronous approach, however, enables efficient implementations via compositional modelling.

@@ -1,4 +1,7 @@
-\begin{table*}[H]
+\section{Case studies and evaluation}
+\label{sec:results}
+
+\begin{table}[H]
 	\centering
 	\caption{Benchmarks and descriptions}
 	\label{tbl:benchmarks}
@@ -14,10 +17,7 @@
 		SENSOR & \ac{CNN}     & Soft real-time              & Section~\ref{sec:motivating-example} front sensor implementation for object detection using images. & 1      & 1000+      \\
 		\bottomrule
 	\end{tabular}
-\end{table*}
-
-\section{Case studies and evaluation}
-\label{sec:results}
+\end{table}
 %\pr{I have defined the concept of reaction time and response time. We
 %  should have both these in all real-time benchmarks and accordingly
 %  evaluate the results.}
@@ -47,7 +47,7 @@ with 74, 23, 18 neurons respectively.
 As this is the first work on synchronous neural networks, we had to
 develop time analysable implementations from scratch. Unfortunately, we were unable
 to complete the implementation of more complex \acp{ANN} such that they met the requirements of the Platin tool. 
-However, we did develop two additional interesting soft-real time examples to illustrate the power of the proposed methodology. The
+However, we did develop two additional interesting soft real-time examples to illustrate the power of the proposed methodology. The
 first example is a computer game called \texttt{RABBIT}, which was
 also implemented using Pthreads in Python.
 This program demonstrates the

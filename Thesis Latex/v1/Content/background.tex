@@ -14,7 +14,7 @@ This covers the verification and validation of \ac{ANN}, and the timing and func
 \acp{ANN} were originally proposed to mimic the functioning of  biological neural networks~\cite{kohonen1988introduction}, which produce recurrent spatio-temporal patterns~\cite{rolston2007precisely}. 
 Similar timed activity of neurons in the cerebellum has been reported in~\cite{bullock1994neural, moore1989adaptively}. 
 A number of types of \ac{NN} which mimic their biological counterparts exist, varying in complexity and accuracy, including the \ac{SNN}~\cite{izhikevich2003spiking,maass1997spiking}, which was designed to model the brain and has been demonstrated to be periodic and run with discrete time intervals when implemented in software. 
-\acp{ANN} are also part of deep learning; \acfp{CNN}~\cite{schmidhuber2015deep} were introduced with many more layers than is possible on a \ac{MLP}. 
+\acp{ANN} are also part of deep learning; \acfp{CNN}~\cite{schmidhuber2015deep} were introduced with many more layers than is possible on a \acf{MLP}. 
 \acp{CNN}, are widely used in \ac{CPS} applications such as autonomous vehicles, e.g. in \cite{EndToEndLearningForSelfDrivingCars}, where a \ac{CNN} is trained to map raw pixel data directly to vehicle steering commands.
 
 \subsubsection{Structure of an \acf{ANN}}
@@ -55,7 +55,7 @@ A figure of a \ac{CNN} is provided in Figure~\ref{fig:cnn}.
 However, it can be very difficult to ensure the safety of a system involving \acp{ANN}~\cite{ANNSafety2018, ANNSafety2007}.
 
 \subsubsection{Training of \acfp{ANN}}
-\acp{ANN} need to be trained to learn data relationships, these cannot just be made up or drawn out by hand~\cite{ann-train}.
+\acp{ANN} need to be trained to learn data relationships; these cannot just be made up or drawn out by hand~\cite{ann-train}.
 There exist many training techniques for \acp{ANN}, all which fall under one of three categories: supervised, reinforcement and unsupervised learning.
 All techniques used in this thesis fall under supervised and reinforcement learning.
 Under any training method, the \ac{ANN} is trained over a training data set multiple times. 
@@ -78,7 +78,7 @@ An \ac{ANN} ensemble is the parallel execution of multiple \acp{ANN} working in 
 An ensemble can contain different \acp{ANN}, with different structures, inputs, outputs and even programming languages.
 The output of an \ac{ANN} ensemble represents some combination of all the \acp{ANN} in the ensemble.
 The output of an \ac{ANN} ensemble is more accurate than any individual \ac{ANN} in the ensemble.
-These are used to increase the prediction or classification of a system.
+These are used to increase the prediction or classification performance of a system.
 
 \subsubsection{Adversarial Perturbation in \acfp{ANN}}
 A research group showed that marginal modifications to the input image of a \acf{CNN}, such as the discolouration of a few pixels, could cause the image to be misclassified~\cite{Gehr2018AI2SA, ann-pert}.
@@ -93,7 +93,12 @@ Misclassifications by a \ac{ANN} controller in a \ac{CPS} can have drastic conse
 \end{figure}
 
 \subsubsection{\acf{ANN} libraries used in this work}
-Primarily, the our own \ac{SNN} library was used in this thesis.
+The majority of \ac{ANN} libraries available were not sufficient to be usable in synchronous environments.
+These libraries, such as Keras~\cite{chollet2015keras}, are developed in languages that don't support synchronous programming or timing analysis.
+For example, these libraries use threading to run their \acp{ANN}.
+Threads are neither synchronous nor time analysable, and this makes these libraries unusable in this work.
+
+Primarily, our own \ac{SNN} library was used in this thesis.
 This library was able to implement and train any \ac{MLP} \ac{ANN} as a time-predictable \ac{SNN}.
 This library was developed in C in conjunction with the synchronous language Esterel to produce the \acp{SNN}.
 However, this library was unable to handle \acp{CNN}, and we use the Darknet~\cite{darknet13} C library to implement any \acp{CNN}.
@@ -271,10 +276,10 @@ An example \ac{DTA} is given in Example~\ref{ex:dta} to introduce the syntax use
 
 \section{Related Work}
 \subsection{\acfp{ANN} for \acf{CPS}}
-In order for an \ac{ANN} to be used in any capacity within a system where safety is critical, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that they it is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}. 
+In order for an \ac{ANN} to be used in any capacity within a system where safety is critical, it should undergo rigorous and thorough validation, verification, and testing procedures to ensure that it is sufficiently safe for its target system~\cite{scann, ANNSafetyLifecycle2003}. 
 
 While considerable research effort is starting in the direction of formal verification of \ac{AI}-based \ac{CPS}~\cite{seshia2016towards, russell2015}, the issue of timing verification has received scant attention. 
-Like the challenges involving functional verification, timing verification of AI-based  \ac{CPS} poses considerable challenges due to the fact that: (1) real-time \ac{AI} systems could involve many concurrent and interacting \ac{AI} modules, which need deterministic composition for safety; (2) \ac{AI} modules are usually developed as untimed systems and the reactive nature of AI algorithms used in CPS are not carefully studied; and (3) \acf{WCET} analysis~\cite{wilhelm2008worst} of \ac{AI}-based \ac{CPS} has received scant attention.
+Like the challenges involving functional verification, timing verification of AI-based  \ac{CPS} poses considerable challenges due to the fact that: (1) real-time \ac{AI} systems could involve many concurrent and interacting \ac{AI} modules, which need deterministic composition for safety; (2) \ac{AI} modules are usually developed as untimed systems and the reactive nature of AI algorithms used in CPS has not been carefully studied; and (3) \acf{WCET} analysis~\cite{wilhelm2008worst} of \ac{AI}-based \ac{CPS} has received scant attention.
 
 Definitions for this safety vary, but Kurd et. al.~\cite{EstSafeCriteria2003} provide a generalisation: safe \acp{ANN} can be defined as those that:
 \begin{itemize}
@@ -292,7 +297,7 @@ Problematic situations can arise when an \ac{ANN} exhibits unexpected behaviour 
 
 \subsection{Functional Verification of \acfp{ANN}}
 Typical approaches for ensuring that \acp{CPS} are safe involve processes to demonstrate that an acceptable level of risk has been achieved~\cite{scann}. 
-Designers of \ac{AI} software rely on several validation and verification technique, including, but not limited to, conventional testing, run-time monitoring, static analysis, model checking and theorem proving~\cite{menzies2005verification}.
+Designers of \ac{AI} software rely on several validation and verification techniques, including, but not limited to, conventional testing, run-time monitoring, static analysis, model checking and theorem proving~\cite{menzies2005verification}.
 Unfortunately, due to the complexity of \acfp{ANN}, techniques such as static analysis, model checking and theorem proving are less valuable in \ac{ANN} environments. 
 Conventional testing is a common method to test the accuracy of \acp{ANN}, but this method is not fool-proof and its efficacy relies heavily on the creator of the test cases.
 Run-time monitoring is a technique that could greatly benefit the safety of running \acp{ANN}, but there has been minimal research done in this field.
@@ -327,7 +332,7 @@ Finally, no matter the chosen methodology, as \acp{ANN} increase in size and com
 % Write about exisiting autonomous RE
 The idea of \ac{RE} of autonomous systems has received some research attention. 
 De Niz et. al. propose a type of \ac{RE} they term temporal enforcement, which ensures that the system controller meets timing deadlines where outputs are concerned~\cite{safe-enforce-auto}. 
-While this shares similarities with the work in this paper, their work does not expand to cover \acp{ANN}, and does not propose the use of \ac{RE} for anything other than meeting timing deadlines.
+While this shares similarities with the work in this thesis, their work does not expand to cover \acp{ANN}, and does not propose the use of \ac{RE} for anything other than meeting timing deadlines.
 Aniculaesei et. al. propose static formal verification and runtime monitoring of autonomous, robotic systems to prevent physical collisions during system execution~\cite{runtime-monitor}.
 While this looks at the enforcement of system outputs, the inputs are not monitored and the timing deadlines of the system are not investigated. 
 Additionally, the case study involves a robot controlled by an automaton, not a highly complex \ac{AI} such as an \ac{ANN}.

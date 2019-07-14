@@ -48,8 +48,8 @@ the atomicity of reactions, where inputs can happen only at the start of a tick,
 non-determinism, which is widely prevalent in event triggered paradigms. A synchronous reaction is often represented as a composition of 
 multiple, interacting \emph{threads} exhibiting \emph{logical concurrency}~\cite{benveniste2003synchronous}. 
 These are usually \emph{compiled-away} to produce sequential code 
-that avoid conventional race conditions widely prevalent in the asynchronous setting. Distributed compilation of threads, which is a much harder problem, over
-multicore platforms is also well developed, though less widely used~\cite{yuan2011compiling}. The synchronous approach guarantees
+that avoid conventional race conditions widely prevalent in the asynchronous setting. Distributed compilation of threads over
+multicore platforms, which is a much harder problem, is also well developed, though less widely used~\cite{yuan2011compiling}. The synchronous approach guarantees
 key properties such as \emph{determinism} and \emph{reactivity}, which is ideal for AI-based CPS. This motivates 
 our adoption of the this paradigm while designing \acp{SNN}.
 
@@ -107,8 +107,8 @@ A module is a basic programming unit in Esterel and the interface of the module 
 output \emph{signals}. We have defined input signals \texttt{A, B, R}, which are \emph{pure signals}
 i.e. these are Boolean in nature carrying a status --- either \emph{present / true} or \emph{absent / false} during a tick. The output signal 
 \texttt{O} is valued and in addition to its status takes a value of type \texttt{integer}. The interface definitions appear in 
-lines \#6-10. \ignore{While these defined signals have global scope, Esterel also has \emph{local signals} and \emph{local variables}, although these are not used in this 
-	program. }% However, a local variable called \texttt{out} of type \texttt{integer} is defined on line \#10.
+lines \#6-10. While these defined signals have global scope, Esterel also has \emph{local signals} and \emph{local variables}, although these are not used in this 
+	program. However, a local variable called \texttt{out} of type \texttt{integer} is defined on line \#10.
 A variable, unlike a signal, has no status information. 
 
 The main logic of the program is composed of two concurrent threads (denoted using the \texttt{||} operator)
