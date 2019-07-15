@@ -1,3 +1,4 @@
+\newcommand{\efalgo}{\ensuremath{{E_{\varphi}^*}}}
 \DeclareSymbolFont{bbold}{U}{bbold}{m}{n}
 \DeclareSymbolFontAlphabet{\mathbbold}{bbold}
 \newcommand{\df}{\stackrel{df}{=}}
@@ -13,8 +14,8 @@
 \newcommand{\modd}{\ensuremath{\mathrel{\textit{mod}}}\xspace}
 \newcommand{\maxd}{\ensuremath{\textit{max}}\xspace}
 \newcommand{\mind}{\ensuremath{\textit{min}}\xspace}
-\newcommand{\zero}{\ensuremath{\mathbbold{0}}\xspace}
-\newcommand{\one}{\ensuremath{\mathbbold{1}}\xspace}
+\newcommand{\zero}{\ensuremath{\mathbb{0}}\xspace}
+\newcommand{\one}{\ensuremath{\mathbb{1}}\xspace}
 
 \newcommand{\pr}[1]{{\textsf{\color{red} \small{[#1 -pr-]}}}}
 \newcommand{\hp}[1]{{\textsf{\color{red} \small{[#1 -hp-]}}}}
@@ -28,13 +29,16 @@
 \newcommand{\calL}{{\mathcal L}}
 \newcommand{\calP}{{\mathcal P}}
 \newcommand{\calA}{{\mathcal A}}
+\newcommand{\calD}{{\mathcal D}}
 \newcommand{\calV}{{\mathcal V}}
 \newcommand{\exec}{\mathit{exec}}
 \newcommand{\true}{\ensuremath{\mathsf{true}}}
 \newcommand{\false}{\ensuremath{\mathsf{false}}}
 \newcommand{\pref}{\preccurlyeq}
-\newcommand{\sem}[1]{[\![#1]\!]}
+\newcommand{\sem}[1]{[\!\left[#1\right]\!]}
 \newcommand{\bin}[1]{\overrightarrow{#1}}
+
+\newcommand{\ef}{\ensuremath{E_{\varphi}}}
 
 \newcommand{\red}[1]{{\color{red}#1}}
 
@@ -49,17 +53,18 @@
 \newcommand{\randEditO}{\mathsf{{rand}\mbox{-} editO_{\varphi}}}
 \newcommand{\randEditIaut}{\mathsf{{rand}\mbox{-} editI_{\calA_{\varphi_{I}}}}}
 \newcommand{\randEditOaut}{\mathsf{{rand}\mbox{-} editO_{\calA_\varphi}}}
+
+\newcommand{\selEditI}{\mathsf{{sel}\mbox{-} editI_{\varphi_{I}}}}
+\newcommand{\selEditO}{\mathsf{{sel}\mbox{-} editO_{\varphi}}}
+\newcommand{\selEditIaut}{\mathsf{{sel}\mbox{-} editI_{\calA_{\varphi_{I}}}}}
+\newcommand{\selEditOaut}{\mathsf{{sel}\mbox{-} editO_{\calA_\varphi}}}
+
 \newcommand{\dist}{\mathsf{dist}}
 
 \newcommand{\minEditI}{\mathsf{{minD}\mbox{-} editI_{\varphi_{I}}}}
 \newcommand{\minEditO}{\mathsf{{minD}\mbox{-} editO_{\varphi}}}
 \newcommand{\minEditIaut}{\mathsf{{minD}\mbox{-} editI_{\calA_{\varphi_{I}}}}}
 \newcommand{\minEditOaut}{\mathsf{{minD}\mbox{-} editO_{\calA_\varphi}}}
-
-\newcommand{\selEditI}{\mathsf{{sel}\mbox{-} editI_{\varphi_{I}}}}
-\newcommand{\selEditO}{\mathsf{{sel}\mbox{-} editO_{\varphi}}}
-\newcommand{\selEditIaut}{\mathsf{{sel}\mbox{-} editI_{\calA_{\varphi_{I}}}}}
-\newcommand{\selEditOaut}{\mathsf{{sel}\mbox{-} editO_{\calA_\varphi}}}
 
 \newcommand{\readInp}{\mathsf{read\_in\_chan}}
 \newcommand{\readOut}{\mathsf{read\_out\_chan}}

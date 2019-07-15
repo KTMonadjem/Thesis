@@ -6,8 +6,8 @@
 \tikzstyle{violate} = [draw=red!75,fill=red!40, dashed]
 \tikzstyle{unstable} = [draw=red!75,fill=red!15]
 
-\node[state, initial, accepting, accept] (A) {$l_{safe}$};
-\node[state, accepting, accept, unstable] (B) [right of=A] {$l_{unsafe}$};
+\node[state, initial, accepting, accept] (A) {$l_{on}$};
+\node[state, accepting, accept, unstable] (B) [right of=A] {$l_{off}$};
 \node[state, violate]         (C) [below of=B, yshift=1cm, xshift=-1.5cm]  {$l_v$};
 
 \path[->] 

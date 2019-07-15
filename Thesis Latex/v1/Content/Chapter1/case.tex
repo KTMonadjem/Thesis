@@ -300,7 +300,7 @@ expected that $T_2 << T_1$.
 
 Like the breaking up of the function $\eta$ into its component
 layers, we can also break each layer $l$ into its component neurons.
-This option is presented in Figure~\ref{fig:tca-neurons}. 
+This option is presented in Figure~\ref{fig:tcas-xor}. 
 Unlike in Figure~\ref{fig:tca-bb}, neurons are able to operate concurrently within each layer. 
 This could provide benefits when considering multi-core
 implementations such as in \cite{yuan2011compiling}.
@@ -316,7 +316,7 @@ A summary of these approaches is presented in Table~\ref{tbl:sann-approaches}.
 		\hline
 		Arrangement    & Figures & WCRT & Cycles & Response Time   \\ \hline
 		Mono-periodic  & \ref{fig:tca-bb-n},\ref{fig:tca-bb} & High & 1 & == WCRT              \\
-		Multi-periodic & \ref{fig:tca-layers},\ref{fig:tca-neurons}& Low  & \textgreater{}1 & \textgreater{}\textgreater{}WCRT \\ \hline
+		Multi-periodic & \ref{fig:tca-layers},\ref{fig:tcas-xor}& Low  & \textgreater{}1 & \textgreater{}\textgreater{}WCRT \\ \hline
 	\end{tabular}
 \end{table}
 
