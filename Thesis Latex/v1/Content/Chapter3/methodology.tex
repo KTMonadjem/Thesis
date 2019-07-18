@@ -22,7 +22,7 @@ After the introduction of \acf{MNN2C}, this system was trained in Python using K
 These ensembles ran in synchronous concurrency with each other, forming a single, larger \ac{MNN}. 
 
 The individual \ac{CNN} outputs were passed to an ensemble function that combined the classifications of each \ac{CNN} together, resulting in a more accurate overall classification.
-Each ensemble used custom averaging function that worked out the most likely class of the classified object using the top 2 most likely classes output by each \ac{CNN}.
+Each ensemble used a custom averaging function that worked out the most likely class of the classified object using the top 2 most likely classes output by each \ac{CNN}.
 The outputs of each ensemble were then combined into a batch of outputs forming the \textit{predicted output} for the colour, shape and object type of the detected object.
 
 \subsection{Sensor Fusion for a Traffic Sign Recognition AV System}
@@ -31,11 +31,11 @@ The \ac{LiDAR} controller for this system used the 93\% accuracy of the research
 The simulated camera outputs consisted of test images from both the \ac{VOC} 2012~\cite{pascal-voc-2012} and \ac{GTSRB}~\cite{Stallkamp2012-gtsrb} datasets, in a combination of people, vehicles and various traffic signs.
 The \ac{LiDAR} and camera outputs were handled by different parts of the controller.
 The camera outputs were fed into a \ac{MNN} (see Figure~\ref{fig:mnn}) where they were classified by shape, colour and object type.
-Sensor fusion happened after classification occurred and was done using by the run-time verifier.
+Sensor fusion happened after classification occurred and was done by the run-time verifier.
 
 \subsection{\acf{RV}~\cite{runtime-verify} for a Traffic Sign Recognition AV System}
 The system controller was encapsulated by a run-time verifier~\cite{recps} that used sensor fusion to check for misclassifications made by the \ac{MNN}.
-A run-time verifier gives a verdict on every I/O sequence given to i by the controller.
+A run-time verifier gives a verdict on every I/O sequence given to it by the controller.
 The \ac{RV} can be seen in Figure~\ref{fig:mnn}, between the controller and the plant, monitoring the outputs of the \ac{MNN} controller.
 The run-time verifier was given a \acf{VDTA}, introduced in Chapter 4, as the safety policy to be used.
 This \ac{VDTA} is shown in Figure~\ref{fig:signrte}.
@@ -47,7 +47,7 @@ The syntax for this figure is explained in Chapter 2.
 	\caption{Flow-chart simplifying the algorithm used to detect misclassifications made by the \ac{MNN} controller.} \label{fig:flow}
 \end{figure}
 
-This policy uses a complex algorithm to determine if an object has been misclassified or not.
+This policy uses a straight-forward algorithm to determine if an object has been misclassified or not.
 For simplicity, this algorithm has been transferred to a flow-chart (Figure~\ref{fig:flow}), rather than being shown on the \ac{VDTA}.
 
 \begin{figure}[h]

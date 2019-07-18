@@ -14,7 +14,7 @@ These two techniques work in tandem to greatly increase the safety of the \ac{AV
 Creating a \ac{MNN}  with three synchronous \acp{CNN}, forming a \ac{MNN} ensemble, did have a large effect on the classification accuracy of the system.
 The classification accuracy was higher than that of the average, ordinary \ac{CNN}.
 Using \ac{MNN} ensembles is more effective for poorly or incompletely trained \acp{CNN}, but does not offer an increase in classification accuracy when extensively trained \acp{CNN} are used.
-The ensembles do, however address the issue of worst case \acp{ANN}, by effectively classifying at the same accuracy as a best cast \ac{ANN} would.
+The ensembles do, however address the issue of worst case trained \acp{ANN}, by effectively classifying at the same accuracy as a best case trained \ac{ANN} would.
 Implementing three \acp{CNN} is more resource intensive; each has to be trained separately to a suitable standard and on different data, each has to be implemented separately and each has to run separately.
 This takes more time, memory and processing power than implementing a single \ac{CNN} to classify the input images.
 The \ac{MNN} ensembles in this case study used three times the resources that a single \ac{CNN} would use, but it can be argued that this trade-off is worth the increase in classification accuracy where human lives are concerned, as the ensemble tend to the worst case scenario.

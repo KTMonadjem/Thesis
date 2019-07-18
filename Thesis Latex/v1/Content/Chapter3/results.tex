@@ -107,9 +107,16 @@ Where input perturbations are concerned, the verifier responded even better and 
 The verifier caught more misclassifications in untrained \acp{ANN} due to the untrained \acp{ANN} having no confidence about their output.
 However, with more trained \acp{ANN} the verifier caught a lower percentage of the total misclassifications due to the \acp{ANN} having a higher confidence that they were correct, even when they were not.
 
+A \ac{CNN} predicts output classes by assigning a percentage probability to each output class, which cumulatively add to 100\%.
+Therefore, the class with the highest percentage is taken as the most probable class.
+In this work, only the top 2 most probable classes were selected to calculate the confidence of the \ac{ANN} output.
+If the two classes had the same percentage, than it is unsure which of the two classes is more probable.
+In this case, there is no confidence in the predicted class being correct.
+However, if one class's probability is significantly higher than another class's probability, then there is a high confidence that the more probable class is the correct class.
+
 \subsection{An \ac{AV} System Using \acf{MNN2C}}
 \ac{MNN2C}, introduced in Section~\ref{sec:mnn2c}, creates time-predictable, modular \acfp{MNN} for C from existing Keras (with Tensorflow) trained \acp{ANN}. 
-This compiler makes implementing \acfp{MNN} in C easy and safe.
+This compiler makes implementing the previously introduced \acfp{MNN} in C much easier.
 For the purposes of testing and demonstration, the complex \ac{MNN} used in this chapter, shown in Figure~\ref{fig:mnn}, was trained in Python, using Keras and the exact same images used to train the original, Darknet system.
 This \ac{MNN} was then described in the \ac{MNN2C} format, and modular C code was generated to initialise, run and incorporate the \ac{MNN}.
 To show the efficacy of \ac{MNN2C}, the generated \ac{MNN} was implemented and tested in an identical system to the original. 
@@ -128,7 +135,8 @@ Since these \acp{MNN} were trained in Keras, they did not need to go through sam
 \end{figure}
 
 Figure~\ref{fig:sign-graphboth-mnn2c} shows that the verifier stills work efficiently with Keras trained \acp{MNN} compiled to C code.
-With the original images, the verifier caught more than 70\% of all misclassifications caught more than 60\% of all misclassifications when the inputs were perturbed.
+With the original images, the verifier caught more than 70\% of all misclassifications with unperturbed images.
+With perturbed images, the \ac{MNN} caught more than 60\% of all misclassifications.
 As the \acp{MNN} are more trained, the number of caught misclassifications increases.
 This shows that the system works better with more extensively trained \acp{MNN}.
 Unlike the Darknet \acp{MNN}, the verifier was not able to catch 100\% of all the misclassifications for untrained \acp{MNN}.
