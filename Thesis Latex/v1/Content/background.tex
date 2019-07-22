@@ -95,7 +95,7 @@ Misclassifications by a \ac{ANN} controller in a \ac{CPS} can have drastic conse
 \subsubsection{\acf{ANN} libraries used in this work}
 The majority of \ac{ANN} libraries available were not sufficient to be usable in synchronous environments.
 These libraries, such as Keras~\cite{chollet2015keras}, are developed in languages that don't support synchronous programming or timing analysis.
-For example, these libraries use threading to run their \acp{ANN}.
+Instead, these libraries use techniques threading to run their \acp{ANN}.
 Threads are neither synchronous nor time analysable, and this makes these libraries unusable in this work.
 
 Primarily, our own \ac{SNN} library was used in this thesis.

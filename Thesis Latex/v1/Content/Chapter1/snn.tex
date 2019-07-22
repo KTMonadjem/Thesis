@@ -95,7 +95,13 @@ our adoption of the this paradigm while designing \acp{SNN}.
 \end{figure}
 
 We have adapted Berry's well known ABRO example in Esterel~\cite{berry2000foundations} to develop our first example of 
-\acp{SNN}. Being an adaptation of ABRO, we term our example, the AI-inspired ABRO, as \texttt{AI-BRO}, and present it in Listing~\ref{lst:ai-bro}.
+\acp{SNN}.
+ABRO is a simplistic example that shows the power of Esterel.
+The program concurrently waits for the presence of two input signals \textbf{A} and \textbf{B}.
+Once these have been received, on the next tick, the system produces some output signal \textbf{O}.
+Upon receiving the input signal \textbf{R}, the system immediately resets and begins waiting for the two input signals.
+
+Being an adaptation of ABRO, we term our example, the AI-inspired ABRO, as \texttt{AI-BRO}, and present it in Listing~\ref{lst:ai-bro}.
 The original ABRO example performs \emph{the emission of \texttt{O} when both inputs \texttt{A} and \texttt{B} 
 	have happened. It resets and restarts this behaviour when the input \texttt{R} happens}. In our setting, the input 
 \texttt{A} is used to control the processing of the frontal sensor, and the input \texttt{B} is used for the side sensors.
