@@ -12,6 +12,9 @@ Static timing analysis was done on these benchmarks, proving that the implemente
 Additionally, a Python tool chain, termed \ac{MNN2C} was introduced.
 This compiler was able to produce time-predictable, \acp{MNN} from existing Keras trained \acp{ANN}.
 This tool chain produced more accurate, lower \ac{WCRT} measurements compared to the original \acp{MNN}.
+It was found that there were fluctuations in the measured run-time of \acp{ANN} however, generally, variation in run-time is cause by conditionals (branches) and \acp{ANN} do not contain conditionals.
+Instead, this is due to several other factors, including the parallelization of tasks, caching, loops in execution and complex arithmetic. 
+These differ every execution and result in varied run-time of the \acp{ANN}.
 
 The next body of work introduced the concept of combining \ac{RE} with \acp{MNN}.
 To this end, the definition of a \ac{MNN} was expanded to include arbitrary synchronous components, such as run-time enforcers, and not \acp{SNN}.

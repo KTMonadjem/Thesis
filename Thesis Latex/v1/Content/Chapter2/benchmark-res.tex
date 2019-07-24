@@ -49,7 +49,7 @@ The \ac{AV}'s controller  MLP is 3 layers, with 17 input neurons, 10 hidden neur
 
 \subsection{Methodology}
 \ac{VDTA} were first specified in a XML-based format and then compiled to C functions using the methodology outlined in Section~\ref{sec:re-algorithm}.
-These enforcer C functions were then synchronously composed~\cite{SynchronousLanguages12YearsLater} with the C neural networks developed using the Esterel programming language~\cite{Berry00}.
+These enforcer C functions were then synchronously composed~\cite{benveniste2003synchronous} with the C neural networks developed using the Esterel programming language~\cite{Berry00}.
 For benchmarking purposes the case studies were then run on Ubuntu 16.04 using an 4 core Intel i7-6700HQ processor at 2.6GHz with 4GB of RAM.
 The \ac{AV} \acp{CNN} and \ac{ESS} predictor \acp{MLP} were trained using gradient descent with back-propagation.
 Then, the controller \acp{MLP} were trained using Q-learning.
